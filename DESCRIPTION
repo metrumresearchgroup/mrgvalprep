@@ -1,7 +1,7 @@
 Package: mrgvalprep
 Type: Package
 Title: Helpers for formatting and preprocessing inputs to mrgvalidate.
-Version: 0.1.2
+Version: 0.0.1
 Authors@R: 
     c(person(given = "Devin",
            family = "Pastoor",
