@@ -20,11 +20,22 @@ read_test_df <- function(test_path = ALL_TESTS) {
 # formatting helpers
 #####################
 
-#' Process a single issue
+#' Extract Summary section from Github issue
 #' @importFrom purrr flatten_chr map_df
 #' @importFrom tibble tibble
 #' @param txt The raw text scraped from the body of the Github issue
-proc_issue <- function(txt) {
+extract_issue_summary <- function(txt) {
+  sp <- sp_sections(txt)
+  ts <- strsplit(sp[2], "[\n\r]+") %>% flatten_chr %>% rm_blank
+  story <- trimws(gsub("^ *[\r\n]+ *", "", sp[1]))
+  return(story)
+}
+
+#' Extract Tests section from Github issue
+#' @importFrom purrr flatten_chr map_df
+#' @importFrom tibble tibble
+#' @param txt The raw text scraped from the body of the Github issue
+extract_issue_tests <- function(txt) {
   sp <- sp_sections(txt)
   ts <- strsplit(sp[2], "[\n\r]+") %>% flatten_chr %>% rm_blank
   story <- trimws(gsub("^ *[\r\n]+ *", "", sp[1]))
@@ -34,18 +45,18 @@ proc_issue <- function(txt) {
   test_end <- c((file_start - 1)[-1],length(ts))
 
   if (length(file_start) == 0) {
-    no_tests_text <- paste0("\n\n_", NO_TESTS_STRING, " - ", paste(ts, collapse = " "), "_")
-    return(tibble(test_file = NO_TESTS_STRING, test_name = NO_TESTS_STRING, story = paste0(story, no_tests_text)))
+    character()
   }
 
   labs <- rm_h(ts[file_start])
   .lab <- basename(labs)
-  dd <- map_df(seq_along(file_start), function(i) {
+  map(seq_along(file_start), function(i) {
     se <- seq(test_start[i],test_end[i])
-    tibble(test_file = .lab[i], test_name = rm_s(rm_h(ts[se])), story = story)
-  })
-  dd
+    rm_s(rm_h(ts[se]))
+  }) %>%
+    unlist()
 }
+
 
 
 ######################################
