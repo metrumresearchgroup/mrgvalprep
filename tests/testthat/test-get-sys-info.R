@@ -1,6 +1,13 @@
-test_that("get_sys_info() returns date and system info", {
+test_that("get_sys_info() returns date and default values", {
   res <- get_sys_info()
   expect_true(stringr::str_detect(res$date, "[0-9]+\\-[0-9]+\\-[0-9]+"))
+  expect_true(stringr::str_detect(res$date, "[0-9]+\\-[0-9]+\\-[0-9]+"))
+  expect_equal(res$executor, Sys.getenv("USER"))
+  expect_equal(res$info, list())
+})
+
+test_that("get_sys_info() returns system info", {
+  res <- get_sys_info(sys_info = TRUE)
   expect_equal(names(res$info$sys), c("sysname", "version", "release", "machine"))
 })
 
@@ -12,8 +19,9 @@ test_that("get_sys_info() writes to json", {
   expect_true(fs::file_exists(tmp_file))
 
   written_res <- jsonlite::fromJSON(tmp_file)
+  expect_equal(names(written_res), c("date", "executor", "info"))
   expect_true(stringr::str_detect(written_res$date, "[0-9]+\\-[0-9]+\\-[0-9]+"))
-  expect_equal(names(written_res$info$sys), c("sysname", "version", "release", "machine"))
+  expect_true(stringr::str_detect(written_res$executor, Sys.getenv("USER")))
 })
 
 test_that("get_sys_info() captures environment variables", {
