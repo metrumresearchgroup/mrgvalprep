@@ -2,7 +2,7 @@
 % Please edit documentation in R/get-sys-info.R
 \name{get_sys_info}
 \alias{get_sys_info}
-\title{Capture system and session info}
+\title{Capture environment variables, system info, and/or session info}
 \usage{
 get_sys_info(
   out_path = NULL,
@@ -38,7 +38,9 @@ Invisibly returns named list with the elements described in
 }
 \description{
 Captures system and session info, returns invisibly, and optionally writes to
-JSON file for later use.
+JSON file for later use. This JSON file is in the format expected by
+\code{\link[mrgvalidate:create_validation_docs]{mrgvalidate::create_validation_docs()}} and is intended to accompany a \code{.csv}
+of test results. See \link[mrgvalidate:input_formats]{mrgvalidate::input_formats} for details.
 }
 \details{
 Structure of returned (and written) list is as follows:
@@ -56,6 +58,9 @@ their current values at time of function call.
 }
 }
 \examples{
-get_sys_info(env_vars = c("USER", "METWORX_VERSION"))
+str(get_sys_info(
+  env_vars = c("USER", "METWORX_VERSION"),
+  sys_info = TRUE
+))
 
 }

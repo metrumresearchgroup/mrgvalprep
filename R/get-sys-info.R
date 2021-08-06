@@ -1,7 +1,9 @@
-#' Capture system and session info
+#' Capture environment variables, system info, and/or session info
 #'
 #' Captures system and session info, returns invisibly, and optionally writes to
-#' JSON file for later use.
+#' JSON file for later use. This JSON file is in the format expected by
+#' [mrgvalidate::create_validation_docs()] and is intended to accompany a `.csv`
+#' of test results. See [mrgvalidate::input_formats] for details.
 #'
 #' @details
 #' Structure of returned (and written) list is as follows:
@@ -34,7 +36,10 @@
 #'   the results under `[["info"]][["session"]]`. Defaults to `FALSE`.
 #'
 #' @examples
-#' get_sys_info(env_vars = c("USER", "METWORX_VERSION"))
+#' str(get_sys_info(
+#'   env_vars = c("USER", "METWORX_VERSION"),
+#'   sys_info = TRUE
+#' ))
 #'
 #' @importFrom jsonlite toJSON
 #' @importFrom purrr map
