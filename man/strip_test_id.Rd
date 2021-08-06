@@ -10,3 +10,4 @@ strip_test_id(string, id)
 Note that any white space in the string will be collapsed to a single
 character.
 }
+\keyword{internal}

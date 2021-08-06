@@ -1,4 +1,14 @@
 
+test_that("parse_testthat_list_reporter() returns expected tibble", {
+  test_res <- readRDS(system.file("test-refs", "test-get-sys-info-ListReporter.RDS", package = "mrgvalprep"))
+  test_ref <- readr::read_csv(system.file("test-refs", "test-get-sys-info-ListReporter-parsed.csv", package = "mrgvalprep"), col_types = "ciic")
+  expect_equal(
+    # using as.data.frame to blow away small differences in classes and formatting that are not relevant
+    as.data.frame(parse_testthat_list_reporter(test_res)),
+    as.data.frame(test_ref)
+  )
+})
+
 test_that("parse_test_id() returns NA if there is no ID", {
   cases <- list(
     # input expected

@@ -1,0 +1,7 @@
+TestName,passed,failed,TestId
+get_sys_info() returns date and default values,4,0,FOO-BAR-001
+get_sys_info() returns system info,1,0,FOO-BAR-002
+get_sys_info() writes to json,4,0,FOO-BAR-003
+get_sys_info() captures environment variables,2,0,FOO-BAR-003
+get_sys_info() captures sessionInfo,2,0,FOO-BAR-004
+fake test that should fail,0,1,FOO-BAR-005

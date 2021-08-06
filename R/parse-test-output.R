@@ -30,6 +30,7 @@ parse_testthat_list_reporter <- function(result) {
 
 #' Extract test ID from a string.
 #' @importFrom stringr str_match
+#' @keywords internal
 parse_test_id <- function(string) {
   str_match(string, "\\[([A-Z]+-[A-Z]+-[0-9]+)\\]") %>%
     dplyr::nth(2)
@@ -41,6 +42,7 @@ parse_test_id <- function(string) {
 #' Note that any white space in the string will be collapsed to a single
 #' character.
 #' @importFrom stringr regex str_replace str_squish
+#' @keywords internal
 strip_test_id <- function(string, id) {
   string %>%
     str_replace(fixed(paste0("[", id, "]")), "") %>%
