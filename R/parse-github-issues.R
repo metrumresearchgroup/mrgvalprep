@@ -3,8 +3,8 @@
 #'
 #' THIS IS SOMEWHAT OF A WORK-IN-PROGRESS BECAUSE THE SPEC IS STILL IN FLUX.
 #' Reads issues from a Github milestone and parses to a tibble in the format
-#' expected by the `specs` argument of [mrgvalidate::create_validation_docs()].
-#' See [mrgvalidate::input_formats] for details.
+#' expected by the `specs` argument of `mrgvalidate::create_validation_docs()`.
+#' See `mrgvalidate::input_formats` for details.
 #' @importFrom tidyr unnest nest
 #' @importFrom dplyr select mutate left_join
 #' @importFrom rlang .data
@@ -27,7 +27,8 @@ parse_github_issues <- function(org, repo, mile, domain = VALID_DOMAINS) {
       #'
     ) %>%
     left_join(
-      get_risk(org, repo, domain)
+      get_risk(org, repo, domain),
+      by = "issue"
     ) %>%
     select(StoryId, StoryName, StoryDescription, ProductRisk, TestIds)
 
@@ -35,6 +36,9 @@ parse_github_issues <- function(org, repo, mile, domain = VALID_DOMAINS) {
 
 
 #' Get tibble of issues associated with a specific milestone
+#'
+#' Mainly a helper function called by [parse_github_issues()] but can also be
+#' used to pull the raw content for issues associated with a given milestone.
 #' @importFrom dplyr filter
 #' @importFrom ghpm api_url
 #' @param org Github organization that the repo is under
@@ -42,6 +46,7 @@ parse_github_issues <- function(org, repo, mile, domain = VALID_DOMAINS) {
 #' @param mile The name of the milestone associated with the release you are validating. All issues tied to this milestone with be pulled.
 #' @param domain Domain where repo lives. Either "github.com" or "ghe.metrumrg.com", defaulting to "github.com"
 #' @importFrom rlang .data
+#' @seealso [parse_github_issues()]
 #' @export
 get_issues <- function(org, repo, mile, domain = VALID_DOMAINS) {
   domain <- match.arg(domain)

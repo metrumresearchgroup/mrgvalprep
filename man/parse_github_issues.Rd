@@ -18,6 +18,6 @@ parse_github_issues(org, repo, mile, domain = VALID_DOMAINS)
 \description{
 THIS IS SOMEWHAT OF A WORK-IN-PROGRESS BECAUSE THE SPEC IS STILL IN FLUX.
 Reads issues from a Github milestone and parses to a tibble in the format
-expected by the \code{specs} argument of \code{\link[mrgvalidate:create_validation_docs]{mrgvalidate::create_validation_docs()}}.
-See \link[mrgvalidate:input_formats]{mrgvalidate::input_formats} for details.
+expected by the \code{specs} argument of \code{mrgvalidate::create_validation_docs()}.
+See \code{mrgvalidate::input_formats} for details.
 }

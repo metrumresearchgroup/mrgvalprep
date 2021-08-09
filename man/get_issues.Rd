@@ -16,5 +16,9 @@ get_issues(org, repo, mile, domain = VALID_DOMAINS)
 \item{domain}{Domain where repo lives. Either "github.com" or "ghe.metrumrg.com", defaulting to "github.com"}
 }
 \description{
-Get tibble of issues associated with a specific milestone
+Mainly a helper function called by \code{\link[=parse_github_issues]{parse_github_issues()}} but can also be
+used to pull the raw content for issues associated with a given milestone.
+}
+\seealso{
+\code{\link[=parse_github_issues]{parse_github_issues()}}
 }
