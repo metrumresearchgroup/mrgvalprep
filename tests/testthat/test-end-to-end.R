@@ -1,4 +1,14 @@
-context("Test step-by-step functions")
+# Intended as a mini end-to-end test
+
+skip("Consider if we want to import mrgvalidate and run end-to-end tests here")
+
+##### ALL OF THIS IS OLD CODE that will need to be heavily refactored if we
+# intend to do an end-to-end test here, but it was kept around in case we wanted
+# to repurpose some of it.
+#
+# The idea, if we do, would be to import `mrgvalidate` and test running from
+# `parse_github_stories()` and `validate_tests()` all the way through
+# generating the docs.
 
 test_that("no docs exist at the beginning", {
   expect_false(fs::file_exists(ALL_TESTS))
