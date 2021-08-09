@@ -55,12 +55,15 @@ validate_tests <- function(
   # install cloned package to temp dir
   tmp_lib <- withr::local_tempdir()
   withr::local_libpaths(tmp_lib, "prefix")
-  devtools::install(
-    file.path(root_dir, repo),
-    build = TRUE,
-    quiet = TRUE,
-    upgrade = "never"
-  )
+  # do this in a fresh session so it doesn't load all of package deps into this session
+  callr::r(function(root_dir, repo) {
+    devtools::install(
+      file.path(root_dir, repo),
+      build = TRUE,
+      quiet = TRUE,
+      upgrade = "never"
+    )
+  }, args = list(root_dir=root_dir, repo=repo))
 
   # run tests and parse output
   test_list <- run_tests(pkg = repo, root_dir = root_dir)
