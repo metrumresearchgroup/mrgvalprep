@@ -58,7 +58,7 @@ test_that("validate_tests writes output files", {
 
   test_info <- jsonlite::fromJSON(file.path(output_dir, paste0(out_file, ".json")))
   expect_equal(names(test_info), c("date", "executor", "info"))
-  expect_equal(test_info$info$env_vars$commit, get_commit_hash(pkg_dir, repo))
+  expect_equal(test_info$info$env_vars$commit, get_commit_hash(pkg_dir, REPO))
 })
 
 

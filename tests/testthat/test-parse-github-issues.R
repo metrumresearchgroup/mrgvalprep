@@ -1,6 +1,6 @@
 test_that("get_issues() pulls from Github", {
   release_issues <- get_issues(org = ORG, repo = REPO, mile = MILESTONE, domain = DOMAIN)
-  expect_equal(nrow(spec), STORIES_DF_ROWS)
+  expect_equal(nrow(release_issues), STORIES_DF_ROWS)
 
   # check a few things that likely won't change if we update some stories
   expect_true(all(stringr::str_detect(release_issues$body, stringr::regex("Summary.+Tests", dotall = TRUE))))
