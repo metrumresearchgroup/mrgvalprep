@@ -42,9 +42,9 @@ cleanup <- function() {
 COMMIT_REF <- "15430d3a6d77adc2e955d4f1e22209e63e6d7f60"
 GHE_COMMIT_REF <- "0817f579b2858cfce24975776f83302bff9162ba"
 
-TEST_DF_ROWS <- 169
-TEST_DF_COLS <- 6
-TEST_DF_ROWS_EXTRA_TESTS <- 173
+TEST_DF_ROWS <- 173
+TEST_DF_COLS <- 4
+TEST_DF_ROWS_EXTRA_TESTS <- 177
 
 STORIES_DF_ROWS <- 6 # this will change when new stories are added for new test cases
 STORIES_DF_COLS <- 5
