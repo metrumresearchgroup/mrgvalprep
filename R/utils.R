@@ -32,7 +32,7 @@ extract_issue_summary <- function(txt) {
 }
 
 #' Extract Tests section from Github issue
-#' @importFrom purrr flatten_chr map_df
+#' @importFrom purrr flatten_chr map_df map_chr
 #' @importFrom tibble tibble
 #' @param txt The raw text scraped from the body of the Github issue
 extract_issue_tests <- function(txt) {
@@ -40,21 +40,15 @@ extract_issue_tests <- function(txt) {
   ts <- strsplit(sp[2], "[\n\r]+") %>% flatten_chr %>% rm_blank
   story <- trimws(gsub("^ *[\r\n]+ *", "", sp[1]))
 
-  file_start <- which(grepl("test-.*\\.R$", ts))
-  test_start <- file_start+1
-  test_end <- c((file_start - 1)[-1],length(ts))
+  # get bulleted list entries of test file names and test names
+  file_names_bullets <- which(grepl("test-.*\\.R$", ts))
+  test_bullets <- which(grepl("(-|*) [A-Za-z0-9]+", ts))
 
-  if (length(file_start) == 0) {
-    character()
-  }
+  # filter to only test names (files names are no longer used in mrgvalidate >= 1.0.0)
+  test_bullets <- setdiff(test_bullets, file_names_bullets)
 
-  labs <- rm_h(ts[file_start])
-  .lab <- basename(labs)
-  map(seq_along(file_start), function(i) {
-    se <- seq(test_start[i],test_end[i])
-    rm_s(rm_h(ts[se]))
-  }) %>%
-    unlist()
+  # clean test names and return
+  map_chr(test_bullets, ~{rm_s(rm_h(ts[.x]))})
 }
 
 

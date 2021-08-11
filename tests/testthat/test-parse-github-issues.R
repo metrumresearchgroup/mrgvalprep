@@ -1,16 +1,3 @@
-test_that("get_issues() pulls from Github", {
-  skip_if_over_rate_limit_github()
-
-  release_issues <- get_issues(org = ORG, repo = REPO, mile = MILESTONE, domain = DOMAIN)
-  expect_equal(nrow(release_issues), STORIES_DF_ROWS_GHP)
-
-  # check a few things that likely won't change if we update some stories
-  expect_true(all(stringr::str_detect(release_issues$body, stringr::regex("Summary.+Tests", dotall = TRUE))))
-  expect_true(all(stringr::str_detect(release_issues$milestone, MILESTONE)))
-  expect_true(all(stringr::str_detect(release_issues$resource_path, REPO)))
-
-})
-
 test_that("parse_github_issues() pulls from Github", {
   skip_if_over_rate_limit_github()
   spec <- parse_github_issues(org = ORG, repo = REPO, mile = MILESTONE, domain = DOMAIN)
@@ -34,5 +21,18 @@ test_that("parse_github_issues() pulls from Github", {
     purrr::map_lgl(spec[["TestIds"]], ~length(.x) > 1),
     c(TRUE,  TRUE,  TRUE,  TRUE,  TRUE, FALSE)
   )
+
+})
+
+test_that("get_issues() pulls from Github", {
+  skip_if_over_rate_limit_github()
+
+  release_issues <- get_issues(org = ORG, repo = REPO, mile = MILESTONE, domain = DOMAIN)
+  expect_equal(nrow(release_issues), STORIES_DF_ROWS_GHP)
+
+  # check a few things that likely won't change if we update some stories
+  expect_true(all(stringr::str_detect(release_issues$body, stringr::regex("Summary.+Tests", dotall = TRUE))))
+  expect_true(all(stringr::str_detect(release_issues$milestone, MILESTONE)))
+  expect_true(all(stringr::str_detect(release_issues$resource_path, REPO)))
 
 })
