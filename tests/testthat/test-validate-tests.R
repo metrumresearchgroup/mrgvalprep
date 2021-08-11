@@ -48,13 +48,16 @@ test_that("validate_tests writes output files", {
     domain = VALID_DOMAINS,
     out_file = out_file,
     root_dir = pkg_dir,
-    output_dir = output_dir
+    output_dir = output_dir,
+    set_id_to_name = TRUE
   )
 
   test_df <- readr::read_csv(file.path(output_dir, paste0(out_file, ".csv")), col_types = "ciic")
   expect_equal(nrow(test_df), TEST_DF_ROWS)
   expect_equal(ncol(test_df), TEST_DF_COLS)
   expect_equal(sum(test_df$failed), 0)
+  # set_id_to_name was honored.
+  expect_equal(test_df$TestName, test_df$TestId)
 
   test_info <- jsonlite::fromJSON(file.path(output_dir, paste0(out_file, ".json")))
   expect_equal(names(test_info), c("date", "executor", "info"))
