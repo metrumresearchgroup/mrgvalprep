@@ -14,10 +14,6 @@ test_that("parse_github_issues() pulls from Github", {
   # check that TestIds are all character vectors except the last (empty) one
   expect_true(inherits(spec[["TestIds"]], "list"))
   expect_equal(
-    purrr::map_lgl(spec[["TestIds"]], ~!is.null(.x)),
-    c(TRUE,  TRUE,  TRUE,  TRUE,  TRUE, FALSE)
-  )
-  expect_equal(
     purrr::map_lgl(spec[["TestIds"]], ~length(.x) > 1),
     c(TRUE,  TRUE,  TRUE,  TRUE,  TRUE, FALSE)
   )

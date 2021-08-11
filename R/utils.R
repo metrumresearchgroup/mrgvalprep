@@ -42,7 +42,7 @@ extract_issue_tests <- function(txt) {
 
   # get bulleted list entries of test file names and test names
   file_names_bullets <- which(grepl("test-.*\\.R$", ts))
-  test_bullets <- which(grepl("(-|*) [A-Za-z0-9]+", ts))
+  test_bullets <- which(grepl("(-|\\*) [A-Za-z0-9]+", ts))
 
   # filter to only test names (files names are no longer used in mrgvalidate >= 1.0.0)
   test_bullets <- setdiff(test_bullets, file_names_bullets)
