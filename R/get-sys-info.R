@@ -43,6 +43,7 @@
 #'
 #' @importFrom jsonlite toJSON
 #' @importFrom purrr map
+#' @importFrom utils capture.output sessionInfo
 #' @export
 get_sys_info <- function(out_path = NULL, executor = NULL, env_vars = NULL, sys_info = FALSE, session = FALSE) {
   checkmate::assert_string(out_path, null.ok = TRUE)
@@ -69,7 +70,7 @@ get_sys_info <- function(out_path = NULL, executor = NULL, env_vars = NULL, sys_
   }
 
   if (isTRUE(session)) {
-    res[["info"]][["session"]] <- capture.output(print(sessionInfo()))
+    res[["info"]][["session"]] <- utils::capture.output(print(utils::sessionInfo()))
   }
 
   if(!is.null(out_path)) {

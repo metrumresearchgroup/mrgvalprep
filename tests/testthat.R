@@ -1,4 +1,4 @@
 library(testthat)
-library(mrgvalidate)
+library(mrgvalprep)
 
-test_check("mrgvalidate")
+test_check("mrgvalprep")

@@ -1,17 +1,16 @@
 
 #' Process issues from Github into a tibble of properly formatted stories
 #'
-#' THIS IS SOMEWHAT OF A WORK-IN-PROGRESS BECAUSE THE SPEC IS STILL IN FLUX.
 #' Reads issues from a Github milestone and parses to a tibble in the format
 #' expected by the `specs` argument of `mrgvalidate::create_validation_docs()`.
 #' See `mrgvalidate::input_formats` for details.
 #' @importFrom tidyr unnest nest
 #' @importFrom dplyr select mutate left_join
 #' @importFrom rlang .data
-#' @param release_issues Tibble output from [get_issues()] or [ghpm::get_issues()] containing all the issues you want to format.
-#' @param org Github organization that the repo is under
-#' @param repo The name of the repo for the package you are validating
-#' @param domain Domain where repo lives. Either "github.com" or "ghe.metrumrg.com", defaulting to "github.com"
+#' @param org Github organization that the repo is under.
+#' @param repo The name of the repo for the package you are validating.
+#' @param mile The name of the milestone associated with the release you are validating. All issues tied to this milestone with be pulled.
+#' @param domain Domain where repo lives. Either "github.com" or "ghe.metrumrg.com", defaulting to "github.com".
 #' @export
 parse_github_issues <- function(org, repo, mile, domain = VALID_DOMAINS) {
   domain <- match.arg(domain)
@@ -30,7 +29,7 @@ parse_github_issues <- function(org, repo, mile, domain = VALID_DOMAINS) {
       get_risk(org, repo, domain),
       by = "issue"
     ) %>%
-    select(StoryId, StoryName, StoryDescription, ProductRisk, TestIds)
+    select(.data$StoryId, .data$StoryName, .data$StoryDescription, .data$ProductRisk, .data$TestIds)
 
 }
 
@@ -41,10 +40,7 @@ parse_github_issues <- function(org, repo, mile, domain = VALID_DOMAINS) {
 #' used to pull the raw content for issues associated with a given milestone.
 #' @importFrom dplyr filter
 #' @importFrom ghpm api_url
-#' @param org Github organization that the repo is under
-#' @param repo The name of the repo for the package you are validating
-#' @param mile The name of the milestone associated with the release you are validating. All issues tied to this milestone with be pulled.
-#' @param domain Domain where repo lives. Either "github.com" or "ghe.metrumrg.com", defaulting to "github.com"
+#' @inheritParams parse_github_issues
 #' @importFrom rlang .data
 #' @seealso [parse_github_issues()]
 #' @export

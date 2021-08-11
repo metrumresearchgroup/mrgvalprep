@@ -7,16 +7,15 @@
 parse_github_issues(org, repo, mile, domain = VALID_DOMAINS)
 }
 \arguments{
-\item{org}{Github organization that the repo is under}
+\item{org}{Github organization that the repo is under.}
 
-\item{repo}{The name of the repo for the package you are validating}
+\item{repo}{The name of the repo for the package you are validating.}
 
-\item{domain}{Domain where repo lives. Either "github.com" or "ghe.metrumrg.com", defaulting to "github.com"}
+\item{mile}{The name of the milestone associated with the release you are validating. All issues tied to this milestone with be pulled.}
 
-\item{release_issues}{Tibble output from \code{\link[=get_issues]{get_issues()}} or \code{\link[ghpm:get_issues]{ghpm::get_issues()}} containing all the issues you want to format.}
+\item{domain}{Domain where repo lives. Either "github.com" or "ghe.metrumrg.com", defaulting to "github.com".}
 }
 \description{
-THIS IS SOMEWHAT OF A WORK-IN-PROGRESS BECAUSE THE SPEC IS STILL IN FLUX.
 Reads issues from a Github milestone and parses to a tibble in the format
 expected by the \code{specs} argument of \code{mrgvalidate::create_validation_docs()}.
 See \code{mrgvalidate::input_formats} for details.

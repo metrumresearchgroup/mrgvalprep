@@ -10,11 +10,11 @@ parse_testthat_list_reporter(result)
 \item{result}{List output as reported by \link[testthat:ListReporter]{testthat::ListReporter}}
 }
 \value{
-A tibble formatted according to \link{input_formats}
+A tibble formatted according to \code{mrgvalidate::input_formats}
 }
 \description{
 Parse testthat output
 }
 \seealso{
-\link{input_formats}, \code{\link[=create_validation_docs]{create_validation_docs()}}
+\code{mrgvalidate::input_formats}, \code{mrgvalidate::create_validation_docs()}
 }

@@ -1,8 +1,8 @@
 #' Parse testthat output
 #'
 #' @param result List output as reported by [testthat::ListReporter]
-#' @return A tibble formatted according to [input_formats]
-#' @seealso [input_formats], [create_validation_docs()]
+#' @return A tibble formatted according to `mrgvalidate::input_formats`
+#' @seealso `mrgvalidate::input_formats`, `mrgvalidate::create_validation_docs()`
 #' @importFrom purrr map_chr map_lgl map_dfr
 #' @importFrom dplyr mutate
 #' @importFrom stringr str_replace fixed

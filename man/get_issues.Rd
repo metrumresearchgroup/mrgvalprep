@@ -7,13 +7,13 @@
 get_issues(org, repo, mile, domain = VALID_DOMAINS)
 }
 \arguments{
-\item{org}{Github organization that the repo is under}
+\item{org}{Github organization that the repo is under.}
 
-\item{repo}{The name of the repo for the package you are validating}
+\item{repo}{The name of the repo for the package you are validating.}
 
 \item{mile}{The name of the milestone associated with the release you are validating. All issues tied to this milestone with be pulled.}
 
-\item{domain}{Domain where repo lives. Either "github.com" or "ghe.metrumrg.com", defaulting to "github.com"}
+\item{domain}{Domain where repo lives. Either "github.com" or "ghe.metrumrg.com", defaulting to "github.com".}
 }
 \description{
 Mainly a helper function called by \code{\link[=parse_github_issues]{parse_github_issues()}} but can also be
