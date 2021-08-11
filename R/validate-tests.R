@@ -33,7 +33,7 @@
 #' @param out_file File path to write out the test results to. Any extension
 #'   will be ignored and replaced with `.csv` for the test output df and
 #'   `.json` for the `get_sys_info()` output.
-#' @param output_dir Directory to write the output documents to. Defaults to
+#' @param output_dir Directory to write the test outputs to. Defaults to
 #'   working directory.
 #' @param extra_test_dirs Character vector of paths (relative to package root
 #'   dir) to directories that contain additional tests to run

@@ -77,6 +77,6 @@ get_risk <- function(org, repo, domain = VALID_DOMAINS) {
   issue_lab <- filter(issue_lab, grepl("risk", .data$label, fixed = TRUE))
   risk <- select(issue_lab, .data$issue, risk = .data$label)
   risk %>%
-    mutate(ProductRisk = sub("risk: ", "", risk, fixed = TRUE)) %>%
-    select(-risk)
+    mutate(ProductRisk = sub("risk: ", "", .data$risk, fixed = TRUE)) %>%
+    select(-.data$risk)
 }

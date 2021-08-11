@@ -32,7 +32,7 @@ will be ignored and replaced with \code{.csv} for the test output df and
 \code{file.path(root_dir, repo)} should lead to the cloned repo that will be
 tested.}
 
-\item{output_dir}{Directory to write the output documents to. Defaults to
+\item{output_dir}{Directory to write the test outputs to. Defaults to
 working directory.}
 
 \item{extra_test_dirs}{Character vector of paths (relative to package root
