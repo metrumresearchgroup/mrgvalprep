@@ -37,6 +37,12 @@
 #'   working directory.
 #' @param extra_test_dirs Character vector of paths (relative to package root
 #'   dir) to directories that contain additional tests to run
+#' @param set_id_to_name Whether to copy the `TestName` column over to the
+#'   `TestId` column when writing the output CSV. This exists to support legacy
+#'   issues and tests that don't use IDs. Starting with v1.0, mrgvalidate relies
+#'   on test IDs and, as a temporary compatibility kludge, will auto-generate
+#'   them if the `TestId` and `TestName` columns match. New tests and issues
+#'   should use test IDs.
 #' @export
 validate_tests <- function(
   org,
@@ -46,7 +52,9 @@ validate_tests <- function(
   out_file = NULL,
   root_dir = tempdir(),
   output_dir = getwd(),
-  extra_test_dirs = NULL
+  extra_test_dirs = NULL,
+  set_id_to_name = FALSE
+
 ) {
 
   message(glue("Pulling repo {domain}/{org}/{repo}..."))
@@ -76,6 +84,10 @@ validate_tests <- function(
     })
 
     test_df <- bind_rows(test_df, extra_df)
+  }
+
+  if (isTRUE(set_id_to_name)) {
+    test_df$TestId <- test_df$TestName
   }
 
   if (sum(test_df$failed) > 0) {
