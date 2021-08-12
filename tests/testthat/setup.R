@@ -6,7 +6,7 @@ DOMAIN <- "github.com"
 ORG <- "metrumresearchgroup"
 REPO <- "mrgvalidatetestreference"
 MILESTONE <- "v0.6.0"
-TAG <- "0.6.0"
+TAG <- "0.6.3"
 
 STORY_RDS <- "stories_df.RDS"
 
@@ -21,18 +21,6 @@ GHE_REPO <- "mrgvalidatetestreference"
 GHE_MILESTONE <- "v0.6.0"
 GHE_TAG <- "0.6.0"
 
-# cleanup function for after each test
-cleanup <- function() {
-  if (fs::file_exists("all_tests.csv")) fs::file_delete("all_tests.csv")
-  if (fs::file_exists("requirements-specification.docx")) fs::file_delete("requirements-specification.docx")
-  if (fs::file_exists("validation-testing.docx")) fs::file_delete("validation-testing.docx")
-  if (fs::file_exists("traceability-matrix.docx")) fs::file_delete("traceability-matrix.docx")
-  if (fs::file_exists("requirements-specification.md")) fs::file_delete("requirements-specification.md")
-  if (fs::file_exists("validation-testing.md")) fs::file_delete("validation-testing.md")
-  if (fs::file_exists("traceability-matrix.md")) fs::file_delete("traceability-matrix.md")
-  if (fs::file_exists(STORY_RDS)) fs::file_delete(STORY_RDS)
-  if (fs::dir_exists(OUTPUT_DIR)) fs::dir_delete(OUTPUT_DIR)
-}
 
 
 #############################
@@ -52,6 +40,39 @@ STORIES_DF_ROWS_GHE <- 5 # this shouldn't ever change because the GHE repo is st
 
 SPECS_DF_ROWS_GS <- 6
 SPECS_DF_COLS_GS <- 7
+
+
+#######
+# helper functions
+
+#' Check that content from spec is rendered in docs
+#' @param spec Tibble mapping Stories (and optionally Requirements) to Tests
+#' @param docs_output_dir Directory where rendered validation docs to check are
+#' @param set_id_to_name Same as in [validate_tests()]
+check_docs <- function(spec, docs_output_dir, set_id_to_name = FALSE) {
+  # check that files exist
+  expect_true(fs::file_exists(file.path(docs_output_dir, paste0(tools::file_path_sans_ext(mrgvalidate::REQ_FILE), ".docx"))))
+  expect_true(fs::file_exists(file.path(docs_output_dir, paste0(tools::file_path_sans_ext(mrgvalidate::VAL_FILE), ".docx"))))
+  expect_true(fs::file_exists(file.path(docs_output_dir, paste0(tools::file_path_sans_ext(mrgvalidate::MAT_FILE), ".docx"))))
+  expect_true(fs::file_exists(file.path(docs_output_dir, mrgvalidate::REQ_FILE)))
+  expect_true(fs::file_exists(file.path(docs_output_dir, mrgvalidate::VAL_FILE)))
+  expect_true(fs::file_exists(file.path(docs_output_dir, mrgvalidate::MAT_FILE)))
+
+  # check for files content
+  req_text <- readr::read_file(file.path(docs_output_dir, mrgvalidate::REQ_FILE))
+  expect_true(any(stringr::str_detect(req_text, spec$StoryId)))
+  expect_true(any(stringr::str_detect(req_text, unlist(spec$TestIds))))
+  if ("RequirementId" %in% names(spec)) expect_true(any(stringr::str_detect(req_text, spec$RequirementId)))
+
+  val_text <- readr::read_file(file.path(docs_output_dir, mrgvalidate::VAL_FILE))
+  expect_true(any(stringr::str_detect(val_text, unlist(spec$TestIds))))
+
+  mat_text <- readr::read_file(file.path(docs_output_dir, mrgvalidate::MAT_FILE))
+  expect_true(any(!!stringr::str_detect(mat_text, fixed(stringr::str_extract(str_trim(spec$StoryDescription), "^.+")))))
+  if (isFALSE(set_id_to_name)) expect_true(any(stringr::str_detect(mat_text, unlist(spec$TestIds))))
+}
+
+####3
 
 VAL_TITLE <- "Validation Testing"
 VAL_BOILER <- '
