@@ -2,17 +2,30 @@
 #' Read requirements and stories from Google Sheets.
 #'
 #' @details
-#' The stories sheet must have the following columns:
-#' * StoryId (character scalar)
-#' * StoryName (character scalar)
-#' * StoryDescription (character scalar)
-#' * ProductRisk (character scalar)
-#' * RequirementIds (character vector)
+#' ## Option 1: Stories and Requirements
 #'
-#' The requirements sheet must have the following columns:
-#' * RequirementId (character scalar)
-#' * RequirementDescription (character scalar)
-#' * TestIds (character vector)
+#' The stories sheet passed to `ss_stories` must have the following columns:
+#' * `StoryId` (character scalar)
+#' * `StoryName` (character scalar)
+#' * `StoryDescription` (character scalar)
+#' * `ProductRisk` (character scalar)
+#' * `RequirementIds` (character vector)
+#'
+#' The requirements sheet passed to `ss_req` must have the following columns:
+#' * `RequirementId` (character scalar)
+#' * `RequirementDescription` (character scalar)
+#' * `TestIds` (character vector)
+#'
+#' ## Option 2: Stories linked directly to Tests
+#'
+#' Don't pass anything to `ss_req`. The stories sheet passed to `ss_stories` must have the following columns:
+#' * `StoryId` (character scalar)
+#' * `StoryName` (character scalar)
+#' * `StoryDescription` (character scalar)
+#' * `ProductRisk` (character scalar)
+#' * `TestIds` (character vector)
+#'
+#' (Note: these are the same columns as Option 1, but replacing `RequirementIds` with `TestIds`)
 #'
 #' @param ss_stories,ss_req,sheet_stories,sheet_req Sheet identifiers for the
 #'   stories and requirements passed along as the `ss` and `sheet` arguments to
@@ -21,12 +34,18 @@
 #' @export
 read_spec_gsheets <- function
 (
-  ss_stories, ss_req,
+  ss_stories, ss_req = NULL,
   sheet_stories = NULL, sheet_req = NULL
 ) {
-  stories <- read_stories_gsheet(ss = ss_stories, sheet = sheet_stories)
-  reqs <- read_requirements_gsheet(ss = ss_req, sheet = sheet_req)
-  return(merge_requirements_and_stories(stories, reqs))
+  res <- if (is.null(ss_req)) {
+    read_stories_only_gsheet(ss = ss_stories, sheet = sheet_stories)
+  } else {
+    stories <- read_stories_gsheet(ss = ss_stories, sheet = sheet_stories)
+    reqs <- read_requirements_gsheet(ss = ss_req, sheet = sheet_req)
+    merge_requirements_and_stories(stories, reqs)
+  }
+
+  return(res)
 }
 
 #' Join the stories and requirements by requirement ID.
@@ -66,7 +85,7 @@ read_requirements_gsheet <- function
            RequirementDescription = !!req_description_col,
            TestIds = !!test_ids_col) %>%
     select(.data$RequirementId, .data$RequirementDescription, .data$TestIds) %>%
-    mutate(TestIds = stringr::str_split(.data$TestIds, "[, ]+"))
+    mutate(TestIds = stringr::str_split(.data$TestIds, "[\\s,;]+"))
 }
 
 
@@ -96,11 +115,28 @@ read_stories_gsheet <- function
            RequirementIds = !!req_ids_col) %>%
     select(.data$StoryId, .data$StoryName, .data$StoryDescription,
            .data$ProductRisk, .data$RequirementIds) %>%
-    mutate(RequirementIds = stringr::str_split(.data$RequirementIds, "[, ]+"))
+    mutate(RequirementIds = stringr::str_split(.data$RequirementIds, "[\\s,;]+"))
 }
 
-# TODO: To support the existing GitHub functionality, we could have something
-# like read_spec_github() that's an alternative to read_spec_gsheets(). Some
-# thought is needed on how to handle that, though, because the GitHub source
-# doesn't have a story/requirement distinction; the summary from the issue body
-# is taken as the "story".
+#' Read a stories gsheet that maps to tests instead of requirements
+#' @keywords internal
+read_stories_only_gsheet <- function
+(
+  ss, sheet = NULL,
+  story_id_col = "StoryId",
+  story_name_col = "StoryName",
+  story_description_col = "StoryDescription",
+  risk_col = "ProductRisk",
+  test_ids_col = "TestIds"
+) {
+  dd <- googlesheets4::read_sheet(ss = ss, sheet = sheet)
+  dd %>%
+    rename(StoryId = !!story_id_col,
+           StoryName = !!story_name_col,
+           StoryDescription = !!story_description_col,
+           ProductRisk = !!risk_col,
+           TestIds = !!test_ids_col) %>%
+    select(.data$StoryId, .data$StoryName, .data$StoryDescription,
+           .data$ProductRisk, .data$TestIds) %>%
+    mutate(TestIds = stringr::str_split(.data$TestIds, "[\\s,;]+"))
+}
