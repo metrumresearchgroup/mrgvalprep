@@ -1,6 +1,6 @@
 # Intended as a mini end-to-end test
 
-skip_if_not_installed("mrgvalidate", minimum_version = "0.1.2.9000")
+skip_if_not_installed("mrgvalidate", minimum_version = "1.0.0")
 
 test_that("Googlesheets end-to-end works", {
   skip_if_over_rate_limit_google()

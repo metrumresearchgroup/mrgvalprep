@@ -121,7 +121,7 @@ validate_tests <- function(
 #' @param domain Domain where repo lives. Either "github.com" or "ghe.metrumrg.com", defaulting to "github.com"
 #' @param dest_dir File path for directory to clone repo into. Defaults to [tempdir()]
 #' @param overwrite Boolean indicating whether to overwrite `file.path(dest_dir, repo)` if something already exists there. TRUE by default.
-#' @export
+#' @keywords internal
 pull_tagged_repo <- function(
   org,
   repo,

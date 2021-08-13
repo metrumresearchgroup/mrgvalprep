@@ -27,18 +27,18 @@ Read requirements and stories from Google Sheets.
 
 The stories sheet passed to \code{ss_stories} must have the following columns:
 \itemize{
-\item StoryId (character scalar)
-\item StoryName (character scalar)
-\item StoryDescription (character scalar)
-\item ProductRisk (character scalar)
-\item RequirementIds (character vector)
+\item \code{StoryId} (character scalar)
+\item \code{StoryName} (character scalar)
+\item \code{StoryDescription} (character scalar)
+\item \code{ProductRisk} (character scalar)
+\item \code{RequirementIds} (character vector)
 }
 
 The requirements sheet passed to \code{ss_req} must have the following columns:
 \itemize{
-\item RequirementId (character scalar)
-\item RequirementDescription (character scalar)
-\item TestIds (character vector)
+\item \code{RequirementId} (character scalar)
+\item \code{RequirementDescription} (character scalar)
+\item \code{TestIds} (character vector)
 }
 }
 
@@ -46,11 +46,11 @@ The requirements sheet passed to \code{ss_req} must have the following columns:
 
 Don't pass anything to \code{ss_req}. The stories sheet passed to \code{ss_stories} must have the following columns:
 \itemize{
-\item StoryId (character scalar)
-\item StoryName (character scalar)
-\item StoryDescription (character scalar)
-\item ProductRisk (character scalar)
-\item TestIds (character vector)
+\item \code{StoryId} (character scalar)
+\item \code{StoryName} (character scalar)
+\item \code{StoryDescription} (character scalar)
+\item \code{ProductRisk} (character scalar)
+\item \code{TestIds} (character vector)
 }
 
 (Note: these are the same columns as Option 1, but replacing \code{RequirementIds} with \code{TestIds})
