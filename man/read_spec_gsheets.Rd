@@ -4,7 +4,12 @@
 \alias{read_spec_gsheets}
 \title{Read requirements and stories from Google Sheets.}
 \usage{
-read_spec_gsheets(ss_stories, ss_req, sheet_stories = NULL, sheet_req = NULL)
+read_spec_gsheets(
+  ss_stories,
+  ss_req = NULL,
+  sheet_stories = NULL,
+  sheet_req = NULL
+)
 }
 \arguments{
 \item{ss_stories, ss_req, sheet_stories, sheet_req}{Sheet identifiers for the
@@ -18,7 +23,9 @@ Tibble joining requirements and stories by RequirementId.
 Read requirements and stories from Google Sheets.
 }
 \details{
-The stories sheet must have the following columns:
+\subsection{Option 1: Stories and Requirements}{
+
+The stories sheet passed to \code{ss_stories} must have the following columns:
 \itemize{
 \item StoryId (character scalar)
 \item StoryName (character scalar)
@@ -27,10 +34,25 @@ The stories sheet must have the following columns:
 \item RequirementIds (character vector)
 }
 
-The requirements sheet must have the following columns:
+The requirements sheet passed to \code{ss_req} must have the following columns:
 \itemize{
 \item RequirementId (character scalar)
 \item RequirementDescription (character scalar)
 \item TestIds (character vector)
+}
+}
+
+\subsection{Option 2: Stories linked directly to Tests}{
+
+Don't pass anything to \code{ss_req}. The stories sheet passed to \code{ss_stories} must have the following columns:
+\itemize{
+\item StoryId (character scalar)
+\item StoryName (character scalar)
+\item StoryDescription (character scalar)
+\item ProductRisk (character scalar)
+\item TestIds (character vector)
+}
+
+(Note: these are the same columns as Option 1, but replacing \code{RequirementIds} with \code{TestIds})
 }
 }
