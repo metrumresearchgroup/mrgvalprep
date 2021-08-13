@@ -63,7 +63,7 @@ get_issues <- function(org, repo, mile, domain = VALID_DOMAINS) {
 #' @importFrom dplyr filter select mutate
 #' @importFrom ghpm api_url
 #' @importFrom rlang .data
-#' @export
+#' @keywords internal
 get_risk <- function(org, repo, domain = VALID_DOMAINS) {
   domain <- match.arg(domain)
   if (domain == "github.com") {
