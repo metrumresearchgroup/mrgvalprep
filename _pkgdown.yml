@@ -1,0 +1,22 @@
+url: https://metrumresearchgroup.github.io/mrgvalprep
+
+title: mrgvalprep
+template:
+  params:
+    bootswatch: flatly
+navbar:
+  type: inverse
+  right:
+  - icon: fa-github fa-lg
+    href: https://github.com/metrumresearchgroup/mrgvalprep
+reference:
+- title: Format test outputs
+  contents:
+  - validate_tests
+  - get_sys_info
+  - parse_testthat_list_reporter
+- title: Format stories and requirements
+  contents:
+  - read_spec_gsheets
+  - parse_github_issues
+  - get_issues

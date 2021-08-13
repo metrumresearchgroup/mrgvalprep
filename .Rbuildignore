@@ -5,3 +5,5 @@
 ^.Rprofile$
 ^LICENSE\.md$
 ^docs/
+^pkgr.yml$
+^_pkgdown.yml$

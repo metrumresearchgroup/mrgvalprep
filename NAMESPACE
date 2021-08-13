@@ -2,11 +2,9 @@
 
 export("%>%")
 export(get_issues)
-export(get_risk)
 export(get_sys_info)
 export(parse_github_issues)
 export(parse_testthat_list_reporter)
-export(pull_tagged_repo)
 export(read_spec_gsheets)
 export(validate_tests)
 importFrom(dplyr,bind_rows)

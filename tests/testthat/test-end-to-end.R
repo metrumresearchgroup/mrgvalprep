@@ -1,102 +1,80 @@
 # Intended as a mini end-to-end test
 
-skip("Consider if we want to import mrgvalidate and run end-to-end tests here")
+skip_if_not_installed("mrgvalidate", minimum_version = "1.0.0")
 
-##### ALL OF THIS IS OLD CODE that will need to be heavily refactored if we
-# intend to do an end-to-end test here, but it was kept around in case we wanted
-# to repurpose some of it.
-#
-# The idea, if we do, would be to import `mrgvalidate` and test running from
-# `parse_github_stories()` and `validate_tests()` all the way through
-# generating the docs.
+test_that("Googlesheets end-to-end works", {
+  skip_if_over_rate_limit_google()
+  googlesheets4::gs4_deauth() # public sheets, so no need to authenticate
+  spec <- read_spec_gsheets(
+    ss_stories = "1HgsxL4qfYK-wjB-nloMilQiuBSLV6FZq_h2ToB6QNlI",
+    ss_req = "1SnyUzxVDUUJFtMGEi2x4zJE0iB2JDV1Np-ivhaUkODk"
+  )
 
-test_that("no docs exist at the beginning", {
-  expect_false(fs::file_exists(ALL_TESTS))
-  expect_false(fs::file_exists(paste0(tools::file_path_sans_ext(REQ_FILE), ".docx")))
-  expect_false(fs::file_exists(paste0(tools::file_path_sans_ext(VAL_FILE), ".docx")))
-  expect_false(fs::file_exists(paste0(tools::file_path_sans_ext(MAT_FILE), ".docx")))
-  expect_false(fs::file_exists(REQ_FILE))
-  expect_false(fs::file_exists(VAL_FILE))
-  expect_false(fs::file_exists(MAT_FILE))
-  expect_false(fs::file_exists(STORY_RDS))
-})
+  docs_output_dir <- file.path(tempdir(), "mrgvalprep_end_to_end_googlesheets_docs_output")
+  if (fs::dir_exists(docs_output_dir)) fs::dir_delete(docs_output_dir)
+  fs::dir_create(docs_output_dir)
+  on.exit({ fs::dir_delete(docs_output_dir) })
 
-test_that("pull_tagged_repo() gets clones and gets commit hash", {
-  commit_hash <- pull_tagged_repo(org = ORG, repo = REPO, tag = TAG, domain = DOMAIN)
-  expect_identical(commit_hash, COMMIT_REF)
-})
+  # test with pre-generated test outputs
+  fake_product <- "fake Googlesheets product"
+  mrgvalidate::create_validation_docs(
+    fake_product,
+    "vFake",
+    spec,
+    auto_test_dir = system.file("test-inputs", "validation-results-sample", package = "mrgvalidate"),
+    man_test_dir = system.file("test-inputs", "manual-tests-sample", package = "mrgvalidate"),
+    output_dir = docs_output_dir
+  )
 
-test_that("validate_tests() writes csv results", {
-  validate_tests(pkg = REPO)
-  expect_true(fs::file_exists(ALL_TESTS))
-
-  test_df <- readr::read_csv(ALL_TESTS, col_types = readr::cols())
-  expect_equal(nrow(test_df), TEST_DF_ROWS)
-  expect_equal(ncol(test_df), TEST_DF_COLS)
-  expect_equal(sum(test_df$failed), 0)
+  check_docs(spec, docs_output_dir)
 
 })
 
-test_that("write_validation_testing() dry_run renders", {
+test_that("Github end-to-end works", {
+  # get issues from Github
+  skip_if_over_rate_limit_github()
+  spec <- parse_github_issues(org = ORG, repo = REPO, mile = MILESTONE, domain = DOMAIN)
 
-  write_validation_testing(
+  # run test to generate output
+  dir_prefix <- "mrgvalprep_end_to_end_github"
+  pkg_dir <- file.path(tempdir(), glue::glue("{dir_prefix}_pkg"))
+  if (fs::dir_exists(pkg_dir)) fs::dir_delete(pkg_dir)
+  fs::dir_create(pkg_dir)
+  on.exit({ fs::dir_delete(pkg_dir) })
+
+  test_output_dir <- file.path(tempdir(), glue::glue("{dir_prefix}_test_output"))
+  if (fs::dir_exists(test_output_dir)) fs::dir_delete(test_output_dir)
+  fs::dir_create(test_output_dir)
+  on.exit({ fs::dir_delete(test_output_dir) })
+
+  docs_output_dir <- file.path(tempdir(), glue::glue("{dir_prefix}_docs_output"))
+  if (fs::dir_exists(docs_output_dir)) fs::dir_delete(docs_output_dir)
+  fs::dir_create(docs_output_dir)
+  on.exit({ fs::dir_delete(docs_output_dir) })
+
+  # run test to generate output
+  validate_tests(
     org = ORG,
     repo = REPO,
     version = TAG,
-    dry_run = TRUE
+    domain = VALID_DOMAINS,
+    out_file = glue::glue("{dir_prefix}_test_res"),
+    root_dir = pkg_dir,
+    output_dir = test_output_dir,
+    set_id_to_name = TRUE
   )
 
-  expect_true(fs::file_exists(paste0(tools::file_path_sans_ext(VAL_FILE), ".docx")))
-  expect_true(fs::file_exists(VAL_FILE))
-
-  val_text <- readr::read_file(VAL_FILE)
-  expect_true(str_detect(val_text, VAL_TITLE))
-  expect_true(str_detect(val_text, VAL_BOILER))
-})
-
-
-test_that("get_issues() and process_stories() pull from github", {
-  release_issues <- get_issues(org = ORG, repo = REPO, mile = MILESTONE, domain = DOMAIN)
-  stories_df <- process_stories(release_issues, org = ORG, repo = REPO, domain = DOMAIN)
-
-  expect_equal(nrow(stories_df), STORIES_DF_ROWS)
-  expect_equal(ncol(stories_df), STORIES_DF_COLS)
-
-  saveRDS(stories_df, STORY_RDS)
-})
-
-test_that("write_requirements() renders", {
-  stories_df <- readRDS(STORY_RDS)
-
-  write_requirements(
-    df = stories_df,
-    pkg = REPO,
-    version = TAG
+  # build docs
+  suppressWarnings( # suppressing warning about `set_id_to_name=T` being legacy functionality
+    mrgvalidate::create_validation_docs(
+      "fake Github product",
+      "vFake",
+      spec,
+      auto_test_dir = test_output_dir,
+      output_dir = docs_output_dir
+    )
   )
 
-  expect_true(fs::file_exists(paste0(tools::file_path_sans_ext(REQ_FILE), ".docx")))
-  expect_true(fs::file_exists(REQ_FILE))
 
-  req_text <- readr::read_file(REQ_FILE)
-  expect_true(str_detect(req_text, REQ_TITLE))
-  expect_true(str_detect(req_text, REQ_BOILER))
+  check_docs(spec, docs_output_dir, set_id_to_name = TRUE)
 })
-
-test_that("write_traceability_matrix() renders", {
-  stories_df <- readRDS(STORY_RDS)
-
-  write_traceability_matrix(
-    df = stories_df,
-    pkg = REPO,
-    version = TAG
-  )
-
-  expect_true(fs::file_exists(paste0(tools::file_path_sans_ext(MAT_FILE), ".docx")))
-  expect_true(fs::file_exists(MAT_FILE))
-
-  mat_text <- readr::read_file(MAT_FILE)
-  expect_true(str_detect(mat_text, MAT_TITLE))
-  expect_true(str_detect(mat_text, MAT_BOILER))
-})
-
-cleanup()

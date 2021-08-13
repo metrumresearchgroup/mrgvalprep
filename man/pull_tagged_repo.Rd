@@ -29,3 +29,4 @@ pull_tagged_repo(
 \description{
 Clones the specified repo at the specified tag to disk
 }
+\keyword{internal}

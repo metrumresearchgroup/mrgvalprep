@@ -1,0 +1,23 @@
+Version: 1
+Descriptions:
+  - DESCRIPTION
+
+Packages:
+  - devtools
+  - renv
+  - pkgdown
+
+Repos:
+  - CRAN: https://cran.rstudio.com
+  - ghpm: https://s3.amazonaws.com/mpn.metworx.dev/releases/ghpm/0.5.1
+  - mrgvalidate: https://s3.amazonaws.com/mpn.metworx.dev/releases/mrgvalidate/1.0.0
+
+Lockfile:
+  Type: renv
+
+Customizations:
+  Packages:
+    - ghpm:
+        Type: source
+    - mrgvalidate:
+        Type: source

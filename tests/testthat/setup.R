@@ -1,3 +1,5 @@
+library(stringr)
+
 ###########################
 # constants for test input
 ###########################
@@ -6,7 +8,7 @@ DOMAIN <- "github.com"
 ORG <- "metrumresearchgroup"
 REPO <- "mrgvalidatetestreference"
 MILESTONE <- "v0.6.0"
-TAG <- "0.6.0"
+TAG <- "0.6.3"
 
 STORY_RDS <- "stories_df.RDS"
 
@@ -21,18 +23,6 @@ GHE_REPO <- "mrgvalidatetestreference"
 GHE_MILESTONE <- "v0.6.0"
 GHE_TAG <- "0.6.0"
 
-# cleanup function for after each test
-cleanup <- function() {
-  if (fs::file_exists("all_tests.csv")) fs::file_delete("all_tests.csv")
-  if (fs::file_exists("requirements-specification.docx")) fs::file_delete("requirements-specification.docx")
-  if (fs::file_exists("validation-testing.docx")) fs::file_delete("validation-testing.docx")
-  if (fs::file_exists("traceability-matrix.docx")) fs::file_delete("traceability-matrix.docx")
-  if (fs::file_exists("requirements-specification.md")) fs::file_delete("requirements-specification.md")
-  if (fs::file_exists("validation-testing.md")) fs::file_delete("validation-testing.md")
-  if (fs::file_exists("traceability-matrix.md")) fs::file_delete("traceability-matrix.md")
-  if (fs::file_exists(STORY_RDS)) fs::file_delete(STORY_RDS)
-  if (fs::dir_exists(OUTPUT_DIR)) fs::dir_delete(OUTPUT_DIR)
-}
 
 
 #############################
@@ -53,40 +43,36 @@ STORIES_DF_ROWS_GHE <- 5 # this shouldn't ever change because the GHE repo is st
 SPECS_DF_ROWS_GS <- 6
 SPECS_DF_COLS_GS <- 7
 
-VAL_TITLE <- "Validation Testing"
-VAL_BOILER <- '
-## Scope
+VAL_FILE <- "validation-testing.md"
+REQ_FILE <- "requirements-specification.md"
+MAT_FILE <- "traceability-matrix.md"
 
-The purpose of this Validation Testing document is to define the conditions for
-test execution. All tests are specified and linked to release candidate user
-stories as numbered issues in the Requirements Specification-Validation Plan
-document.
+#######
+# helper functions
 
-----------------
+#' Check that content from spec is rendered in docs
+#' @param spec Tibble mapping Stories (and optionally Requirements) to Tests
+#' @param docs_output_dir Directory where rendered validation docs to check are
+#' @param set_id_to_name Same as in [validate_tests()]
+check_docs <- function(spec, docs_output_dir, set_id_to_name = FALSE) {
+  # check that files exist
+  expect_true(fs::file_exists(file.path(docs_output_dir, paste0(tools::file_path_sans_ext(REQ_FILE), ".docx"))))
+  expect_true(fs::file_exists(file.path(docs_output_dir, paste0(tools::file_path_sans_ext(VAL_FILE), ".docx"))))
+  expect_true(fs::file_exists(file.path(docs_output_dir, paste0(tools::file_path_sans_ext(MAT_FILE), ".docx"))))
+  expect_true(fs::file_exists(file.path(docs_output_dir, REQ_FILE)))
+  expect_true(fs::file_exists(file.path(docs_output_dir, VAL_FILE)))
+  expect_true(fs::file_exists(file.path(docs_output_dir, MAT_FILE)))
 
-## Test locations
+  # check for files content
+  req_text <- readr::read_file(file.path(docs_output_dir, REQ_FILE))
+  expect_true(any(str_detect(req_text, spec$StoryId)))
+  expect_true(any(str_detect(req_text, unlist(spec$TestIds))))
+  if ("RequirementId" %in% names(spec)) expect_true(any(str_detect(req_text, spec$RequirementId)))
 
-Tests are in the following location
+  val_text <- readr::read_file(file.path(docs_output_dir, VAL_FILE))
+  expect_true(any(str_detect(val_text, unlist(spec$TestIds))))
 
-1. `tests/testthat`
-'
-
-REQ_TITLE <- "# Requirements Specification"
-REQ_BOILER <- '
-## Scope
-
-The purpose of this document is to define specific criteria for each testing
-task.  Testing shall be conducted in accordance to the requirements within this
-document. The Requirement Specifications ensure that each requirement is tested.
-'
-
-MAT_TITLE <- "# Traceability Matrix"
-MAT_BOILER <- '
-## Scope
-
-This traceability matrix links product risk, test names, and test results to
-specific user stories for the proposed software release. User stories, including
-requirements and test specifications are listed in the Requirements Specification
-and Validation Plan.
-'
-
+  mat_text <- readr::read_file(file.path(docs_output_dir, MAT_FILE))
+  expect_true(any(!!str_detect(mat_text, fixed(str_extract(str_trim(spec$StoryDescription), "^.+")))))
+  if (isFALSE(set_id_to_name)) expect_true(any(str_detect(mat_text, unlist(spec$TestIds))))
+}

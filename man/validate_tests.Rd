@@ -12,7 +12,8 @@ validate_tests(
   out_file = NULL,
   root_dir = tempdir(),
   output_dir = getwd(),
-  extra_test_dirs = NULL
+  extra_test_dirs = NULL,
+  set_id_to_name = FALSE
 )
 }
 \arguments{
@@ -37,6 +38,13 @@ working directory.}
 
 \item{extra_test_dirs}{Character vector of paths (relative to package root
 dir) to directories that contain additional tests to run}
+
+\item{set_id_to_name}{Whether to copy the \code{TestName} column over to the
+\code{TestId} column when writing the output CSV. This exists to support legacy
+issues and tests that don't use IDs. Starting with v1.0, mrgvalidate relies
+on test IDs and, as a temporary compatibility kludge, will auto-generate
+them if the \code{TestId} and \code{TestName} columns match. New tests and issues
+should use test IDs.}
 }
 \value{
 Invisibly returns tibble of formatted test output. Note that this

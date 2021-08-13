@@ -16,3 +16,4 @@ get_risk(org, repo, domain = VALID_DOMAINS)
 \description{
 Get risk field for each issue
 }
+\keyword{internal}
