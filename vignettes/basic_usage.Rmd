@@ -18,17 +18,45 @@ knitr::opts_chunk$set(
 
 The `mrgvalprep` package contains helper functions for gathering, formatting, and preprocessing input data for `mrgvalidate`. The `mrgvalidate` package is used specifically to generate three documents that are necessary for the software validation process at Mertrum Research Group. Those documents are:
 
-* requirements-specification.docx
-* validation-testing.docx
-* traceability-matrix.docx
+* `requirements-specification.docx`
+* `validation-testing.docx`
+* `traceability-matrix.docx`
 
-This vignette demonstrates some of the primary functionality for using `mrgvalprep` to pull validate an R package and build validation docs from content stored in either Github issues or Googlesheets.
+This vignette demonstrates some of the primary functionality for using `mrgvalprep` to validate an R package and build validation docs from content stored in either Github issues or Googlesheets.
 
 ```{r setup}
 library(mrgvalprep)
-#library(mrgvalidate)
-devtools::load_all("../../mrgvalidate") ##### REPLACE!!!
+library(mrgvalidate)
 ```
+
+# `mrgvalidate` inputs
+
+`mrgvalidate` requires two primary inputs:
+
+* A directory of test outputs (`.csv` and `.json` files, described below)
+* A tibble of user stories and, optionally, technical requirements
+
+**The format these are expected to conform to is described in [?mrgvalidate::input_formats](https://metrumresearchgroup.github.io/mrgvalidate/reference/input_formats.html).** The purpose of `mrgvalprep` is to take test outputs and stories from a variety of formats and transform them into the format that `mrgvalidate` expects.
+
+Below we show a few examples of how to do this. 
+
+* [Example 1: Automated and Manual Tests, with Stories from Googlesheets](#example1)
+* [Example 2: An R package on Github, with Stories from Github Issues](#example2)
+
+# Example 1: Automated and Manual Tests, with Stories from Googlesheets {#example1}
+
+This example show how to validate software that contains both automated _and_ manual tests, as well as how to pull Stories and Requirements from Googlesheets.
+
+### Automated test outputs
+
+Currently, `mrgvalprep` only has a formatter for R's `testthat` package, though we are planning to add more functions to take the input from other test frameworks (for example `go test --json` output) that will return a tibble in the same shape as the output from `parse_testthat_list_reporter()`.
+
+
+* Calls `get_sys_info()` to capture relevant system and user information, writing that to a `.json`
+
+... _WORK IN PROGRESS_ ...
+
+# Example 2: An R package on Github, with Stories from Github Issues {#example2}
 
 ### Initial setup
 
@@ -44,20 +72,10 @@ Next, you will need to make sure you have a valid token assigned to the relevant
 Sys.setenv(GITHUB_PAT="your-token") # "your-token" will be the alphanumeric OAuth token you get from Github
 ```
 
-# `mrgvalidate` inputs
 
-`mrgvalidate` requires two primary inputs:
+## Test outputs
 
-* A directory of test outputs (`.csv` and `.json` files, described below)
-* A tibble of user stories and, optionally, technical requirements
-
-**The format these are expected to conform to is described in `?mrgvalidate::input_formats`.** Below we will discuss how to generate them.
-
-# Test outputs
-
-Currently, `mrgvalprep` only has a formatter for R's `testthat` package, though we are planning to add more functions to take the input from other test frameworks (for example `go test --json` output) that will return a tibble in the same shape as the output from `parse_testthat_list_reporter()`.
-
-While you can call `parse_testthat_list_reporter()` directly, it is likely easier to use the `validate_tests()` wrapper, which does several things:
+While you can call `parse_testthat_list_reporter()` directly, if you are validating an R package on Github, it is likely easier to use the `validate_tests()` wrapper. This does several things:
 
 * Clones the repo of the package being validated from Github at a specified tag
 * Installs the package in a temp directory
@@ -73,21 +91,41 @@ validate_tests(
   repo = "mrgvalidatetestreference", # fake package used by mrgvalprep test suite
   milestone = "v0.6.0", # the name of the milestone in github
   version = "0.6.0",     # the tag that will be pulled for testing
-  out_file = "my_test_output"
+  out_file = "my_test_output",
+  set_id_to_name = TRUE # pass this only if _not_ using Test Id's (described below)
 )
 ```
 
 This call will write the `testthat` output to `my_test_output.csv` and the system info (including the commit hash of the git tag you pass to `version`) to `my_test_output.json`.
 
-## Notes on formatting
+### Identifying tests in code
 
-Both `mrgvalprep` and `mrgvalidate` rely on the input data being structured in a predictable way.
+To map tests to Stories, each test must be uniquely identified. The preferred method is to include Test Id's in the Test Name within your code, as described in [Example 1](#example1) above. However, it is also possible to match on the full Test Name (the full string passed as the first argument to `test_that()`). For example:
+
+```
+test_that("this feature works", {
+  # test code
+})
+```
+
+In this case, `this feature works` is the Test Name which will be passed through as a Test Id, if you pass `set_id_to_name = TRUE` to `validate_tests()` as shown above. Your Stories can then reference this full string, as discussed in the next section. **Note that you must either use Test Id's _or_ the full Test Names** for mapping to Stories. It is not possible to mix between them.
+
+A few notes of caution on using full Test Names:
+
+* All tests must have a unique name specified as the first arguement to the `test_that()` function (as in, no two tests have the same name).
+* If you are using Test Names in your issues then when you change the names of your tests in future versions, you will have to go back and change the names in the issues as well (as described in the "Issue format" section below). This is obviously toilsome and is one of the primary motivations for using Test Id's instead.
+
+**STOPPED HERE!!!!!!!**
+
+## Stories from Github issues
+
+You can define your Stories in Github issues, attached to a milestone, and `mrgvalprep` will pull them using the `ghpm` package. However, doing this relies on the input data being structured in a predictable way:
 
 ### Release tag
 The commit that represents your release must be tagged, ideally as the version number that you are validating.
 
 ### Milestone
-All issues relevant to the release you are validating _must_ be associated with the same milestone. This may be the same as the tag for the release commit, but it does not necessarily need to be.
+All issues relevant to the release you are validating _must_ be associated with the same milestone. This may be named the same as the tag for the release commit, but it does not necessarily need to be.
 
 ### Issue format
 The issue parser for creating validation documents requires a very specific format for _all_ issues that are being validated (i.e. associated with the milestone discussed above).
@@ -98,29 +136,14 @@ The issue parser for creating validation documents requires a very specific form
 * Tests section
   * There must be a top-level heading entitled `# Tests`
   * This should contain a bulleted list of all the tests that are relevant to this functionality. This list can take two forms:
-    * **test Id's -- NEED TO FILL IN AND EXPLAIN THIS** and also how it needs to be in brackets in the test code
-    * Test names (i.e. the first arguement to the `test_that()` function).
+    * Test Id's -- as described in Example 1, you can list only the Test Id's (like `XXX-XXX-123`) here, as long as those Test Id's are contained in the `.csv` file created by `validate_tests()`. See [Example 1](#example1) above for how to included Test Id's in your test suite code.
+    * Test names -- alternatively, you pass the full text of the Test name (i.e. the string passed as the first arguement to the `test_that()` function in your test code). This method is _not_ recommended because it relies on extract full string matching and is therefore more brittle than using Test Id's. If you use this method, you will need to pass `set_id_to_name = TRUE` to `validate_tests()` as shown above.
   * Note that **if an issue has no tests** associated with it, you _still_ need a top-level heading entitled `# Tests` but it should contain only some brief text about why tests are not necessary (with _no_ leading bullets).
 * Risk
   * All issues must have a label that conveys the level of risk associated with this functionality.
   * Label must be formatted like `risk: ____`
 
-There should be no other top-level headings. Examples of correctly formatted issues can be seen in the [test reference repo](https://github.com/metrumresearchgroup/mrgvalidatetestreference/issues) used by `mrgvalidate`.
-
-
-## testthat tests
-Similarly, the package you are validating must use the `testthat` package and the tests must be specified in the following way:
-
-* **MAYBE TALK ABOUT TEST ID'S HERE**
-* All tests must have a unique name specified as the first arguement to the `test_that()` function (as in, no two tests have the same name).
-* As a word of caution, if you are using Test names in your issues then when you change the names of your tests in future versions, you will have to go back and change the names in the issues as well (as described in the "Issue format" section above). This is obviously toilsome and is one of the primary motivations for using Test Id's instead.
-
-**STOPPED HERE!!!!!!!**
-
-## Github issues
-The `mrgvalidate` package depends on the issues in Github being in a very specific format. All functionality that is going to be validated must be defined in a Github issue, formatted as described below.
-
-
+There should be no other top-level headings. Examples of correctly formatted issues can be seen in the [test reference repo](https://github.com/metrumresearchgroup/mrgvalidatetestreference/issues) used by the `mrgvalprep` test suite.
 
 
 # Generating the docs
