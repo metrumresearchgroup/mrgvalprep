@@ -10,7 +10,8 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  eval = FALSE
 )
 ```
 
@@ -24,7 +25,7 @@ The `mrgvalprep` package contains helper functions for gathering, formatting, an
 
 This vignette demonstrates some of the primary functionality for using `mrgvalprep` to validate an R package and build validation docs from content stored in either Github issues or Googlesheets.
 
-```{r setup}
+```{r}
 library(mrgvalprep)
 library(mrgvalidate)
 ```
@@ -47,6 +48,26 @@ Below we show a few examples of how to do this.
 
 This example show how to validate software that contains both automated _and_ manual tests, as well as how to pull Stories and Requirements from Googlesheets.
 
+The full code (replicated in each section below) is included here for ease of reference. See below for details about each of these functions and their inputs.
+
+```{r}
+stories_df <- read_spec_gsheets(
+  ss_stories = "1HgsxL4qfYK-wjB-nloMilQiuBSLV6FZq_h2ToB6QNlI", # the sheet with Stories
+  ss_req = "1SnyUzxVDUUJFtMGEi2x4zJE0iB2JDV1Np-ivhaUkODk"      # the (optional) sheet with Requirements
+)
+
+# create validation documents
+mrgvalidate::create_validation_docs(
+  "fake Googlesheets product",              # name of the product or package you are validating
+  "vFake",                                  # version number for this validation (to be printed in docs)
+  stories_df,                               # tibble of stories from `read_spec_gsheets()`
+  auto_test_dir = "automated_test_outputs", # dir containing .csv and .json files for automated test outputs
+  man_test_dir = "manual_test_outputs",     # dir containing manual test outputs
+  output_dir = docs_output_dir              # dir to write validation docs into
+)
+```
+
+
 ### Automated test outputs
 
 Currently, `mrgvalprep` only has a formatter for R's `testthat` package, though we are planning to add more functions to take the input from other test frameworks (for example `go test --json` output) that will return a tibble in the same shape as the output from `parse_testthat_list_reporter()`.
@@ -58,17 +79,49 @@ Currently, `mrgvalprep` only has a formatter for R's `testthat` package, though 
 
 # Example 2: An R package on Github, with Stories from Github Issues {#example2}
 
+This example shows how to validate an R package, stored in a Github repo, that has Stories defined in Github issues in that same repo.
+
+The full code (replicated in each section below) is included here for ease of reference. See below for details about each of these functions and their inputs.
+
+```{r}
+# run test suite to generate test outputs
+validate_tests(
+  org = "metrumresearchgroup",       # Github organization containing repo that will be validated
+  repo = "mrgvalidatetestreference", # repo for fake package used by mrgvalprep test suite
+  version = "0.6.0",                 # the tag that will be pulled for testing
+  out_file = "my_test_output",       # basename for output .csv and .json files
+  set_id_to_name = TRUE              # pass this only if _not_ using Test Id's (described below)
+)
+
+# pull Stories from Github issues
+stories_df <- parse_github_issues(
+  org = "metrumresearchgroup",        # Github organization containing repo that will be validated
+  repo = "mrgvalidatetestreference",  # repo for fake package used by mrgvalprep test suite
+  milestone = "v0.6.0"                # the name of the milestone in Github
+)
+
+# create the validation documents
+mrgvalidate::create_validation_docs(
+  "mrgvalidatetestreference",       # name of the product or package you are validating
+  "0.6.0",                          # version number for this validation (to be printed in docs)
+  stories_df,                       # tibble of stories from `parse_github_issues()`
+  auto_test_dir = "test_outputs",   # dir containing test output .csv and .json files
+  output_dir = "some_dir_for_docs"  # dir to write validation docs into
+)
+```
+
+
 ### Initial setup
 
 Before proceeding, you will need to have `ghpm` installed on your system in order to interact with Github. This is an internal Metrum package that handles calls to the Github API. You can try `library(ghpm)` if you're not sure if you have it. If you do not, install it with:
 
-```{r get ghpm, eval = FALSE}
+```{r}
 devtools::install_github("metrumresearchgroup/ghpm")
 ```
 
 Next, you will need to make sure you have a valid token assigned to the relevant environment variable so that `ghpm` can access the Github API. Depending on whether the package you are validating is on Github Enterprise or public Github, you will either need to set `GHE_PAT` or `GITHUB_PAT` respectively. **If you do not have a token** please read an article like [this](https://happygitwithr.com/github-pat.html#github-pat) for instuctions on getting one set up. Then use the following code to set the variable (substituting `GHE_PAT` if appropriate).
 
-```{r set token, eval = FALSE}
+```{r}
 Sys.setenv(GITHUB_PAT="your-token") # "your-token" will be the alphanumeric OAuth token you get from Github
 ```
 
@@ -85,14 +138,13 @@ While you can call `parse_testthat_list_reporter()` directly, if you are validat
 
 The results `.csv` and `.json` files can be passed directly to the `auto_test_dir` argument of `mrgvalidate::create_validation_docs()`.
 
-```{r get testing, eval = FALSE}
+```{r}
 validate_tests(
-  org = "metrumresearchgroup",
-  repo = "mrgvalidatetestreference", # fake package used by mrgvalprep test suite
-  milestone = "v0.6.0", # the name of the milestone in github
-  version = "0.6.0",     # the tag that will be pulled for testing
-  out_file = "my_test_output",
-  set_id_to_name = TRUE # pass this only if _not_ using Test Id's (described below)
+  org = "metrumresearchgroup",       # Github organization containing repo that will be validated
+  repo = "mrgvalidatetestreference", # repo for fake package used by mrgvalprep test suite
+  version = "0.6.0",                 # the tag that will be pulled for testing
+  out_file = "my_test_output",       # basename for output .csv and .json files
+  set_id_to_name = TRUE              # pass this only if _not_ using Test Id's (described below)
 )
 ```
 
@@ -103,29 +155,29 @@ This call will write the `testthat` output to `my_test_output.csv` and the syste
 To map tests to Stories, each test must be uniquely identified. The preferred method is to include Test Id's in the Test Name within your code, as described in [Example 1](#example1) above. However, it is also possible to match on the full Test Name (the full string passed as the first argument to `test_that()`). For example:
 
 ```
-test_that("this feature works", {
+test_that("feature X works correctly", {
   # test code
 })
 ```
 
-In this case, `this feature works` is the Test Name which will be passed through as a Test Id, if you pass `set_id_to_name = TRUE` to `validate_tests()` as shown above. Your Stories can then reference this full string, as discussed in the next section. **Note that you must either use Test Id's _or_ the full Test Names** for mapping to Stories. It is not possible to mix between them.
+In this case, `this feature works` is the Test Name which will be passed through as a Test Id, if you pass `set_id_to_name = TRUE` to `validate_tests()` as shown above. Your Stories can then reference this full string, as discussed in the next section. Note that, for mapping tests to Stories, **you must either use Test Id's _or_ the full Test Names, it is _not_ possible to mix between them.**
 
 A few notes of caution on using full Test Names:
 
 * All tests must have a unique name specified as the first arguement to the `test_that()` function (as in, no two tests have the same name).
+* If using the `describe()`/`it()` syntax in `testthat`, the Test Name will be the concatenation of the string passed to the outer `describe()` and the inner `it()`.
 * If you are using Test Names in your issues then when you change the names of your tests in future versions, you will have to go back and change the names in the issues as well (as described in the "Issue format" section below). This is obviously toilsome and is one of the primary motivations for using Test Id's instead.
 
-**STOPPED HERE!!!!!!!**
+Test Id's is the preferred method for for mapping, for these reasons and others.
 
 ## Stories from Github issues
 
-You can define your Stories in Github issues, attached to a milestone, and `mrgvalprep` will pull them using the `ghpm` package. However, doing this relies on the input data being structured in a predictable way:
-
-### Release tag
-The commit that represents your release must be tagged, ideally as the version number that you are validating.
+You can define your Stories in Github issues, attached to a milestone, and `mrgvalprep` will pull them into a tibble that can be passed to `mrgvalidate`. However, doing this relies on the input data being structured in a predictable way:
 
 ### Milestone
-All issues relevant to the release you are validating _must_ be associated with the same milestone. This may be named the same as the tag for the release commit, but it does not necessarily need to be.
+All issues relevant to the release you are validating _must_ be associated with the same milestone. This may be named the same as the tag for the release commit, but it does not need to be. 
+
+Note that this works well for validating a _change set_, but makes it difficult to validate the full functionality of the package (because _all_ functionality would need to be represented in an issue on this milestone). If you need to validate the full functionality in single set of docs, consider using the Googlesheets method, shown in the previous example.
 
 ### Issue format
 The issue parser for creating validation documents requires a very specific format for _all_ issues that are being validated (i.e. associated with the milestone discussed above).
@@ -136,8 +188,8 @@ The issue parser for creating validation documents requires a very specific form
 * Tests section
   * There must be a top-level heading entitled `# Tests`
   * This should contain a bulleted list of all the tests that are relevant to this functionality. This list can take two forms:
-    * Test Id's -- as described in Example 1, you can list only the Test Id's (like `XXX-XXX-123`) here, as long as those Test Id's are contained in the `.csv` file created by `validate_tests()`. See [Example 1](#example1) above for how to included Test Id's in your test suite code.
-    * Test names -- alternatively, you pass the full text of the Test name (i.e. the string passed as the first arguement to the `test_that()` function in your test code). This method is _not_ recommended because it relies on extract full string matching and is therefore more brittle than using Test Id's. If you use this method, you will need to pass `set_id_to_name = TRUE` to `validate_tests()` as shown above.
+    * **Test Id's** -- as described in Example 1, you can list only the Test Id's (like `XXX-XXX-123`) here, as long as those Test Id's are contained in the `.csv` file created by `validate_tests()`. See [Example 1](#example1) above for how to included Test Id's in your test suite code.
+    * **Test Names** -- alternatively, you can pass the full text of the Test Name (i.e. the string passed as the first arguement to the `test_that()` function in your test code). As mentioned above, this method is _not_ recommended because it relies on extract full string matching and is therefore more brittle than using Test Id's. If you use this method, **you will need to pass `set_id_to_name = TRUE` to `validate_tests()`** as shown above.
   * Note that **if an issue has no tests** associated with it, you _still_ need a top-level heading entitled `# Tests` but it should contain only some brief text about why tests are not necessary (with _no_ leading bullets).
 * Risk
   * All issues must have a label that conveys the level of risk associated with this functionality.
@@ -145,21 +197,35 @@ The issue parser for creating validation documents requires a very specific form
 
 There should be no other top-level headings. Examples of correctly formatted issues can be seen in the [test reference repo](https://github.com/metrumresearchgroup/mrgvalidatetestreference/issues) used by the `mrgvalprep` test suite.
 
+### Pulling the issues
 
-# Generating the docs
+Once you have your issues formatted as described in the previous section, you can pull them into a tibble with `parse_github_issues()`.
 
-The "happy path" to generating the docs is a single function call.
-
-```{r input vars, eval = FALSE}
-mrgvalidate::generate_docs(
-  org = "metrumresearchgroup",
-  repo = "rbabylon",
-  milestone = "v0.6.0", # the name of the milestone in github
-  version = "0.6.0"     # the tag that will be pulled for testing
+```{r}
+stories_df <- parse_github_issues(
+  org = "metrumresearchgroup",        # Github organization containing repo that will be validated
+  repo = "mrgvalidatetestreference",  # repo for fake package used by mrgvalprep test suite
+  milestone = "v0.6.0"                # the name of the milestone in Github
 )
 ```
 
-The `generate_docs()` function is a simple wrapper around the functions you'll see below. It uses the defaults to write out three `.docx` files, as well as the `.md` files that are used to render each.
+## Generating the docs
+
+Now that you have test outputs and a tibble of Stories, you are ready to generate your validation documents. This is done with [`mrgvalidate::create_validation_docs()`](https://metrumresearchgroup.github.io/mrgvalidate/reference/create_validation_docs.html).
+
+You will have a `.csv` and `.json` file of test output, from your `validate_tests()` call above. Put these in a directory together (this is the `test_outputs` directory in the code below). Then simply pass the path to that directory, along with your tibble of Stories, into [`mrgvalidate::create_validation_docs()`](https://metrumresearchgroup.github.io/mrgvalidate/reference/create_validation_docs.html).
+
+```{r}
+mrgvalidate::create_validation_docs(
+  "mrgvalidatetestreference",       # name of the product or package you are validating
+  "0.6.0",                          # version number for this validation (to be printed in docs)
+  stories_df,                       # tibble of stories from `parse_github_issues()`
+  auto_test_dir = "test_outputs",   # dir containing test output .csv and .json files
+  output_dir = "some_dir_for_docs"  # dir to write validation docs into
+)
+```
+
+This will write out three `.docx` files, as well as the `.md` files that are used to render each, into the directory passed to `output_dir`.
 
 * validation-testing.docx
 * requirements-specification.docx
@@ -167,127 +233,5 @@ The `generate_docs()` function is a simple wrapper around the functions you'll s
 
 If these three documents look correct after human inspection, you're done!
 
-## Domain argument
+_Formatting note:_ You may want to manually adjust the column widths of the tables in these documents for better readability. Unfortunately, it is not possible to programmatically specify these column widths. However, it is possible to pass `.docx` "style reference templates" via the [`style_dir` argument](https://metrumresearchgroup.github.io/mrgvalidate/reference/create_validation_docs.html#arguments) to `create_validation_docs()`.
 
-There is only one other argument to `generate_docs()`:
-
-* `domain` -- Domain where the repo lives. Either "github.com" or "ghe.metrum.com", defaulting to "github.com"
-
-## Slightly more detail
-The specified repo will be cloned at the tag passed to the `version` argument. By default it is cloned to `tempdir()`. The repo is then built and tested with the following:
-
-```
-# build, install, and load from current folder
-source_path <- devtools::build()
-pkg_name <- unlist(strsplit(basename(source_path), "_"))[1]
-install.packages(source_path, lib = ".", repos = NULL)
-library(pkg_name, lib.loc = ".", character.only = TRUE)
-testthat::test_check(pkg_name)
-```
-
-The results of these tests are captured and joined against the tests in the Github issues associated with the milestone passed to the `milestone` argument. This data, combined with the user stories in those issues, are used to create the documents.
-
-# Step by step
-
-If the documents produced by `generate_docs()` don't look right, or you need to debug for any reason, you can run the pieces step-by-step. For the demonstration below, we will use the following constants:
-
-```{r vars}
-ORG <- "metrumresearchgroup"
-REPO <- "rbabylon"
-MILESTONE <- "v0.6.0"
-TAG <- "0.6.0"
-print(glue::glue("{ORG}/{REPO} -- version: {TAG} -- milestone: {MILESTONE}"))
-```
-
-## Validation testing
-
-The `write_validation_testing()` function will do the following:
-
-* clone the repo with the specified tag locally (to `tempdir()` by default)
-* run `test_check()` in the `"tests"` folder of the cloned repo
-* save the tests results to a file (by default `"all_tests.csv"`)
-* render the `validation-testing.md` and corresponding `.docx` from those results
-
-```{r val testing, eval = FALSE}
-write_validation_testing(
-  org = ORG,
-  repo = REPO,
-  version = TAG
-)
-```
-
-If you would like to debug each of these steps manually, you can use the following
-
-```{r pull repo}
-# pull the repo for a specific tag to a temp directory
-commit_hash <- pull_tagged_repo(org = ORG, repo = REPO, tag = TAG)
-print(glue::glue("Pulled tag {TAG} -- commit hash: {commit_hash}"))
-```
-
-```{r run tests, eval = FALSE}
-# run the tests on it
-validate_tests(pkg = REPO)
-```
-
-The `validate_tests()` function will save the test results to `"all_tests.csv"` by default. Then you can render the markdown from the saved file with the `dry_run = TRUE` argument.
-
-```{r write val fake, eval=FALSE}
-# render markdown from previously run tests
-write_validation_testing(
-  org = ORG,
-  repo = REPO,
-  version = TAG,
-  dry_run = TRUE
-)
-```
-
-The files output from `dry_run = TRUE` will be marked with a `DRYRUN` identifier at the top, to indicate that the included date stamp does _not_ in fact match when the repo was cloned and the tests were run.
-
-## Release issues
-
-Before rendering either of the other two documents, you will need to create the tibble of issues assigned to this milestone.
-
-```{r release issues, eval=FALSE}
-# get issues from Github
-release_issues <- get_issues(org = ORG, repo = REPO, mile = MILESTONE)
-stories_df <- process_stories(release_issues, org = ORG, repo = REPO)
-```
-
-The tibble returned from `get_issues()` will have information relating to each issue in the specified milestone. That is passed to `process_stories()` which joins it to the test results, and `risk` field, and formats them to be rendered into markdown.
-
-## Requirements specification
-
-The `write_requirements()` function takes the tibble returned from `process_stories()` and renders `requirements-specification.md` and corresponding `.docx` file. This document summarizes the requirements detailed in the Github issues.
-
-```{r req, eval=FALSE}
-  write_requirements(
-    df = stories_df,
-    pkg = REPO,
-    version = TAG
-  )
-```
-
-## Traceability matrix
-
-Likewise, the `write_traceability_matrix()` function takes the tibble returned from `process_stories()` and renders `traceability-matrix.md` and corresponding `.docx` file. This document matches the test results against the corresponding Github issues.
-
-```{r trace, eval=FALSE}
-  write_traceability_matrix(
-    df = stories_df,
-    pkg = REPO,
-    version = TAG
-  )
-```
-
-
-```{r cleanup, include = FALSE}
-# I don't actually eval any of these here, but if they are run piece-by-piece this will cleanup the created files
-if (fs::file_exists("all_tests.csv")) fs::file_delete("all_tests.csv")
-if (fs::file_exists("all_tests.json")) fs::file_delete("all_tests.json")
-if (fs::file_exists("requirements-specification.docx")) fs::file_delete("requirements-specification.docx")
-if (fs::file_exists("validation-testing.docx")) fs::file_delete("validation-testing.docx")
-if (fs::file_exists("traceability-matrix.docx")) fs::file_delete("traceability-matrix.docx")
-if (fs::file_exists("requirements-specification.md")) fs::file_delete("requirements-specification.md")
-if (fs::file_exists("validation-testing.md")) fs::file_delete("validation-testing.md")
-if (fs::file_exists("traceability-matrix.md")) fs::file_delete("traceability-matrix.md")
-```
