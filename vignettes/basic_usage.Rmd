@@ -199,7 +199,7 @@ This will write out three `.docx` files, as well as the `.md` files that are use
 
 If these three documents look correct after human inspection, you're done!
 
-_Formatting note:_ You may want to manually adjust the column widths of the tables in these documents for better readability. Unfortunately, it is not possible to programmatically specify these column widths. However, it is possible to pass `.docx` "style reference templates" via the [`style_dir` argument](https://metrumresearchgroup.github.io/mrgvalidate/reference/create_validation_docs.html#arguments) to [`mrgvalidate::create_validation_docs()`](https://metrumresearchgroup.github.io/mrgvalidate/reference/create_validation_docs.html).
+_Formatting note:_ You may want to manually adjust the column widths of the tables in these documents for better readability, especially so that each "Test Id" column value is on its own line. Unfortunately, it is not possible to programmatically specify these column widths. However, it is possible to pass `.docx` "style reference templates" via the [`style_dir` argument](https://metrumresearchgroup.github.io/mrgvalidate/reference/create_validation_docs.html#arguments) to [`mrgvalidate::create_validation_docs()`](https://metrumresearchgroup.github.io/mrgvalidate/reference/create_validation_docs.html).
 
 # Example 2: An R package on Github, with Stories from Github Issues {#example2}
 
@@ -363,5 +363,5 @@ This will write out three `.docx` files, as well as the `.md` files that are use
 
 If these three documents look correct after human inspection, you're done!
 
-_Formatting note:_ You may want to manually adjust the column widths of the tables in these documents for better readability. Unfortunately, it is not possible to programmatically specify these column widths. However, it is possible to pass `.docx` "style reference templates" via the [`style_dir` argument](https://metrumresearchgroup.github.io/mrgvalidate/reference/create_validation_docs.html#arguments) to [`mrgvalidate::create_validation_docs()`](https://metrumresearchgroup.github.io/mrgvalidate/reference/create_validation_docs.html).
+_Formatting note:_ You may want to manually adjust the column widths of the tables in these documents for better readability, especially so that each "Test Id" column value is on its own line. Unfortunately, it is not possible to programmatically specify these column widths. However, it is possible to pass `.docx` "style reference templates" via the [`style_dir` argument](https://metrumresearchgroup.github.io/mrgvalidate/reference/create_validation_docs.html#arguments) to [`mrgvalidate::create_validation_docs()`](https://metrumresearchgroup.github.io/mrgvalidate/reference/create_validation_docs.html).
 
