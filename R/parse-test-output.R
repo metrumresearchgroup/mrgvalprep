@@ -28,6 +28,52 @@ parse_testthat_list_reporter <- function(result) {
   })
 }
 
+
+#' Parse Go test output
+#' @param test_file Path to a file `.json` file containing the output from `go test --json`
+#' @return A tibble formatted according to `mrgvalidate::input_formats`
+#' @seealso `mrgvalidate::input_formats`, `mrgvalidate::create_validation_docs()`
+#' @importFrom dplyr summarise group_by filter select rename mutate
+#' @importFrom jsonlite fromJSON
+#' @importFrom purrr map_dfr
+#' @importFrom readr read_lines
+#' @importFrom rlang .data
+#' @export
+parse_golang_test_json <- function(test_file) {
+  line_by_line <- read_lines(test_file)
+  df <- map_dfr(line_by_line, fromJSON)
+
+  test_results <- df %>%
+    filter(!is.na(Test)) %>%
+    filter(Action %in% c("pass", "fail", "skip")) %>%
+    rename(TestName = Test) %>%
+    mutate(
+      TestId = parse_test_id(.data$TestName),
+      TestName = strip_test_id(.data$TestName, .data$TestId),
+      passed = ifelse(.data$Action == "pass", 1, 0),
+      failed = ifelse(.data$Action != "pass", 1, 0)
+    )
+
+  no_id <- sum(is.na(test_results$TestId))
+  if (length(no_id) > 0) {
+    rlang::warn(glue("Throwing out {length(no_id)} tests with no Test Id's"))
+    test_results <- filter(test_results, !is.na(.data$TestId))
+  }
+
+  # TODO: make this optional with an arg
+  test_results <- test_results %>%
+    group_by(.data$TestId) %>%
+    summarise(
+      TestName = leading_lcs(.data$TestName),
+      passed = sum(.data$passed, na.rm = TRUE),
+      failed = sum(.data$failed, na.rm = TRUE)
+    )
+
+  return(select(test_results, TestName, passed, failed, TestId))
+}
+
+
+
 #' Extract test ID from a string.
 #' @importFrom stringr str_match
 #' @keywords internal
@@ -46,4 +92,37 @@ strip_test_id <- function(string, id) {
   string %>%
     str_replace(fixed(paste0("[", id, "]")), "") %>%
     str_squish
+}
+
+
+#' Leading longest common substring
+#'
+#' Get the longest string contained in _each_ element of `x`, _starting from the
+#' beginning_ of each element.
+#' @importFrom stringr str_extract str_replace
+#' @importFrom purrr map_chr
+#' @param x a character vector
+#' @keywords internal
+leading_lcs <- function(x) {
+  checkmate::assert_character(x)
+  if (length(x) == 1) return(x)
+  lcs <- ""
+  a <- x[1]
+  for(n in seq_len(nchar(a))) {
+    sb <- substr(a, 1, n)
+
+    matched <- map_chr(x[2:length(x)], function(b) {
+      str_extract(b, paste0("^", sb))
+    })
+
+    if(any(is.na(matched))) {
+      break
+    } else {
+      lcs <- sb
+    }
+  }
+
+  if (lcs == "") rlang::abort(paste("No leading overlap in\n", paste(x, collapse = "\n ")))
+
+  return (str_replace(lcs, "\\/$", ""))
 }
