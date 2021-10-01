@@ -1,3 +1,7 @@
+# development
+
+* Adding parser for Go test `go test --json` output
+
 # mrgvalprep 0.0.1
 
 First release! This release moved some functionality that used to be in `mrgvalidate 0.1.2` into its own package. Much of the old code has been heavily refactored, and new functionality has been added as well.
