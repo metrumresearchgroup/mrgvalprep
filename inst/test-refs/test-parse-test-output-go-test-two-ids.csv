@@ -1,0 +1,3 @@
+TestName,passed,failed,TestId
+TestCovCorHappyPath,3,0,INT-COVCOR-001
+TestCovCorErrors/,2,0,INT-COVCOR-003

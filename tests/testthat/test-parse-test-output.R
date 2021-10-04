@@ -2,9 +2,55 @@
 test_that("parse_testthat_list_reporter() returns expected tibble", {
   test_res <- readRDS(system.file("test-refs", "test-parse-test-output-ListReporter.RDS", package = "mrgvalprep"))
   test_ref <- readr::read_csv(system.file("test-refs", "test-parse-test-output-ListReporter-parsed.csv", package = "mrgvalprep"), col_types = "ciic")
+  parsed_df <- parse_testthat_list_reporter(test_res)
   expect_equal(
     # using as.data.frame to blow away small differences in classes and formatting that are not relevant
-    as.data.frame(parse_testthat_list_reporter(test_res)),
+    as.data.frame(parsed_df),
+    as.data.frame(test_ref)
+  )
+})
+
+
+test_that("parse_golang_test_json() happy path", {
+  test_res_file <- system.file("test-refs", "test-parse-test-output-go-test-1.json", package = "mrgvalprep")
+  test_ref_file <- system.file("test-refs", "test-parse-test-output-go-test-1-parsed.csv", package = "mrgvalprep")
+
+  parsed_df <- parse_golang_test_json(test_res_file)
+  test_ref <- readr::read_csv(test_ref_file, col_types = "ciic")
+
+  expect_equal(
+    # using as.data.frame to blow away small differences in classes and formatting that are not relevant
+    as.data.frame(parsed_df),
+    as.data.frame(test_ref)
+  )
+})
+
+test_that("parse_golang_test_json() missing test id", {
+  test_res_file <- system.file("test-refs", "test-parse-test-output-go-test-brackets-missing.json", package = "mrgvalprep")
+  test_ref_file <- system.file("test-refs", "test-parse-test-output-go-test-brackets-missing.csv", package = "mrgvalprep")
+
+  expect_warning({
+    parsed_df <- parse_golang_test_json(test_res_file)
+  }, regexp = "Throwing out.+no Test Id")
+  test_ref <- readr::read_csv(test_ref_file, col_types = "ciic")
+
+  expect_equal(
+    # using as.data.frame to blow away small differences in classes and formatting that are not relevant
+    as.data.frame(parsed_df),
+    as.data.frame(test_ref)
+  )
+})
+
+test_that("parse_golang_test_json() two test ids for single test", {
+  test_res_file <- system.file("test-refs", "test-parse-test-output-go-test-two-ids.json", package = "mrgvalprep")
+  test_ref_file <- system.file("test-refs", "test-parse-test-output-go-test-two-ids.csv", package = "mrgvalprep")
+
+  parsed_df <- parse_golang_test_json(test_res_file)
+  test_ref <- readr::read_csv(test_ref_file, col_types = "ciic")
+
+  expect_equal(
+    # using as.data.frame to blow away small differences in classes and formatting that are not relevant
+    as.data.frame(parsed_df),
     as.data.frame(test_ref)
   )
 })
