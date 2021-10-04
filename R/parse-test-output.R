@@ -45,6 +45,7 @@ parse_golang_test_json <- function(test_file) {
 
   test_results <- df %>%
     filter(!is.na(Test)) %>%
+    filter(str_detect(Test, "\\/")) %>% # TODO: I think this throws out only the full test function summaries, but should double check
     filter(Action %in% c("pass", "fail", "skip")) %>%
     rename(TestName = Test) %>%
     mutate(
@@ -55,8 +56,8 @@ parse_golang_test_json <- function(test_file) {
     )
 
   no_id <- sum(is.na(test_results$TestId))
-  if (length(no_id) > 0) {
-    rlang::warn(glue("Throwing out {length(no_id)} tests with no Test Id's"))
+  if (no_id > 0) {
+    rlang::warn(glue("Throwing out {no_id} tests with no Test Id's"))
     test_results <- filter(test_results, !is.na(.data$TestId))
   }
 
@@ -74,7 +75,7 @@ parse_golang_test_json <- function(test_file) {
 
 
 
-#' Extract test ID from a string.
+#' Extract test ID from a string. Always takes the _first_ ID found in the string.
 #' @importFrom stringr str_match
 #' @keywords internal
 parse_test_id <- function(string) {
@@ -124,5 +125,5 @@ leading_lcs <- function(x) {
 
   if (lcs == "") rlang::abort(paste("No leading overlap in\n", paste(x, collapse = "\n ")))
 
-  return (str_replace(lcs, "\\/$", ""))
+  return (str_replace(lcs, "(\\/|_)$", ""))
 }
