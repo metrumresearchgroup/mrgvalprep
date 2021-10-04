@@ -29,3 +29,14 @@ skip_if_over_rate_limit_github <- function(by = 5) {
 skip_if_over_rate_limit_google <- function(by = 5) {
   message("skip_if_over_rate_limit_google(): Not actually checking google API rate limit.")
 }
+
+#' Skip test if over Googlesheets API rate limit
+#'
+#' This is currently not implemented but at some point we
+#' may need it.
+#' @keywords internal
+skip_if_no_github_pat <- function() {
+  if (Sys.getenv('GITHUB_PAT') == "") {
+    message("skip_if_no_github_pat(): Skipping Github tests because `Sys.getenv('GITHUB_PAT')` is not set.")
+  }
+}

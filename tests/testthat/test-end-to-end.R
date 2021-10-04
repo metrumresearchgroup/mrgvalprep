@@ -33,6 +33,8 @@ test_that("Googlesheets end-to-end works", {
 test_that("Github end-to-end works", {
   # get issues from Github
   skip_if_over_rate_limit_github()
+  skip_if_no_github_pat()
+
   spec <- parse_github_issues(org = ORG, repo = REPO, mile = MILESTONE, domain = DOMAIN)
 
   # run test to generate output
