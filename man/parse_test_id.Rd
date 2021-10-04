@@ -2,11 +2,11 @@
 % Please edit documentation in R/parse-test-output.R
 \name{parse_test_id}
 \alias{parse_test_id}
-\title{Extract test ID from a string.}
+\title{Extract test ID from a string. Always takes the \emph{first} ID found in the string.}
 \usage{
 parse_test_id(string)
 }
 \description{
-Extract test ID from a string.
+Extract test ID from a string. Always takes the \emph{first} ID found in the string.
 }
 \keyword{internal}

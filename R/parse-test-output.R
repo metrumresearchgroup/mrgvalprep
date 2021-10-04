@@ -30,6 +30,23 @@ parse_testthat_list_reporter <- function(result) {
 
 
 #' Parse Go test output
+#'
+#' Parses output of `go test --json` into a tibble for `mrgvalidate` to consume.
+#'
+#' @details
+#'
+#' * Any tests _without_ Test Id's (correctly formatted _in brackets_) will be thrown out.
+#'
+#' * All tests and subtests with the same Test Id will be rolled up to a single
+#' row in the output tibble. The `passed,failed` counts will reflect the number
+#' of tests/subtests that were rolled up this way.
+#'
+#' * Any test with _more than one Test Id_ will have only the first Test Id
+#' extracted. Any subsequent Test Id's for that test will be ignored. Generally,
+#' the first Id will be the _least_ specific, since subsequent Id's will likely
+#' have been added as part of subtests. Keep this in mind when adding Testd Id's
+#' in your Go test code.
+#'
 #' @param test_file Path to a file `.json` file containing the output from `go test --json`
 #' @return A tibble formatted according to `mrgvalidate::input_formats`
 #' @seealso `mrgvalidate::input_formats`, `mrgvalidate::create_validation_docs()`
