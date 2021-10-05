@@ -62,10 +62,10 @@ parse_golang_test_json <- function(test_file) {
   df <- map_dfr(line_by_line, fromJSON)
 
   test_results <- df %>%
-    filter(!is.na(Test)) %>%
-    filter(str_detect(Test, "\\/")) %>% # TODO: I think this throws out only the full test function summaries, but should double check
-    filter(Action %in% c("pass", "fail", "skip")) %>%
-    rename(TestName = Test) %>%
+    filter(!is.na(.data$Test)) %>%
+    filter(str_detect(.data$Test, "\\/")) %>% # TODO: I think this throws out only the full test function summaries, but should double check
+    filter(.data$Action %in% c("pass", "fail", "skip")) %>%
+    rename(TestName = .data$Test) %>%
     mutate(
       TestId = parse_test_id(.data$TestName),
       TestName = strip_test_id(.data$TestName, .data$TestId),
@@ -79,7 +79,8 @@ parse_golang_test_json <- function(test_file) {
     test_results <- filter(test_results, !is.na(.data$TestId))
   }
 
-  # TODO: make this optional with an arg
+  # Roll up over TestId
+  # TODO: make this optional with an arg?
   test_results <- test_results %>%
     group_by(.data$TestId) %>%
     summarise(
@@ -88,7 +89,7 @@ parse_golang_test_json <- function(test_file) {
       failed = sum(.data$failed, na.rm = TRUE)
     )
 
-  return(select(test_results, TestName, passed, failed, TestId))
+  return(select(test_results, .data$TestName, .data$passed, .data$failed, .data$TestId))
 }
 
 
