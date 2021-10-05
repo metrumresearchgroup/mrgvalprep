@@ -51,6 +51,7 @@ parse_testthat_list_reporter <- function(result) {
 #' @return A tibble formatted according to `mrgvalidate::input_formats`
 #' @seealso `mrgvalidate::input_formats`, `mrgvalidate::create_validation_docs()`
 #' @importFrom dplyr summarise group_by filter select rename mutate
+#' @importFrom stringr str_detect
 #' @importFrom jsonlite fromJSON
 #' @importFrom purrr map_dfr
 #' @importFrom readr read_lines
@@ -142,5 +143,5 @@ leading_lcs <- function(x) {
 
   if (lcs == "") rlang::abort(paste("No leading overlap in\n", paste(x, collapse = "\n ")))
 
-  return (str_replace(lcs, "(\\/|_)$", ""))
+  return (str_replace(lcs, "[\\/_ ]*$", ""))
 }
