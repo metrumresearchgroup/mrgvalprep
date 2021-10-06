@@ -37,6 +37,6 @@ skip_if_over_rate_limit_google <- function(by = 5) {
 #' @keywords internal
 skip_if_no_github_pat <- function() {
   if (Sys.getenv('GITHUB_PAT') == "") {
-    message("skip_if_no_github_pat(): Skipping Github tests because `Sys.getenv('GITHUB_PAT')` is not set.")
+    testthat::skip("Skipping Github tests because `Sys.getenv('GITHUB_PAT')` is not set.")
   }
 }

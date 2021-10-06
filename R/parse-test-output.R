@@ -47,7 +47,7 @@ parse_testthat_list_reporter <- function(result) {
 #' have been added as part of subtests. Keep this in mind when adding Testd Id's
 #' in your Go test code.
 #'
-#' @param test_file Path to a file `.json` file containing the output from `go test --json`
+#' @param test_file Path to a `.json` file containing the output from `go test --json`
 #' @return A tibble formatted according to `mrgvalidate::input_formats`
 #' @seealso `mrgvalidate::input_formats`, `mrgvalidate::create_validation_docs()`
 #' @importFrom dplyr summarise group_by filter select rename mutate
@@ -132,7 +132,7 @@ leading_lcs <- function(x) {
     sb <- substr(a, 1, n)
 
     matched <- map_chr(x[2:length(x)], function(b) {
-      str_extract(b, paste0("^", sb))
+      str_extract(b, paste0("^\\Q", sb, "\\E"))
     })
 
     if(any(is.na(matched))) {

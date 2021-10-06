@@ -7,7 +7,7 @@
 parse_golang_test_json(test_file)
 }
 \arguments{
-\item{test_file}{Path to a file \code{.json} file containing the output from \verb{go test --json}}
+\item{test_file}{Path to a \code{.json} file containing the output from \verb{go test --json}}
 }
 \value{
 A tibble formatted according to \code{mrgvalidate::input_formats}
