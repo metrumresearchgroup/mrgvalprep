@@ -1,6 +1,8 @@
 context("Unit tests for validate-tests.R")
 
 test_that("validate_tests returns expected df", {
+  skip_if_no_github_pat()
+
   # set up clean test dirs
   pkg_dir <- file.path(tempdir(), "validate_tests_pkg")
   if (fs::dir_exists(pkg_dir)) fs::dir_delete(pkg_dir)
@@ -28,6 +30,8 @@ test_that("validate_tests returns expected df", {
 
 
 test_that("validate_tests writes output files", {
+  skip_if_no_github_pat()
+
   # set up clean test dirs
   pkg_dir <- file.path(tempdir(), "validate_tests_pkg")
   if (fs::dir_exists(pkg_dir)) fs::dir_delete(pkg_dir)
@@ -66,6 +70,8 @@ test_that("validate_tests writes output files", {
 
 
 test_that("validate_tests returns expected df with extra tests", {
+  skip_if_no_github_pat()
+
   # set up clean test dirs
   pkg_dir <- file.path(tempdir(), "validate_tests_pkg")
   if (fs::dir_exists(pkg_dir)) fs::dir_delete(pkg_dir)
