@@ -36,7 +36,9 @@ steps:
   commands:
   - R -s -e 'devtools::install_deps(upgrade = '"'"'always'"'"')'
   - R -s -e 'devtools::load_all(); sessioninfo::session_info()'
-  - R -s -e 'devtools::check(env_vars = c("NOT_CRAN" = "true", "USER" = "drone"))'
+  - R -s -e 'devtools::check(env_vars = c("NOT_CRAN" = "true"))'
+  environment:
+    USER: drone
   volumes:
   - name: cache
     path: /ephemeral
