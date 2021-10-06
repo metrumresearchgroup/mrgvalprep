@@ -1,110 +1,6 @@
 ---
 kind: pipeline
 type: docker
-name: mpn:latest
-
-platform:
-  os: linux
-  arch: amd64
-
-steps:
-- name: pull
-  image: omerxx/drone-ecr-auth
-  commands:
-  - $(aws ecr get-login --no-include-email --region us-east-1)
-  - docker pull 906087756158.dkr.ecr.us-east-1.amazonaws.com/r-dev-ci-mpn-4.0:latest
-  - docker pull 906087756158.dkr.ecr.us-east-1.amazonaws.com/r-dev-ci-mpn-3.6:latest
-  volumes:
-  - name: docker.sock
-    path: /var/run/docker.sock
-
-- name: "Check package: R 4.0"
-  pull: never
-  image: 906087756158.dkr.ecr.us-east-1.amazonaws.com/r-dev-ci-mpn-4.0:latest
-  commands:
-  - R -s -e 'devtools::install_deps(upgrade = '"'"'never'"'"')'
-  - R -s -e 'devtools::check(env_vars = c("NOT_CRAN" = "true"))'
-  volumes:
-  - name: cache
-    path: /ephemeral
-
-- name: "Check package: R 3.6"
-  pull: never
-  image: 906087756158.dkr.ecr.us-east-1.amazonaws.com/r-dev-ci-mpn-3.6:latest
-  commands:
-  - R -s -e 'devtools::install_deps(upgrade = '"'"'never'"'"')'
-  - R -s -e 'devtools::check(env_vars = c("NOT_CRAN" = "true"))'
-  volumes:
-  - name: cache
-    path: /ephemeral
-
-volumes:
-- name: docker.sock
-  host:
-    path: /var/run/docker.sock
-- name: cache
-  temp: {}
-
-trigger:
-  event:
-    exclude:
-    - promote
-
----
-kind: pipeline
-type: docker
-name: mpn:oldest
-
-platform:
-  os: linux
-  arch: amd64
-
-steps:
-- name: pull
-  image: omerxx/drone-ecr-auth
-  commands:
-  - $(aws ecr get-login --no-include-email --region us-east-1)
-  - docker pull 906087756158.dkr.ecr.us-east-1.amazonaws.com/r-dev-ci-mpn-4.0:2020-04-18
-  - docker pull 906087756158.dkr.ecr.us-east-1.amazonaws.com/r-dev-ci-mpn-3.6:2020-04-18
-  volumes:
-  - name: docker.sock
-    path: /var/run/docker.sock
-
-- name: "Check package: R 4.0"
-  pull: never
-  image: 906087756158.dkr.ecr.us-east-1.amazonaws.com/r-dev-ci-mpn-4.0:2020-04-18
-  commands:
-  - R -s -e 'devtools::install_deps(upgrade = '"'"'never'"'"')'
-  - R -s -e 'devtools::check(env_vars = c("NOT_CRAN" = "true"))'
-  volumes:
-  - name: cache
-    path: /ephemeral
-
-- name: "Check package: R 3.6"
-  pull: never
-  image: 906087756158.dkr.ecr.us-east-1.amazonaws.com/r-dev-ci-mpn-3.6:2020-04-18
-  commands:
-  - R -s -e 'devtools::install_deps(upgrade = '"'"'never'"'"')'
-  - R -s -e 'devtools::check(env_vars = c("NOT_CRAN" = "true"))'
-  volumes:
-  - name: cache
-    path: /ephemeral
-
-volumes:
-- name: docker.sock
-  host:
-    path: /var/run/docker.sock
-- name: cache
-  temp: {}
-
-trigger:
-  event:
-    exclude:
-    - promote
-
----
-kind: pipeline
-type: docker
 name: cran-latest
 
 platform:
@@ -158,6 +54,112 @@ trigger:
     - promote
 
 
+# Currently NOT running these two because no "latest" and "oldest" promises made for this repo
+#
+# ---
+# kind: pipeline
+# type: docker
+# name: mpn:latest
+#
+# platform:
+#   os: linux
+#   arch: amd64
+#
+# steps:
+# - name: pull
+#   image: omerxx/drone-ecr-auth
+#   commands:
+#   - $(aws ecr get-login --no-include-email --region us-east-1)
+#   - docker pull 906087756158.dkr.ecr.us-east-1.amazonaws.com/r-dev-ci-mpn-4.0:latest
+#   - docker pull 906087756158.dkr.ecr.us-east-1.amazonaws.com/r-dev-ci-mpn-3.6:latest
+#   volumes:
+#   - name: docker.sock
+#     path: /var/run/docker.sock
+#
+# - name: "Check package: R 4.0"
+#   pull: never
+#   image: 906087756158.dkr.ecr.us-east-1.amazonaws.com/r-dev-ci-mpn-4.0:latest
+#   commands:
+#   - R -s -e 'devtools::install_deps(upgrade = '"'"'never'"'"')'
+#   - R -s -e 'devtools::check(env_vars = c("NOT_CRAN" = "true"))'
+#   volumes:
+#   - name: cache
+#     path: /ephemeral
+#
+# - name: "Check package: R 3.6"
+#   pull: never
+#   image: 906087756158.dkr.ecr.us-east-1.amazonaws.com/r-dev-ci-mpn-3.6:latest
+#   commands:
+#   - R -s -e 'devtools::install_deps(upgrade = '"'"'never'"'"')'
+#   - R -s -e 'devtools::check(env_vars = c("NOT_CRAN" = "true"))'
+#   volumes:
+#   - name: cache
+#     path: /ephemeral
+#
+# volumes:
+# - name: docker.sock
+#   host:
+#     path: /var/run/docker.sock
+# - name: cache
+#   temp: {}
+#
+# trigger:
+#   event:
+#     exclude:
+#     - promote
+#
+# ---
+# kind: pipeline
+# type: docker
+# name: mpn:oldest
+#
+# platform:
+#   os: linux
+#   arch: amd64
+#
+# steps:
+# - name: pull
+#   image: omerxx/drone-ecr-auth
+#   commands:
+#   - $(aws ecr get-login --no-include-email --region us-east-1)
+#   - docker pull 906087756158.dkr.ecr.us-east-1.amazonaws.com/r-dev-ci-mpn-4.0:2020-04-18
+#   - docker pull 906087756158.dkr.ecr.us-east-1.amazonaws.com/r-dev-ci-mpn-3.6:2020-04-18
+#   volumes:
+#   - name: docker.sock
+#     path: /var/run/docker.sock
+#
+# - name: "Check package: R 4.0"
+#   pull: never
+#   image: 906087756158.dkr.ecr.us-east-1.amazonaws.com/r-dev-ci-mpn-4.0:2020-04-18
+#   commands:
+#   - R -s -e 'devtools::install_deps(upgrade = '"'"'never'"'"')'
+#   - R -s -e 'devtools::check(env_vars = c("NOT_CRAN" = "true"))'
+#   volumes:
+#   - name: cache
+#     path: /ephemeral
+#
+# - name: "Check package: R 3.6"
+#   pull: never
+#   image: 906087756158.dkr.ecr.us-east-1.amazonaws.com/r-dev-ci-mpn-3.6:2020-04-18
+#   commands:
+#   - R -s -e 'devtools::install_deps(upgrade = '"'"'never'"'"')'
+#   - R -s -e 'devtools::check(env_vars = c("NOT_CRAN" = "true"))'
+#   volumes:
+#   - name: cache
+#     path: /ephemeral
+#
+# volumes:
+# - name: docker.sock
+#   host:
+#     path: /var/run/docker.sock
+# - name: cache
+#   temp: {}
+#
+# trigger:
+#   event:
+#     exclude:
+#     - promote
+
 ---
 kind: pipeline
 type: docker
@@ -184,6 +186,7 @@ steps:
   - git config --global user.email drone@metrumrg.com
   - git config --global user.name Drony
   - git fetch --tags
+  - R -s -e 'devtools::install_deps(upgrade = '"'"'always'"'"')'
   - R -s -e 'pkgpub::create_tagged_repo(.dir = '"'"'/ephemeral'"'"')'
   volumes:
   - name: cache
@@ -225,6 +228,6 @@ trigger:
   - tag
 
 depends_on:
-- mpn:latest
-- mpn:oldest
+#- mpn:latest
+#- mpn:oldest
 - cran-latest
