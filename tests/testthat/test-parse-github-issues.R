@@ -1,5 +1,7 @@
 test_that("parse_github_issues() pulls from Github", {
   skip_if_over_rate_limit_github()
+  skip_if_no_github_pat()
+
   spec <- parse_github_issues(org = ORG, repo = REPO, mile = MILESTONE, domain = DOMAIN)
   expect_equal(nrow(spec), STORIES_DF_ROWS_GHP)
   expect_equal(ncol(spec), STORIES_DF_COLS_GHP)
@@ -22,6 +24,7 @@ test_that("parse_github_issues() pulls from Github", {
 
 test_that("get_issues() pulls from Github", {
   skip_if_over_rate_limit_github()
+  skip_if_no_github_pat()
 
   release_issues <- get_issues(org = ORG, repo = REPO, mile = MILESTONE, domain = DOMAIN)
   expect_equal(nrow(release_issues), STORIES_DF_ROWS_GHP)
