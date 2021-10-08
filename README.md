@@ -7,6 +7,7 @@ Supports the following data sources:
 ### Test Output
 
 * `testthat::ListReporter`
+* `go test --json`
 
 ### Stories and Requirements
 
@@ -15,7 +16,7 @@ Supports the following data sources:
 
 ## More to come...
 
-* Intending to have connectors to Go test outputs, and others
+* Intending to expand to outputs from other test framework soon, as the need arises
 * Probably some connectors to Jira and/or Confluence for pulling in Stories and Requirements
 
 ## Development
