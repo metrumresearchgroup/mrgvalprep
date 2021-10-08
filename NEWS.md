@@ -1,6 +1,13 @@
-# development
+# mrgvalprep 0.0.2
 
-* Adding parser for Go test `go test --json` output
+## New features and changes
+
+* Adding parser for Go test `go test --json` output (#10)
+
+## Developer-facing changes
+
+* Enabled drone CI (#11)
+* Added `skip_if_no_github_pat()` to test suite
 
 # mrgvalprep 0.0.1
 
