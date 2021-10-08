@@ -19,6 +19,9 @@
     <loc>https://metrumresearchgroup.github.io/mrgvalprep/reference/get_sys_info.html</loc>
   </url>
   <url>
+    <loc>https://metrumresearchgroup.github.io/mrgvalprep/reference/leading_lcs.html</loc>
+  </url>
+  <url>
     <loc>https://metrumresearchgroup.github.io/mrgvalprep/reference/merge_requirements_and_stories.html</loc>
   </url>
   <url>
@@ -26,6 +29,9 @@
   </url>
   <url>
     <loc>https://metrumresearchgroup.github.io/mrgvalprep/reference/parse_github_issues.html</loc>
+  </url>
+  <url>
+    <loc>https://metrumresearchgroup.github.io/mrgvalprep/reference/parse_golang_test_json.html</loc>
   </url>
   <url>
     <loc>https://metrumresearchgroup.github.io/mrgvalprep/reference/parse_test_id.html</loc>

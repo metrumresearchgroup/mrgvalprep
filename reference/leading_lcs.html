@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Run and summarize tests — validate_tests • mrgvalprep</title>
+<title>Leading longest common substring — leading_lcs • mrgvalprep</title>
 
 
 <!-- jquery -->
@@ -39,12 +39,9 @@
 
 
 
-<meta property="og:title" content="Run and summarize tests — validate_tests" />
-<meta property="og:description" content="Will clone repo at version tag and run test suite. Package will be built
-and installed (along with any missing dependencies) to a temporary library.
-Then we run all tests for repo, roll up successes and failures, and write
-to a CSV file. Also writes the commit hash of the package and some other
-system info to a JSON file." />
+<meta property="og:title" content="Leading longest common substring — leading_lcs" />
+<meta property="og:description" content="Get the longest string contained in each element of x, starting from the
+beginning of each element." />
 
 
 
@@ -127,94 +124,27 @@ system info to a JSON file." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Run and summarize tests</h1>
+    <h1>Leading longest common substring</h1>
     
-    <div class="hidden name"><code>validate_tests.Rd</code></div>
+    <div class="hidden name"><code>leading_lcs.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Will clone <code>repo</code> at <code>version</code> tag and run test suite. Package will be built
-and installed (along with any missing dependencies) to a temporary library.
-Then we run all tests for <code>repo</code>, roll up successes and failures, and write
-to a CSV file. Also writes the commit hash of the package and some other
-system info to a JSON file.</p>
+    <p>Get the longest string contained in <em>each</em> element of <code>x</code>, <em>starting from the
+beginning</em> of each element.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>validate_tests</span><span class='op'>(</span>
-  <span class='va'>org</span>,
-  <span class='va'>repo</span>,
-  <span class='va'>version</span>,
-  domain <span class='op'>=</span> <span class='va'>VALID_DOMAINS</span>,
-  out_file <span class='op'>=</span> <span class='cn'>NULL</span>,
-  root_dir <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span><span class='op'>(</span><span class='op'>)</span>,
-  output_dir <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/getwd.html'>getwd</a></span><span class='op'>(</span><span class='op'>)</span>,
-  extra_test_dirs <span class='op'>=</span> <span class='cn'>NULL</span>,
-  set_id_to_name <span class='op'>=</span> <span class='cn'>FALSE</span>
-<span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>leading_lcs</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>org</th>
-      <td><p>Github organization that the repo is under</p></td>
-    </tr>
-    <tr>
-      <th>repo</th>
-      <td><p>The name of the repo for the package you are validating</p></td>
-    </tr>
-    <tr>
-      <th>version</th>
-      <td><p>The version number of the package you are validating. This must correspond to a tag in the repo.</p></td>
-    </tr>
-    <tr>
-      <th>domain</th>
-      <td><p>Domain where repo lives. Either "github.com" or "ghe.metrumrg.com", defaulting to "github.com"</p></td>
-    </tr>
-    <tr>
-      <th>out_file</th>
-      <td><p>File path to write out the test results to. Any extension
-will be ignored and replaced with <code>.csv</code> for the test output df and
-<code>.json</code> for the <code><a href='get_sys_info.html'>get_sys_info()</a></code> output.</p></td>
-    </tr>
-    <tr>
-      <th>root_dir</th>
-      <td><p>The directory path to where the package has been cloned.
-<code><a href='https://rdrr.io/r/base/file.path.html'>file.path(root_dir, repo)</a></code> should lead to the cloned repo that will be
-tested.</p></td>
-    </tr>
-    <tr>
-      <th>output_dir</th>
-      <td><p>Directory to write the test outputs to. Defaults to
-working directory.</p></td>
-    </tr>
-    <tr>
-      <th>extra_test_dirs</th>
-      <td><p>Character vector of paths (relative to package root
-dir) to directories that contain additional tests to run</p></td>
-    </tr>
-    <tr>
-      <th>set_id_to_name</th>
-      <td><p>Whether to copy the <code>TestName</code> column over to the
-<code>TestId</code> column when writing the output CSV. This exists to support legacy
-issues and tests that don't use IDs. Starting with v1.0, mrgvalidate relies
-on test IDs and, as a temporary compatibility kludge, will auto-generate
-them if the <code>TestId</code> and <code>TestName</code> columns match. New tests and issues
-should use test IDs.</p></td>
+      <th>x</th>
+      <td><p>a character vector</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>Invisibly returns tibble of formatted test output. Note that this
-function is primarily called for the side effect of writing out the
-output to disk.</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>The package found at <code><a href='https://rdrr.io/r/base/file.path.html'>file.path(root_dir, repo)</a></code> will be built and installed
-into a tempory library that is appended to the <em>beginning</em> of your
-<code><a href='https://rdrr.io/r/base/libPaths.html'>.libPaths()</a></code>, using <code><a href='https://devtools.r-lib.org//reference/install.html'>devtools::install(..., build = TRUE, upgrade = "never")</a></code>. This will also install (into the temporary library) any
-dependencies from the package that are <em>not</em> found in your <code><a href='https://rdrr.io/r/base/libPaths.html'>.libPaths()</a></code>.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

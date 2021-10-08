@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Run and summarize tests — validate_tests • mrgvalprep</title>
+<title>Parse Go test output — parse_golang_test_json • mrgvalprep</title>
 
 
 <!-- jquery -->
@@ -39,12 +39,8 @@
 
 
 
-<meta property="og:title" content="Run and summarize tests — validate_tests" />
-<meta property="og:description" content="Will clone repo at version tag and run test suite. Package will be built
-and installed (along with any missing dependencies) to a temporary library.
-Then we run all tests for repo, roll up successes and failures, and write
-to a CSV file. Also writes the commit hash of the package and some other
-system info to a JSON file." />
+<meta property="og:title" content="Parse Go test output — parse_golang_test_json" />
+<meta property="og:description" content="Parses output of go test --json into a tibble for mrgvalidate to consume." />
 
 
 
@@ -127,94 +123,47 @@ system info to a JSON file." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Run and summarize tests</h1>
+    <h1>Parse Go test output</h1>
     
-    <div class="hidden name"><code>validate_tests.Rd</code></div>
+    <div class="hidden name"><code>parse_golang_test_json.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Will clone <code>repo</code> at <code>version</code> tag and run test suite. Package will be built
-and installed (along with any missing dependencies) to a temporary library.
-Then we run all tests for <code>repo</code>, roll up successes and failures, and write
-to a CSV file. Also writes the commit hash of the package and some other
-system info to a JSON file.</p>
+    <p>Parses output of <code>go test --json</code> into a tibble for <code>mrgvalidate</code> to consume.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>validate_tests</span><span class='op'>(</span>
-  <span class='va'>org</span>,
-  <span class='va'>repo</span>,
-  <span class='va'>version</span>,
-  domain <span class='op'>=</span> <span class='va'>VALID_DOMAINS</span>,
-  out_file <span class='op'>=</span> <span class='cn'>NULL</span>,
-  root_dir <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span><span class='op'>(</span><span class='op'>)</span>,
-  output_dir <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/getwd.html'>getwd</a></span><span class='op'>(</span><span class='op'>)</span>,
-  extra_test_dirs <span class='op'>=</span> <span class='cn'>NULL</span>,
-  set_id_to_name <span class='op'>=</span> <span class='cn'>FALSE</span>
-<span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>parse_golang_test_json</span><span class='op'>(</span><span class='va'>test_file</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>org</th>
-      <td><p>Github organization that the repo is under</p></td>
-    </tr>
-    <tr>
-      <th>repo</th>
-      <td><p>The name of the repo for the package you are validating</p></td>
-    </tr>
-    <tr>
-      <th>version</th>
-      <td><p>The version number of the package you are validating. This must correspond to a tag in the repo.</p></td>
-    </tr>
-    <tr>
-      <th>domain</th>
-      <td><p>Domain where repo lives. Either "github.com" or "ghe.metrumrg.com", defaulting to "github.com"</p></td>
-    </tr>
-    <tr>
-      <th>out_file</th>
-      <td><p>File path to write out the test results to. Any extension
-will be ignored and replaced with <code>.csv</code> for the test output df and
-<code>.json</code> for the <code><a href='get_sys_info.html'>get_sys_info()</a></code> output.</p></td>
-    </tr>
-    <tr>
-      <th>root_dir</th>
-      <td><p>The directory path to where the package has been cloned.
-<code><a href='https://rdrr.io/r/base/file.path.html'>file.path(root_dir, repo)</a></code> should lead to the cloned repo that will be
-tested.</p></td>
-    </tr>
-    <tr>
-      <th>output_dir</th>
-      <td><p>Directory to write the test outputs to. Defaults to
-working directory.</p></td>
-    </tr>
-    <tr>
-      <th>extra_test_dirs</th>
-      <td><p>Character vector of paths (relative to package root
-dir) to directories that contain additional tests to run</p></td>
-    </tr>
-    <tr>
-      <th>set_id_to_name</th>
-      <td><p>Whether to copy the <code>TestName</code> column over to the
-<code>TestId</code> column when writing the output CSV. This exists to support legacy
-issues and tests that don't use IDs. Starting with v1.0, mrgvalidate relies
-on test IDs and, as a temporary compatibility kludge, will auto-generate
-them if the <code>TestId</code> and <code>TestName</code> columns match. New tests and issues
-should use test IDs.</p></td>
+      <th>test_file</th>
+      <td><p>Path to a <code>.json</code> file containing the output from <code>go test --json</code></p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Invisibly returns tibble of formatted test output. Note that this
-function is primarily called for the side effect of writing out the
-output to disk.</p>
+    <p>A tibble formatted according to <code><a href='https://rdrr.io/pkg/mrgvalidate/man/input_formats.html'>mrgvalidate::input_formats</a></code></p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The package found at <code><a href='https://rdrr.io/r/base/file.path.html'>file.path(root_dir, repo)</a></code> will be built and installed
-into a tempory library that is appended to the <em>beginning</em> of your
-<code><a href='https://rdrr.io/r/base/libPaths.html'>.libPaths()</a></code>, using <code><a href='https://devtools.r-lib.org//reference/install.html'>devtools::install(..., build = TRUE, upgrade = "never")</a></code>. This will also install (into the temporary library) any
-dependencies from the package that are <em>not</em> found in your <code><a href='https://rdrr.io/r/base/libPaths.html'>.libPaths()</a></code>.</p>
+    
+<ul>
+<li><p>Any tests <em>without</em> Test Id's (correctly formatted <em>in brackets</em>) will be thrown out.</p></li>
+<li><p>All tests and subtests with the same Test Id will be rolled up to a single
+row in the output tibble. The <code>passed,failed</code> counts will reflect the number
+of tests/subtests that were rolled up this way.</p></li>
+<li><p>Any test with <em>more than one Test Id</em> will have only the first Test Id
+extracted. Any subsequent Test Id's for that test will be ignored. Generally,
+the first Id will be the <em>least</em> specific, since subsequent Id's will likely
+have been added as part of subtests. Keep this in mind when adding Testd Id's
+in your Go test code.</p></li>
+</ul>
+
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code><a href='https://rdrr.io/pkg/mrgvalidate/man/input_formats.html'>mrgvalidate::input_formats</a></code>, <code><a href='https://rdrr.io/pkg/mrgvalidate/man/create_validation_docs.html'>mrgvalidate::create_validation_docs()</a></code></p></div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
