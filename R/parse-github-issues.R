@@ -44,7 +44,6 @@ parse_github_issues <- function(org, repo, mile, domain = VALID_DOMAINS) {
 #' Mainly a helper function called by [parse_github_issues()] but can also be
 #' used to pull the raw content for issues associated with a given milestone.
 #' @importFrom dplyr filter
-#' @importFrom ghpm api_url
 #' @inheritParams parse_github_issues
 #' @importFrom rlang .data
 #' @seealso [parse_github_issues()]
@@ -59,7 +58,7 @@ get_issues <- function(org, repo, mile, domain = VALID_DOMAINS) {
   if (domain == "github.com") {
     domain <- paste0("api.", domain)
   }
-  pkg_issues <- ghpm::get_issues(org, repo, api_url(hostname = domain))
+  pkg_issues <- ghpm::get_issues(org, repo, ghpm::api_url(hostname = domain))
   release_issues <- pkg_issues %>% filter(.data$milestone == mile)
 
   return(release_issues)
@@ -71,7 +70,6 @@ get_issues <- function(org, repo, mile, domain = VALID_DOMAINS) {
 #' @param repo The name of the repo for the package you are validating
 #' @param domain Domain where repo lives. Either "github.com" or "ghe.metrumrg.com", defaulting to "github.com"
 #' @importFrom dplyr filter select mutate
-#' @importFrom ghpm api_url
 #' @importFrom rlang .data
 #' @keywords internal
 get_risk <- function(org, repo, domain = VALID_DOMAINS) {
@@ -84,7 +82,7 @@ get_risk <- function(org, repo, domain = VALID_DOMAINS) {
   if (domain == "github.com") {
     domain <- paste0("api.", domain)
   }
-  issue_lab <- ghpm::get_issue_labels(org, repo, api_url(hostname = domain))
+  issue_lab <- ghpm::get_issue_labels(org, repo, ghpm::api_url(hostname = domain))
   issue_lab <- filter(issue_lab, grepl("risk", .data$label, fixed = TRUE))
   risk <- select(issue_lab, .data$issue, risk = .data$label)
   risk %>%
