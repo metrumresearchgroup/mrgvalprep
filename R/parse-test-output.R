@@ -35,7 +35,8 @@ parse_testthat_list_reporter <- function(result, roll_up_ids = FALSE) {
   if (isTRUE(roll_up_ids)) {
     test_results <- roll_up_test_ids(test_results)
   }
-  return(test_results)
+
+  return(select(test_results, .data$TestName, .data$passed, .data$failed, .data$TestId))
 }
 
 
@@ -175,5 +176,7 @@ roll_up_test_ids <- function(test_df) {
         failed = sum(.data$failed, na.rm = TRUE)
       )
 
-  bind_rows(test_df, no_id_tests)
+  test_df %>%
+    bind_rows(no_id_tests) %>%
+    select(.data$TestName, .data$passed, .data$failed, .data$TestId)
 }
