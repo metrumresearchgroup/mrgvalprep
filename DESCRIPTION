@@ -35,7 +35,6 @@ Imports:
     dplyr,
     fs,
     glue,
-    ghpm (>= 0.5.1),
     jsonlite,
     knitr,
     magrittr,
@@ -53,6 +52,7 @@ Imports:
 Suggests:
     checkmate,
     digest,
+    ghpm (>= 0.5.1),
     yaml,
     forcats,
     cli,
