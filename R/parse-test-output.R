@@ -1,6 +1,10 @@
 #' Parse testthat output
 #'
 #' @param result List output as reported by [testthat::ListReporter]
+#' @param roll_up_ids If `FALSE`, the default, will leave duplicated Test ID's
+#'   as is. If `TRUE`, will roll up any duplicated (non-NA) ID's so that they
+#'   are unique and the passed/failed count reflects the total sums for a tests
+#'   with a given ID.
 #' @return A tibble formatted according to `mrgvalidate::input_formats`
 #' @seealso `mrgvalidate::input_formats`, `mrgvalidate::create_validation_docs()`
 #' @importFrom purrr map_chr map_lgl map_dfr
@@ -8,8 +12,8 @@
 #' @importFrom stringr str_replace fixed
 #' @importFrom rlang .data
 #' @export
-parse_testthat_list_reporter <- function(result) {
-  map_dfr(result, function(.r) {
+parse_testthat_list_reporter <- function(result, roll_up_ids = FALSE) {
+  test_results <- map_dfr(result, function(.r) {
     .t <- unique(map_chr(.r$results, ~ .x$test))
     if (length(.t) > 1) {
       abort(paste("DEV ERROR: parsed more than one test name from results:", paste(.t, collapse = ", ")))
@@ -26,6 +30,12 @@ parse_testthat_list_reporter <- function(result) {
         TestName = strip_test_id(.data$TestName, .data$TestId)
       )
   })
+
+  # Roll up over TestId
+  if (isTRUE(roll_up_ids)) {
+    test_results <- roll_up_test_ids(test_results)
+  }
+  return(test_results)
 }
 
 
@@ -48,6 +58,11 @@ parse_testthat_list_reporter <- function(result) {
 #' in your Go test code.
 #'
 #' @param test_file Path to a `.json` file containing the output from `go test --json`
+#' @param roll_up_ids If `TRUE`, the default, will roll up any duplicated
+#'   (non-NA) ID's so that they are unique and the passed/failed count reflects
+#'   the total sums for a tests with a given ID. If `FALSE`, will leave
+#'   duplicated Test ID's as is. Note: leaving this `FALSE` may cause strange
+#'   outputs for subtests.
 #' @return A tibble formatted according to `mrgvalidate::input_formats`
 #' @seealso `mrgvalidate::input_formats`, `mrgvalidate::create_validation_docs()`
 #' @importFrom dplyr summarise group_by filter select rename mutate
@@ -57,7 +72,7 @@ parse_testthat_list_reporter <- function(result) {
 #' @importFrom readr read_lines
 #' @importFrom rlang .data
 #' @export
-parse_golang_test_json <- function(test_file) {
+parse_golang_test_json <- function(test_file, roll_up_ids = TRUE) {
   line_by_line <- read_lines(test_file)
   df <- map_dfr(line_by_line, fromJSON)
 
@@ -80,14 +95,9 @@ parse_golang_test_json <- function(test_file) {
   }
 
   # Roll up over TestId
-  # TODO: make this optional with an arg?
-  test_results <- test_results %>%
-    group_by(.data$TestId) %>%
-    summarise(
-      TestName = leading_lcs(.data$TestName),
-      passed = sum(.data$passed, na.rm = TRUE),
-      failed = sum(.data$failed, na.rm = TRUE)
-    )
+  if (isTRUE(roll_up_ids)) {
+    test_results <- roll_up_test_ids(test_results)
+  }
 
   return(select(test_results, .data$TestName, .data$passed, .data$failed, .data$TestId))
 }
@@ -145,4 +155,25 @@ leading_lcs <- function(x) {
   if (lcs == "") rlang::abort(paste("No leading overlap in\n", paste(x, collapse = "\n ")))
 
   return (str_replace(lcs, "[\\/_ ]*$", ""))
+}
+
+#' Roll up so test ID's are unique and passed/failed sums up counts
+#' @importFrom dplyr filter group_by summarise bind_rows
+#' @keywords internal
+roll_up_test_ids <- function(test_df) {
+
+  # don't roll up tests with no ID
+  no_id_tests <- filter(test_df, is.na(.data$TestId))
+
+  # roll up tests with ID's
+  test_df <- test_df %>%
+    filter(!is.na(.data$TestId)) %>%
+    group_by(.data$TestId) %>%
+      summarise(
+        TestName = leading_lcs(.data$TestName),
+        passed = sum(.data$passed, na.rm = TRUE),
+        failed = sum(.data$failed, na.rm = TRUE)
+      )
+
+  bind_rows(test_df, no_id_tests)
 }
