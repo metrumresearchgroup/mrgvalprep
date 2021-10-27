@@ -4,10 +4,15 @@
 \alias{parse_testthat_list_reporter}
 \title{Parse testthat output}
 \usage{
-parse_testthat_list_reporter(result)
+parse_testthat_list_reporter(result, roll_up_ids = FALSE)
 }
 \arguments{
 \item{result}{List output as reported by \link[testthat:ListReporter]{testthat::ListReporter}}
+
+\item{roll_up_ids}{If \code{FALSE}, the default, will leave duplicated Test ID's
+as is. If \code{TRUE}, will roll up any duplicated (non-NA) ID's so that they
+are unique and the passed/failed count reflects the total sums for a tests
+with a given ID.}
 }
 \value{
 A tibble formatted according to \code{mrgvalidate::input_formats}

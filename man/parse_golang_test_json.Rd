@@ -4,10 +4,16 @@
 \alias{parse_golang_test_json}
 \title{Parse Go test output}
 \usage{
-parse_golang_test_json(test_file)
+parse_golang_test_json(test_file, roll_up_ids = TRUE)
 }
 \arguments{
 \item{test_file}{Path to a \code{.json} file containing the output from \verb{go test --json}}
+
+\item{roll_up_ids}{If \code{TRUE}, the default, will roll up any duplicated
+(non-NA) ID's so that they are unique and the passed/failed count reflects
+the total sums for a tests with a given ID. If \code{FALSE}, will leave
+duplicated Test ID's as is. Note: leaving this \code{FALSE} may cause strange
+outputs for subtests.}
 }
 \value{
 A tibble formatted according to \code{mrgvalidate::input_formats}
