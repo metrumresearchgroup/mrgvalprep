@@ -13,10 +13,7 @@
 #' @param domain Domain where repo lives. Either "github.com" or "ghe.metrumrg.com", defaulting to "github.com".
 #' @export
 parse_github_issues <- function(org, repo, mile, domain = VALID_DOMAINS) {
-  if (requireNamespace("ghpm", quietly = TRUE) &&
-      utils::packageVersion("ghpm") < "0.5.1") {
-    stop("must have ghpm >= 0.5.1 to use parse_github_issues()")
-  }
+  check_for_ghpm("parse_github_issues()")
 
   domain <- match.arg(domain)
 
@@ -49,10 +46,7 @@ parse_github_issues <- function(org, repo, mile, domain = VALID_DOMAINS) {
 #' @seealso [parse_github_issues()]
 #' @export
 get_issues <- function(org, repo, mile, domain = VALID_DOMAINS) {
-  if (requireNamespace("ghpm", quietly = TRUE) &&
-      utils::packageVersion("ghpm") < "0.5.1") {
-    stop("must have ghpm >= 0.5.1 to use get_issues()")
-  }
+  check_for_ghpm("get_issues()")
 
   domain <- match.arg(domain)
   if (domain == "github.com") {
@@ -73,10 +67,7 @@ get_issues <- function(org, repo, mile, domain = VALID_DOMAINS) {
 #' @importFrom rlang .data
 #' @keywords internal
 get_risk <- function(org, repo, domain = VALID_DOMAINS) {
-  if (requireNamespace("ghpm", quietly = TRUE) &&
-      utils::packageVersion("ghpm") < "0.5.1") {
-    stop("must have ghpm >= 0.5.1 to use get_risk()")
-  }
+  check_for_ghpm("get_risk()")
 
   domain <- match.arg(domain)
   if (domain == "github.com") {
@@ -88,4 +79,12 @@ get_risk <- function(org, repo, domain = VALID_DOMAINS) {
   risk %>%
     mutate(ProductRisk = sub("risk: ", "", .data$risk, fixed = TRUE)) %>%
     select(-.data$risk)
+}
+
+#' @keywords internal
+check_for_ghpm <- function(.func) {
+  ghpm_installed <- requireNamespace("ghpm", quietly = TRUE)
+  if (!ghpm_installed || (ghpm_installed && utils::packageVersion("ghpm") < "0.5.1")) {
+    stop(paste("must have ghpm >= 0.5.1 to use", .func))
+  }
 }
