@@ -1,8 +1,16 @@
+# mrgvalprep 0.0.3
+
+## New features and changes
+
+* Added `roll_up_ids` argument to `parse_testthat_list_reporter()` and `parse_golang_test_json()` (#16)
+
+* Moved `ghpm` to Suggests and put checks on all functions that touch Github (#15)
+
 # mrgvalprep 0.0.2
 
 ## New features and changes
 
-* Adding parser for Go test `go test --json` output (#10)
+* Added `parse_golang_test_json()` for Go test `go test --json` output (#10)
 
 ## Developer-facing changes
 

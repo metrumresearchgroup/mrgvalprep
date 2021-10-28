@@ -10,6 +10,32 @@ test_that("parse_testthat_list_reporter() returns expected tibble", {
   )
 })
 
+test_that("parse_testthat_list_reporter() optionally rolls up ID's", {
+  test_res <- readRDS(system.file("test-refs", "test-parse-test-output-ListReporter.RDS", package = "mrgvalprep"))
+
+  # modify to have duplicates
+  new_idx <- length(test_res)+1
+  test_res[[new_idx]] <- test_res[[1]]
+
+  # add some that are missing ID's
+  no_id <- list(
+    results = list(structure(list(test = "this test has no ID"), class = "expectation_success"))
+  )
+  test_res[[new_idx+1]] <- no_id
+  test_res[[new_idx+2]] <- no_id
+
+  parsed_df <- parse_testthat_list_reporter(test_res, roll_up_ids = TRUE)
+  expect_equal(sum(is.na(parsed_df$TestId)), 2)
+  expect_false(any(duplicated(parsed_df$TestId[!is.na(parsed_df$TestId)])))
+
+  # check that the counts are rolled up
+  id_to_check <- parse_test_id(test_res[[1]]$test)
+  test_ref <- readr::read_csv(system.file("test-refs", "test-parse-test-output-ListReporter-parsed.csv", package = "mrgvalprep"), col_types = "ciic")
+  expect_equal(
+    parsed_df %>% filter(TestId == id_to_check) %>% dplyr::pull(passed),
+    2 * (test_ref %>% filter(TestId == id_to_check) %>% dplyr::pull(passed))
+  )
+})
 
 test_that("parse_golang_test_json() happy path", {
   test_res_file <- system.file("test-refs", "test-parse-test-output-go-test-1.json", package = "mrgvalprep")

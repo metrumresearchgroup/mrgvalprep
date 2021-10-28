@@ -1,7 +1,7 @@
 Package: mrgvalprep
 Type: Package
 Title: Preprocessing for mrgvalidate
-Version: 0.0.2
+Version: 0.0.3
 Authors@R: 
     c(person(given = "Devin",
            family = "Pastoor",
@@ -35,7 +35,6 @@ Imports:
     dplyr,
     fs,
     glue,
-    ghpm (>= 0.5.1),
     jsonlite,
     knitr,
     magrittr,
@@ -53,6 +52,7 @@ Imports:
 Suggests:
     checkmate,
     digest,
+    ghpm (>= 0.5.1),
     yaml,
     forcats,
     cli,
