@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">mrgvalprep</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.3</span>
       </span>
     </div>
 
@@ -132,7 +132,7 @@
     <p>Parses output of <code>go test --json</code> into a tibble for <code>mrgvalidate</code> to consume.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>parse_golang_test_json</span><span class='op'>(</span><span class='va'>test_file</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>parse_golang_test_json</span><span class='op'>(</span><span class='va'>test_file</span>, roll_up_ids <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -140,6 +140,14 @@
     <tr>
       <th>test_file</th>
       <td><p>Path to a <code>.json</code> file containing the output from <code>go test --json</code></p></td>
+    </tr>
+    <tr>
+      <th>roll_up_ids</th>
+      <td><p>If <code>TRUE</code>, the default, will roll up any duplicated
+(non-NA) ID's so that they are unique and the passed/failed count reflects
+the total sums for a tests with a given ID. If <code>FALSE</code>, will leave
+duplicated Test ID's as is. Note: leaving this <code>FALSE</code> may cause strange
+outputs for subtests.</p></td>
     </tr>
     </table>
 

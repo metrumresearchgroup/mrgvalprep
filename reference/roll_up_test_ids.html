@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Read requirements and stories from Google Sheets. — read_spec_gsheets • mrgvalprep</title>
+<title>Roll up so test ID's are unique and passed/failed sums up counts — roll_up_test_ids • mrgvalprep</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Read requirements and stories from Google Sheets. — read_spec_gsheets" />
-<meta property="og:description" content="Read requirements and stories from Google Sheets." />
+<meta property="og:title" content="Roll up so test ID's are unique and passed/failed sums up counts — roll_up_test_ids" />
+<meta property="og:description" content="Roll up so test ID's are unique and passed/failed sums up counts" />
 
 
 
@@ -123,69 +123,17 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Read requirements and stories from Google Sheets.</h1>
+    <h1>Roll up so test ID's are unique and passed/failed sums up counts</h1>
     
-    <div class="hidden name"><code>read_spec_gsheets.Rd</code></div>
+    <div class="hidden name"><code>roll_up_test_ids.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Read requirements and stories from Google Sheets.</p>
+    <p>Roll up so test ID's are unique and passed/failed sums up counts</p>
     </div>
 
-    <pre class="usage"><span class='fu'>read_spec_gsheets</span><span class='op'>(</span>
-  <span class='va'>ss_stories</span>,
-  ss_req <span class='op'>=</span> <span class='cn'>NULL</span>,
-  sheet_stories <span class='op'>=</span> <span class='cn'>NULL</span>,
-  sheet_req <span class='op'>=</span> <span class='cn'>NULL</span>
-<span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>roll_up_test_ids</span><span class='op'>(</span><span class='va'>test_df</span><span class='op'>)</span></pre>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>ss_stories, ss_req, sheet_stories, sheet_req</th>
-      <td><p>Sheet identifiers for the
-stories and requirements passed along as the <code>ss</code> and <code>sheet</code> arguments to
-<code><a href='https://googlesheets4.tidyverse.org/reference/range_read.html'>googlesheets4::read_sheet()</a></code>.</p></td>
-    </tr>
-    </table>
-
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>Tibble joining requirements and stories by RequirementId.</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    
-<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Option 1: Stories and Requirements</h3>
-
-
-<p>The stories sheet passed to <code>ss_stories</code> must have the following columns:</p><ul>
-<li><p><code>StoryId</code> (character scalar)</p></li>
-<li><p><code>StoryName</code> (character scalar)</p></li>
-<li><p><code>StoryDescription</code> (character scalar)</p></li>
-<li><p><code>ProductRisk</code> (character scalar)</p></li>
-<li><p><code>RequirementIds</code> (character vector)</p></li>
-</ul>
-
-<p>The requirements sheet passed to <code>ss_req</code> must have the following columns:</p><ul>
-<li><p><code>RequirementId</code> (character scalar)</p></li>
-<li><p><code>RequirementDescription</code> (character scalar)</p></li>
-<li><p><code>TestIds</code> (character vector)</p></li>
-</ul>
-
-
-<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Option 2: Stories linked directly to Tests</h3>
-
-
-<p>Don't pass anything to <code>ss_req</code>. The stories sheet passed to <code>ss_stories</code> must have the following columns:</p><ul>
-<li><p><code>StoryId</code> (character scalar)</p></li>
-<li><p><code>StoryName</code> (character scalar)</p></li>
-<li><p><code>StoryDescription</code> (character scalar)</p></li>
-<li><p><code>ProductRisk</code> (character scalar)</p></li>
-<li><p><code>TestIds</code> (character vector)</p></li>
-</ul>
-
-<p>(Note: these are the same columns as Option 1, but replacing <code>RequirementIds</code> with <code>TestIds</code>)</p>
 
 
   </div>

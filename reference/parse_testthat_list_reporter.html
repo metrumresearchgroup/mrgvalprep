@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">mrgvalprep</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.3</span>
       </span>
     </div>
 
@@ -132,7 +132,7 @@
     <p>Parse testthat output</p>
     </div>
 
-    <pre class="usage"><span class='fu'>parse_testthat_list_reporter</span><span class='op'>(</span><span class='va'>result</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>parse_testthat_list_reporter</span><span class='op'>(</span><span class='va'>result</span>, roll_up_ids <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -140,6 +140,13 @@
     <tr>
       <th>result</th>
       <td><p>List output as reported by <a href='https://testthat.r-lib.org/reference/ListReporter.html'>testthat::ListReporter</a></p></td>
+    </tr>
+    <tr>
+      <th>roll_up_ids</th>
+      <td><p>If <code>FALSE</code>, the default, will leave duplicated Test ID's
+as is. If <code>TRUE</code>, will roll up any duplicated (non-NA) ID's so that they
+are unique and the passed/failed count reflects the total sums for a tests
+with a given ID.</p></td>
     </tr>
     </table>
 
