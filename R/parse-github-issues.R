@@ -13,6 +13,8 @@
 #' @param domain Domain where repo lives. Either "github.com" or "ghe.metrumrg.com", defaulting to "github.com".
 #' @export
 parse_github_issues <- function(org, repo, mile, domain = VALID_DOMAINS) {
+  check_for_ghpm("parse_github_issues()")
+
   domain <- match.arg(domain)
 
   release_issues <- get_issues(org, repo, mile, domain)
@@ -39,17 +41,18 @@ parse_github_issues <- function(org, repo, mile, domain = VALID_DOMAINS) {
 #' Mainly a helper function called by [parse_github_issues()] but can also be
 #' used to pull the raw content for issues associated with a given milestone.
 #' @importFrom dplyr filter
-#' @importFrom ghpm api_url
 #' @inheritParams parse_github_issues
 #' @importFrom rlang .data
 #' @seealso [parse_github_issues()]
 #' @export
 get_issues <- function(org, repo, mile, domain = VALID_DOMAINS) {
+  check_for_ghpm("get_issues()")
+
   domain <- match.arg(domain)
   if (domain == "github.com") {
     domain <- paste0("api.", domain)
   }
-  pkg_issues <- ghpm::get_issues(org, repo, api_url(hostname = domain))
+  pkg_issues <- ghpm::get_issues(org, repo, ghpm::api_url(hostname = domain))
   release_issues <- pkg_issues %>% filter(.data$milestone == mile)
 
   return(release_issues)
@@ -61,18 +64,27 @@ get_issues <- function(org, repo, mile, domain = VALID_DOMAINS) {
 #' @param repo The name of the repo for the package you are validating
 #' @param domain Domain where repo lives. Either "github.com" or "ghe.metrumrg.com", defaulting to "github.com"
 #' @importFrom dplyr filter select mutate
-#' @importFrom ghpm api_url
 #' @importFrom rlang .data
 #' @keywords internal
 get_risk <- function(org, repo, domain = VALID_DOMAINS) {
+  check_for_ghpm("get_risk()")
+
   domain <- match.arg(domain)
   if (domain == "github.com") {
     domain <- paste0("api.", domain)
   }
-  issue_lab <- ghpm::get_issue_labels(org, repo, api_url(hostname = domain))
+  issue_lab <- ghpm::get_issue_labels(org, repo, ghpm::api_url(hostname = domain))
   issue_lab <- filter(issue_lab, grepl("risk", .data$label, fixed = TRUE))
   risk <- select(issue_lab, .data$issue, risk = .data$label)
   risk %>%
     mutate(ProductRisk = sub("risk: ", "", .data$risk, fixed = TRUE)) %>%
     select(-.data$risk)
+}
+
+#' @keywords internal
+check_for_ghpm <- function(.func) {
+  ghpm_installed <- requireNamespace("ghpm", quietly = TRUE)
+  if (!ghpm_installed || (ghpm_installed && utils::packageVersion("ghpm") < "0.5.1")) {
+    stop(paste("must have ghpm >= 0.5.1 to use", .func))
+  }
 }
