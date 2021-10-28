@@ -1,7 +1,7 @@
 Package: mrgvalprep
 Type: Package
 Title: Preprocessing for mrgvalidate
-Version: 0.0.2.8001
+Version: 0.0.3
 Authors@R: 
     c(person(given = "Devin",
            family = "Pastoor",
