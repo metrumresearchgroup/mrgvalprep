@@ -26,7 +26,10 @@ Parses output of \verb{go test --json} into a tibble for \code{mrgvalidate} to c
 \item Any tests \emph{without} Test Id's (correctly formatted \emph{in brackets}) will be thrown out.
 \item All tests and subtests with the same Test Id will be rolled up to a single
 row in the output tibble. The \verb{passed,failed} counts will reflect the number
-of tests/subtests that were rolled up this way.
+of tests/subtests that were rolled up this way. The test names for a set of
+rolled up ID's must share a common prefix, which will be used as the new test
+name. Any trailing spaces, slashes, or underscores will be removed from the
+extracted prefix.
 \item Any test with \emph{more than one Test Id} will have only the first Test Id
 extracted. Any subsequent Test Id's for that test will be ignored. Generally,
 the first Id will be the \emph{least} specific, since subsequent Id's will likely

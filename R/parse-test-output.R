@@ -4,7 +4,9 @@
 #' @param roll_up_ids If `FALSE`, the default, will leave duplicated Test ID's
 #'   as is. If `TRUE`, will roll up any duplicated (non-NA) ID's so that they
 #'   are unique and the passed/failed count reflects the total sums for a tests
-#'   with a given ID.
+#'   with a given ID. The test names for a set of rolled up ID's must share a
+#'   common prefix, which will be used as the new test name. Any trailing
+#'   spaces, slashes, or underscores will be removed from the extracted prefix.
 #' @return A tibble formatted according to `mrgvalidate::input_formats`
 #' @seealso `mrgvalidate::input_formats`, `mrgvalidate::create_validation_docs()`
 #' @importFrom purrr map_chr map_lgl map_dfr
@@ -50,7 +52,10 @@ parse_testthat_list_reporter <- function(result, roll_up_ids = FALSE) {
 #'
 #' * All tests and subtests with the same Test Id will be rolled up to a single
 #' row in the output tibble. The `passed,failed` counts will reflect the number
-#' of tests/subtests that were rolled up this way.
+#' of tests/subtests that were rolled up this way. The test names for a set of
+#' rolled up ID's must share a common prefix, which will be used as the new test
+#' name. Any trailing spaces, slashes, or underscores will be removed from the
+#' extracted prefix.
 #'
 #' * Any test with _more than one Test Id_ will have only the first Test Id
 #' extracted. Any subsequent Test Id's for that test will be ignored. Generally,
