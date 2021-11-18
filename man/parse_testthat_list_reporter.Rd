@@ -14,7 +14,8 @@ as is. If \code{TRUE}, will roll up any duplicated (non-NA) ID's so that they
 are unique and the passed/failed count reflects the total sums for a tests
 with a given ID. The test names for a set of rolled up ID's must share a
 common prefix, which will be used as the new test name. Any trailing
-spaces, slashes, or underscores will be removed from the extracted prefix.}
+spaces, slashes, colons, or underscores will be removed from the extracted
+prefix.}
 }
 \value{
 A tibble formatted according to \code{mrgvalidate::input_formats}

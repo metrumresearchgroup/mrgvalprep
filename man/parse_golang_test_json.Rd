@@ -28,8 +28,8 @@ Parses output of \verb{go test --json} into a tibble for \code{mrgvalidate} to c
 row in the output tibble. The \verb{passed,failed} counts will reflect the number
 of tests/subtests that were rolled up this way. The test names for a set of
 rolled up ID's must share a common prefix, which will be used as the new test
-name. Any trailing spaces, slashes, or underscores will be removed from the
-extracted prefix.
+name. Any trailing spaces, slashes, colons, or underscores will be removed
+from the extracted prefix.
 \item Any test with \emph{more than one Test Id} will have only the first Test Id
 extracted. Any subsequent Test Id's for that test will be ignored. Generally,
 the first Id will be the \emph{least} specific, since subsequent Id's will likely
