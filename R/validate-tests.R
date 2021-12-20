@@ -169,13 +169,12 @@ pull_tagged_repo <- function(
 #'   the directory that will be tested.
 #' @keywords internal
 run_tests <- function(pkg, test_path = "tests/testthat", root_dir = tempdir()) {
-  stopifnot(requireNamespace(pkg))
   message(glue("run_tests() on {root_dir}/{pkg}/{test_path}"))
 
   results_list <- callr::r(
     function(root_dir, pkg, test_path, setup_package_env) {
       withr::local_dir(file.path(root_dir, pkg))
-      require(pkg, character.only = TRUE)
+      stopifnot(require(pkg, character.only = TRUE))
 
       # load package environment
       env <- setup_package_env(pkg, test_path)
