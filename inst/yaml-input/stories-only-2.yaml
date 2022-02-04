@@ -1,0 +1,7 @@
+S003:
+  name: S003 name
+  description: >
+    S001 description
+  tests:
+  - TEST-ID-003
+  ProductRisk: low

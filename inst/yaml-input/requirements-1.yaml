@@ -1,0 +1,11 @@
+R001:
+  description: >
+    R001 description
+  tests:
+  - TEST-ID-001
+  - TEST-ID-002
+R002:
+  description: >
+    R002 description
+  tests:
+  - TEST-ID-001
