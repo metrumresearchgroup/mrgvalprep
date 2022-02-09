@@ -37,6 +37,9 @@ read_spec_gsheets <- function
   ss_stories, ss_req = NULL,
   sheet_stories = NULL, sheet_req = NULL
 ) {
+  if (!requireNamespace("googlesheets4", quietly = TRUE)) {
+    rlang::abort("Need to install googlesheets4 to use read_spec_gsheets()")
+  }
   res <- if (is.null(ss_req)) {
     read_stories_only_gsheet(ss = ss_stories, sheet = sheet_stories)
   } else {
