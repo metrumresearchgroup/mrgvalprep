@@ -12,3 +12,4 @@ extract_issue_tests(txt)
 \description{
 Extract Tests section from Github issue
 }
+\keyword{internal}

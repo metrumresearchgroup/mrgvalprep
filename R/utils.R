@@ -8,6 +8,7 @@
 #' @importFrom dplyr rename mutate_at
 #' @importFrom rlang .data
 #' @param test_path File path to file containing test results
+#' @keywords internal
 read_test_df <- function(test_path = ALL_TESTS) {
   tst <- read_csv(test_path, col_types = cols())
   tst <- rename(tst,test_name = .data$tests, test_file = .data$file, number=.data$nb)
@@ -24,6 +25,7 @@ read_test_df <- function(test_path = ALL_TESTS) {
 #' @importFrom purrr flatten_chr map_df
 #' @importFrom tibble tibble
 #' @param txt The raw text scraped from the body of the Github issue
+#' @keywords internal
 extract_issue_summary <- function(txt) {
   sp <- sp_sections(txt)
   ts <- strsplit(sp[2], "[\n\r]+") %>% flatten_chr %>% rm_blank
@@ -35,6 +37,7 @@ extract_issue_summary <- function(txt) {
 #' @importFrom purrr flatten_chr map_df map_chr
 #' @importFrom tibble tibble
 #' @param txt The raw text scraped from the body of the Github issue
+#' @keywords internal
 extract_issue_tests <- function(txt) {
   sp <- sp_sections(txt)
   ts <- strsplit(sp[2], "[\n\r]+") %>% flatten_chr %>% rm_blank
@@ -59,19 +62,23 @@ extract_issue_tests <- function(txt) {
 
 #' remove leading hyphen
 #' @param x input to clean
+#' @keywords internal
 rm_h <- function(x) trimws(gsub("^ *- *", "",x))
 
 #' remove leading star/bullet
 #' @param x input to clean
+#' @keywords internal
 rm_s <- function(x) trimws(gsub("^ *\\* *", "",x))
 
 #' drop blanks
 #' @param x input to clean
+#' @keywords internal
 rm_blank <- function(x) x[!grepl("^\\s*$",x)]
 
 #' split body by Test and Summary
 #' @param x input to clean
 #' @importFrom purrr flatten_chr
+#' @keywords internal
 sp_sections <- function(x) {
   x <- strsplit(x,"(\\# *Test\\w*|\\# *Summ\\w*)") %>% flatten_chr
   x <- rm_blank(x)
