@@ -47,12 +47,12 @@ Imports:
     testthat,
     tibble,
     tidyr,
-    withr (>= 2.3.0),
-    googlesheets4
+    withr (>= 2.3.0)
 Suggests:
     checkmate,
     digest,
     ghpm (>= 0.5.1),
+    googlesheets4,
     yaml,
     forcats,
     cli,
