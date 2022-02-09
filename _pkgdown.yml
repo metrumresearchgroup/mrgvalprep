@@ -19,5 +19,6 @@ reference:
 - title: Format stories and requirements
   contents:
   - read_spec_gsheets
+  - read_spec_yaml
   - parse_github_issues
   - get_issues
