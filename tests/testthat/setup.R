@@ -23,7 +23,13 @@ GHE_REPO <- "mrgvalidatetestreference"
 GHE_MILESTONE <- "v0.6.0"
 GHE_TAG <- "0.6.0"
 
+STORIES_ONLY_COLS <- c(
+  "StoryId", "StoryName", "StoryDescription", "ProductRisk", "TestIds")
 
+STORIES_AND_REQS_COLS <- c(
+  "StoryId", "StoryName", "StoryDescription",
+  "RequirementId", "RequirementDescription",
+  "ProductRisk", "TestIds")
 
 #############################
 # reference for test results
@@ -75,4 +81,8 @@ check_docs <- function(spec, docs_output_dir, set_id_to_name = FALSE) {
   mat_text <- readr::read_file(file.path(docs_output_dir, MAT_FILE))
   expect_true(any(!!str_detect(mat_text, fixed(str_extract(str_trim(spec$StoryDescription), "^.+")))))
   if (isFALSE(set_id_to_name)) expect_true(any(str_detect(mat_text, unlist(spec$TestIds))))
+}
+
+yaml_file <- function(name) {
+  system.file("yaml-input", name, package = "mrgvalprep")
 }
