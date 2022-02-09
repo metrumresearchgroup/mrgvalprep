@@ -1,7 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://metrumresearchgroup.github.io/mrgvalprep/404.html</loc>
+  </url>
+  <url>
+    <loc>https://metrumresearchgroup.github.io/mrgvalprep/LICENSE-text.html</loc>
+  </url>
+  <url>
+    <loc>https://metrumresearchgroup.github.io/mrgvalprep/articles/basic_usage.html</loc>
+  </url>
+  <url>
+    <loc>https://metrumresearchgroup.github.io/mrgvalprep/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>https://metrumresearchgroup.github.io/mrgvalprep/authors.html</loc>
+  </url>
+  <url>
     <loc>https://metrumresearchgroup.github.io/mrgvalprep/index.html</loc>
+  </url>
+  <url>
+    <loc>https://metrumresearchgroup.github.io/mrgvalprep/news/index.html</loc>
   </url>
   <url>
     <loc>https://metrumresearchgroup.github.io/mrgvalprep/reference/extract_issue_summary.html</loc>
@@ -17,6 +35,9 @@
   </url>
   <url>
     <loc>https://metrumresearchgroup.github.io/mrgvalprep/reference/get_sys_info.html</loc>
+  </url>
+  <url>
+    <loc>https://metrumresearchgroup.github.io/mrgvalprep/reference/index.html</loc>
   </url>
   <url>
     <loc>https://metrumresearchgroup.github.io/mrgvalprep/reference/leading_lcs.html</loc>
@@ -50,6 +71,9 @@
   </url>
   <url>
     <loc>https://metrumresearchgroup.github.io/mrgvalprep/reference/read_spec_gsheets.html</loc>
+  </url>
+  <url>
+    <loc>https://metrumresearchgroup.github.io/mrgvalprep/reference/read_spec_yaml.html</loc>
   </url>
   <url>
     <loc>https://metrumresearchgroup.github.io/mrgvalprep/reference/read_stories_gsheet.html</loc>
@@ -88,6 +112,12 @@
     <loc>https://metrumresearchgroup.github.io/mrgvalprep/reference/validate_tests.html</loc>
   </url>
   <url>
-    <loc>https://metrumresearchgroup.github.io/mrgvalprep/articles/basic_usage.html</loc>
+    <loc>https://metrumresearchgroup.github.io/mrgvalprep/requirements-specification.html</loc>
+  </url>
+  <url>
+    <loc>https://metrumresearchgroup.github.io/mrgvalprep/traceability-matrix.html</loc>
+  </url>
+  <url>
+    <loc>https://metrumresearchgroup.github.io/mrgvalprep/validation-testing.html</loc>
   </url>
 </urlset>
