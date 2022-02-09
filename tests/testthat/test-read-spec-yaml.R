@@ -1,19 +1,7 @@
 
-stories_only_cols <- c(
-  "StoryId", "StoryName", "StoryDescription", "ProductRisk", "TestIds")
-
-stories_and_reqs_cols <- c(
-  "StoryId", "StoryName", "StoryDescription",
-  "RequirementId", "RequirementDescription",
-  "ProductRisk", "TestIds")
-
-yaml_file <- function(name) {
-  system.file("yaml-input", name, package = "mrgvalprep")
-}
-
 test_that("read_spec_yaml() supports stories-only mode", {
   spec <- read_spec_yaml(yaml_file("stories-only-1.yaml"))
-  expect_setequal(names(spec), stories_only_cols)
+  expect_setequal(names(spec), STORIES_ONLY_COLS)
   expect_equal(nrow(spec), 2)
   expect_setequal(spec$TestIds,
                   list(c("TEST-ID-001", "TEST-ID-002"),
@@ -23,7 +11,7 @@ test_that("read_spec_yaml() supports stories-only mode", {
 test_that("read_spec_yaml() can read stories from multiple YAMLs", {
   spec <- read_spec_yaml(c(yaml_file("stories-only-1.yaml"),
                            yaml_file("stories-only-2.yaml")))
-  expect_setequal(names(spec), stories_only_cols)
+  expect_setequal(names(spec), STORIES_ONLY_COLS)
   expect_equal(nrow(spec), 3)
 })
 
@@ -33,7 +21,7 @@ test_that("read_spec_yaml() supports requirements", {
     requirements = c(yaml_file("requirements-1.yaml"),
                      yaml_file("requirements-2.yaml")))
 
-  expect_setequal(names(spec), stories_and_reqs_cols)
+  expect_setequal(names(spec), STORIES_AND_REQS_COLS)
   expect_equal(nrow(spec), 3)
   expect_setequal(spec$TestIds,
                   list(c("TEST-ID-001", "TEST-ID-002"),
