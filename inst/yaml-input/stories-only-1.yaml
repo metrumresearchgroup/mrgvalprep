@@ -9,7 +9,7 @@ S001:
 S002:
   name: S002 name
   description: >
-    S001 description
+    S002 description
   tests:
   - TEST-ID-001
   ProductRisk: low
