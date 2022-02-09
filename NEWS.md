@@ -1,3 +1,18 @@
+# mrgvalprep 0.0.4
+
+## New features and changes
+
+* With the new function `read_spec_yaml()`, stories and requirements can now be provided through YAML files. (#23)
+
+* `googlesheets4` has been moved from `Imports` to `Suggests` so that users that only want to use YAML input don't need to install it. (#24)
+
+* `parse_testthat_list_reporter()` and `parse_golang_test_json()` now strip a trailing colon from the test name when rolling up test IDs. (#19)
+
+## Docs
+
+* The documentation for `parse_testthat_list_reporter()` and `parse_golang_test_json()` now describe the requirements for the test name when `roll_up_ids = TRUE`.  (#19)
+
+
 # mrgvalprep 0.0.3
 
 ## New features and changes
