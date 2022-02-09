@@ -37,6 +37,9 @@ read_spec_gsheets <- function
   ss_stories, ss_req = NULL,
   sheet_stories = NULL, sheet_req = NULL
 ) {
+  if (!requireNamespace("googlesheets4", quietly = TRUE)) {
+    rlang::abort("Need to install googlesheets4 to use read_spec_gsheets()")
+  }
   res <- if (is.null(ss_req)) {
     read_stories_only_gsheet(ss = ss_stories, sheet = sheet_stories)
   } else {
@@ -46,22 +49,6 @@ read_spec_gsheets <- function
   }
 
   return(res)
-}
-
-#' Join the stories and requirements by requirement ID.
-#' @param stories Data frame of stories, where the RequirementIds column has a
-#'   list of requirement IDs associated with each story.
-#' @param reqs Data frame of requirements, with each row identified by a unique
-#'   requirement ID.
-#' @importFrom dplyr full_join
-#' @importFrom tidyr unnest
-#' @importFrom rlang .data
-#' @keywords internal
-merge_requirements_and_stories <- function(stories, reqs) {
-  stories_flat <- stories %>%
-    unnest("RequirementIds") %>%
-    rename(RequirementId = .data$RequirementIds)
-  return(full_join(stories_flat, reqs, by = "RequirementId"))
 }
 
 #' Read requirements from a Google Sheet.

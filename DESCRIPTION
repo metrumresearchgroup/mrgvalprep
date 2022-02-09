@@ -1,7 +1,7 @@
 Package: mrgvalprep
 Type: Package
 Title: Preprocessing for mrgvalidate
-Version: 0.0.3
+Version: 0.0.4
 Authors@R: 
     c(person(given = "Devin",
            family = "Pastoor",
@@ -47,12 +47,12 @@ Imports:
     testthat,
     tibble,
     tidyr,
-    withr (>= 2.3.0),
-    googlesheets4
+    withr (>= 2.3.0)
 Suggests:
     checkmate,
     digest,
     ghpm (>= 0.5.1),
+    googlesheets4,
     yaml,
     forcats,
     cli,

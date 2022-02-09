@@ -13,6 +13,7 @@ Supports the following data sources:
 
 * Googlesheets
 * Github issues and milestones
+* YAML files
 
 ## More to come...
 

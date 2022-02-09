@@ -37,6 +37,23 @@ test_that("parse_testthat_list_reporter() optionally rolls up ID's", {
   )
 })
 
+test_that("trailing colon is stripped when rolling up IDs", {
+  df <- tibble::tribble(
+    ~TestName, ~passed, ~failed, ~TestId,
+    "t1", 2, 0, "FOO-BAR-001",
+    "t2", 1, 0, "FOO-BAR-002",
+    "t3: first case", 1, 0, "FOO-BAR-003",
+    "t3: second case", 3, 0, "FOO-BAR-003")
+
+  expect_equal(
+    roll_up_test_ids(df),
+    tibble::tribble(
+      ~TestName, ~passed, ~failed, ~TestId,
+    "t1", 2, 0, "FOO-BAR-001",
+    "t2", 1, 0, "FOO-BAR-002",
+    "t3", 4, 0, "FOO-BAR-003"))
+})
+
 test_that("parse_golang_test_json() happy path", {
   test_res_file <- system.file("test-refs", "test-parse-test-output-go-test-1.json", package = "mrgvalprep")
   test_ref_file <- system.file("test-refs", "test-parse-test-output-go-test-1-parsed.csv", package = "mrgvalprep")

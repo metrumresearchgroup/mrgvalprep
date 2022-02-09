@@ -1,0 +1,15 @@
+S001:
+  name: S001 name
+  description: >
+    S001 description
+  tests:
+  - TEST-ID-001
+  - TEST-ID-002
+  ProductRisk: low
+S002:
+  name: S002 name
+  description: >
+    S002 description
+  tests:
+  - TEST-ID-001
+  ProductRisk: low
