@@ -131,10 +131,12 @@ read_stories_only_gsheet <- function
 #' Read stories from a Google Sheet.
 #' @param ss,sheet Sheet identifiers passed [googlesheets4::read_sheet()].
 #' @param file output
-#' @param story_id_col,story_name_col,story_description_col,risk_col,req_ids_col
+#' @param story_id_col,story_name_col,story_description_col,risk_col,test_ids_col
 #'   Names of relevant columns in input Google Sheet.
 #' @importFrom stringr str_split
 #' @importFrom yaml write_yaml
+#' @importFrom stats setNames
+#' @importFrom utils file.edit
 #' @export
 gsheet_to_yaml <- function
 (
@@ -156,9 +158,9 @@ gsheet_to_yaml <- function
            TestIds = !!test_ids_col)
   dl <- dd %>%
     rename(
-      name = StoryName,
-      description = StoryDescription,
-      tests = TestIds
+      name = .data$StoryName,
+      description = .data$StoryDescription,
+      tests = .data$TestIds
     ) %>%
     split(seq(nrow(dd))) %>%
     setNames(dd$StoryId) %>%

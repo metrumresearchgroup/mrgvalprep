@@ -20,7 +20,7 @@ gsheet_to_yaml(
 
 \item{file}{output}
 
-\item{story_id_col, story_name_col, story_description_col, risk_col, req_ids_col}{Names of relevant columns in input Google Sheet.}
+\item{story_id_col, story_name_col, story_description_col, risk_col, test_ids_col}{Names of relevant columns in input Google Sheet.}
 }
 \description{
 Read stories from a Google Sheet.
