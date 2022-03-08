@@ -127,3 +127,48 @@ read_stories_only_gsheet <- function
            .data$ProductRisk, .data$TestIds) %>%
     mutate(TestIds = stringr::str_split(.data$TestIds, "[\\s,;]+"))
 }
+
+#' Read stories from a Google Sheet.
+#' @param ss,sheet Sheet identifiers passed [googlesheets4::read_sheet()].
+#' @param file output
+#' @param story_id_col,story_name_col,story_description_col,risk_col,req_ids_col
+#'   Names of relevant columns in input Google Sheet.
+#' @importFrom stringr str_split
+#' @importFrom yaml write_yaml
+#' @export
+gsheet_to_yaml <- function
+(
+  ss,
+  sheet = NULL,
+  file = "",
+  story_id_col = "StoryId",
+  story_name_col = "StoryName",
+  story_description_col = "StoryDescription",
+  risk_col = "ProductRisk",
+  test_ids_col = "TestIds"
+){
+  dd <- googlesheets4::read_sheet(ss = ss, sheet = sheet)
+  dd <- dd %>%
+    rename(StoryId = !!story_id_col,
+           StoryName = !!story_name_col,
+           StoryDescription = !!story_description_col,
+           ProductRisk = !!risk_col,
+           TestIds = !!test_ids_col)
+  dl <- dd %>%
+    rename(
+      name = StoryName,
+      description = StoryDescription,
+      tests = TestIds
+    ) %>%
+    split(seq(nrow(dd))) %>%
+    setNames(dd$StoryId) %>%
+    map(~ {
+      .x <- as.list(.x)
+      .x$StoryId <- NULL
+      .x$tests <- unlist(stringr::str_split(.x$tests, ", *"))
+      .x
+    })
+
+  yaml::write_yaml(dl, file)
+  file.edit(file)
+}
