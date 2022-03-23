@@ -166,7 +166,7 @@ gsheet_to_yaml <- function(
     rlang::abort("Need to install googlesheets4 to use read_spec_gsheets()")
   }
   dd <- read_stories_only_gsheet(ss = ss, sheet = sheet) %>%
-    mutate(TestIds = sapply(TestIds, toString))
+    mutate(TestIds = sapply(.data$TestIds, toString))
   dl <- dd %>%
     rename(
       name = .data$StoryName,
