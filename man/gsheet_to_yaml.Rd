@@ -10,8 +10,6 @@ gsheet_to_yaml(ss, sheet = NULL, file)
 \item{ss, sheet}{Sheet identifiers passed \code{\link[googlesheets4:range_read]{googlesheets4::read_sheet()}}.}
 
 \item{file}{output}
-
-\item{story_id_col, story_name_col, story_description_col, risk_col, test_ids_col}{Names of relevant columns in input Google Sheet.}
 }
 \description{
 Read stories from a Google Sheet and write to a yaml file.

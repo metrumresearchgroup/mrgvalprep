@@ -150,8 +150,6 @@ read_stories_only_gsheet <- function
 #'
 #' @param ss,sheet Sheet identifiers passed [googlesheets4::read_sheet()].
 #' @param file output
-#' @param story_id_col,story_name_col,story_description_col,risk_col,test_ids_col
-#'   Names of relevant columns in input Google Sheet.
 #' @importFrom stringr str_split
 #' @importFrom yaml write_yaml
 #' @importFrom stats setNames
