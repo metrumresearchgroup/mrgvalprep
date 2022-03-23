@@ -31,6 +31,9 @@ STORIES_AND_REQS_COLS <- c(
   "RequirementId", "RequirementDescription",
   "ProductRisk", "TestIds")
 
+STORY_TO_GSHEET_ONLY_COLS <-  c(
+  "name","description", "ProductRisk", "tests")
+
 #############################
 # reference for test results
 #############################

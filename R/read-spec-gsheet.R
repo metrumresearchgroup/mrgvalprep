@@ -128,7 +128,26 @@ read_stories_only_gsheet <- function
     mutate(TestIds = stringr::str_split(.data$TestIds, "[\\s,;]+"))
 }
 
-#' Read stories from a Google Sheet.
+#' Read stories from a Google Sheet and write to a yaml file.
+#'
+#' @details
+#'
+#' ## Option 1: Stories and Requirements
+#'
+#' (Note: Option 1 is not currently implemented for `gsheet_to_yaml()`)
+#'
+#'
+#' ## Option 2: Stories linked directly to Tests
+#'
+#' The stories sheet passed to `ss_stories` must have the following columns:
+#' * `StoryId` (character scalar)
+#' * `StoryName` (character scalar)
+#' * `StoryDescription` (character scalar)
+#' * `ProductRisk` (character scalar)
+#' * `TestIds` (character vector)
+#'
+#'
+#'
 #' @param ss,sheet Sheet identifiers passed [googlesheets4::read_sheet()].
 #' @param file output
 #' @param story_id_col,story_name_col,story_description_col,risk_col,test_ids_col
@@ -138,24 +157,16 @@ read_stories_only_gsheet <- function
 #' @importFrom stats setNames
 #' @importFrom utils file.edit
 #' @export
-gsheet_to_yaml <- function
-(
+gsheet_to_yaml <- function(
   ss,
   sheet = NULL,
-  file = "",
-  story_id_col = "StoryId",
-  story_name_col = "StoryName",
-  story_description_col = "StoryDescription",
-  risk_col = "ProductRisk",
-  test_ids_col = "TestIds"
+  file
 ){
-  dd <- googlesheets4::read_sheet(ss = ss, sheet = sheet)
-  dd <- dd %>%
-    rename(StoryId = !!story_id_col,
-           StoryName = !!story_name_col,
-           StoryDescription = !!story_description_col,
-           ProductRisk = !!risk_col,
-           TestIds = !!test_ids_col)
+  if (!requireNamespace("googlesheets4", quietly = TRUE)) {
+    rlang::abort("Need to install googlesheets4 to use read_spec_gsheets()")
+  }
+  dd <- read_stories_only_gsheet(ss = ss, sheet = sheet) %>%
+    mutate(TestIds = sapply(TestIds, toString))
   dl <- dd %>%
     rename(
       name = .data$StoryName,
@@ -170,7 +181,7 @@ gsheet_to_yaml <- function
       .x$tests <- unlist(stringr::str_split(.x$tests, ", *"))
       .x
     })
-
   yaml::write_yaml(dl, file)
-  file.edit(file)
+return(file)
 }
+

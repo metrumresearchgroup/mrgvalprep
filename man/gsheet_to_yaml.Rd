@@ -2,18 +2,9 @@
 % Please edit documentation in R/read-spec-gsheet.R
 \name{gsheet_to_yaml}
 \alias{gsheet_to_yaml}
-\title{Read stories from a Google Sheet.}
+\title{Read stories from a Google Sheet and write to a yaml file.}
 \usage{
-gsheet_to_yaml(
-  ss,
-  sheet = NULL,
-  file = "",
-  story_id_col = "StoryId",
-  story_name_col = "StoryName",
-  story_description_col = "StoryDescription",
-  risk_col = "ProductRisk",
-  test_ids_col = "TestIds"
-)
+gsheet_to_yaml(ss, sheet = NULL, file)
 }
 \arguments{
 \item{ss, sheet}{Sheet identifiers passed \code{\link[googlesheets4:range_read]{googlesheets4::read_sheet()}}.}
@@ -23,5 +14,23 @@ gsheet_to_yaml(
 \item{story_id_col, story_name_col, story_description_col, risk_col, test_ids_col}{Names of relevant columns in input Google Sheet.}
 }
 \description{
-Read stories from a Google Sheet.
+Read stories from a Google Sheet and write to a yaml file.
+}
+\details{
+\subsection{Option 1: Stories and Requirements}{
+
+(Note: Option 1 is not currently implemented for \code{gsheet_to_yaml()})
+}
+
+\subsection{Option 2: Stories linked directly to Tests}{
+
+The stories sheet passed to \code{ss_stories} must have the following columns:
+\itemize{
+\item \code{StoryId} (character scalar)
+\item \code{StoryName} (character scalar)
+\item \code{StoryDescription} (character scalar)
+\item \code{ProductRisk} (character scalar)
+\item \code{TestIds} (character vector)
+}
+}
 }
