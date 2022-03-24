@@ -53,7 +53,7 @@ get_issues <- function(org, repo, mile, domain = VALID_DOMAINS) {
     domain <- paste0("api.", domain)
   }
   pkg_issues <- ghpm::get_issues(org, repo, ghpm::api_url(hostname = domain))
-  release_issues <- pkg_issues %>% filter(.data$milestone == mile)
+  release_issues <- pkg_issues %>% filter(.data$milestone %in% mile)
 
   return(release_issues)
 }

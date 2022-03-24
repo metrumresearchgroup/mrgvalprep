@@ -28,7 +28,7 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 VignetteBuilder: knitr
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Imports: 
     callr,
     checkmate,
@@ -48,12 +48,12 @@ Imports:
     testthat,
     tibble,
     tidyr,
-    withr (>= 2.3.0)
+    withr (>= 2.3.0),
+    yaml
 Suggests:
     digest,
     ghpm (>= 0.5.1),
     googlesheets4,
-    yaml,
     forcats,
     cli,
     httpuv,

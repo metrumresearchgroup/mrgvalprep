@@ -109,9 +109,6 @@ read_stories_yaml <- function(content, stories_only) {
 #' @return Tibble with columns as described by `mrgvalidate::input_formats`.
 #' @export
 read_spec_yaml <- function(stories, requirements = NULL) {
-  if (!requireNamespace("yaml", quietly = TRUE)) {
-    rlang::abort("Need to install yaml to use read_spec_yaml()")
-  }
 
   stories_only <- is.null(requirements)
   res <- dplyr::bind_rows(
