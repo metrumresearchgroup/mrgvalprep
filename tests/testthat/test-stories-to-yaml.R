@@ -2,9 +2,12 @@ test_that("read_spec_gsheet() works correctly", {
   skip_if_over_rate_limit_google()
   googlesheets4::gs4_deauth() # public sheets, so no need to authenticate
 
-  spec <- gsheet_to_yaml(
-    ss = "1LpSX5Rb1XM5-xmQ8Wl2gQjMT5-3FIkuCM7oZhSgvWeI",
-    file = file.path(tempdir(), "tmp.yaml"))
+  spec <- read_stories_only_gsheet(
+    ss = "1LpSX5Rb1XM5-xmQ8Wl2gQjMT5-3FIkuCM7oZhSgvWeI") %>%
+    stories_to_yaml(
+      file = file.path(tempdir(), "temp.yaml")
+    )
+
   spec_txt <- spec %>% yaml::read_yaml()
 
   expect_true(file.exists(spec))
