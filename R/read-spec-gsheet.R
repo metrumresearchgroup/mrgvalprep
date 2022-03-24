@@ -148,22 +148,38 @@ read_stories_only_gsheet <- function
 #'
 #'
 #'
-#' @param ss,sheet Sheet identifiers passed [googlesheets4::read_sheet()].
+#' @param sheet_df a dataframe of stories returned by `read_stories_only_gsheet()` or `parse_github_issues()`.
 #' @param file output
+#'
+#' @examples
+#' # github milestones
+#'
+#' # Note: Make sure to set the environment variable `GITHUB_PAT` with your personal
+#' #       access token to authorize GHPM before using `parse_github_issues()`
+#'
+#' MILESTONES <- c("v0.6.0", "v0.6.1")
+#' parse_github_issues(org = "metrumresearchgroup", repo = "mrgvalidatetestreference",
+#'  mile = MILESTONES, domain = "github.com") %>%
+#'   stories_to_yaml(file = file.path(tempdir(), "temp.yaml")) %>%
+#'   file.edit()
+#'
+#'
+#' # google sheets
+#'
+#' read_stories_only_gsheet(ss = "1LpSX5Rb1XM5-xmQ8Wl2gQjMT5-3FIkuCM7oZhSgvWeI") %>%
+#'   stories_to_yaml(file = file.path(tempdir(), "temp.yaml")) %>%
+#'   file.edit()
+#'
 #' @importFrom stringr str_split
 #' @importFrom yaml write_yaml
 #' @importFrom stats setNames
 #' @importFrom utils file.edit
 #' @export
-gsheet_to_yaml <- function(
-  ss,
-  sheet = NULL,
+stories_to_yaml <- function(
+  sheet_df,
   file
 ){
-  if (!requireNamespace("googlesheets4", quietly = TRUE)) {
-    rlang::abort("Need to install googlesheets4 to use read_spec_gsheets()")
-  }
-  dd <- read_stories_only_gsheet(ss = ss, sheet = sheet) %>%
+  dd <- sheet_df %>%
     mutate(TestIds = sapply(.data$TestIds, toString))
   dl <- dd %>%
     rename(
@@ -180,6 +196,6 @@ gsheet_to_yaml <- function(
       .x
     })
   yaml::write_yaml(dl, file)
-return(file)
+  return(file)
 }
 
