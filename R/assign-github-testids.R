@@ -31,9 +31,17 @@ assign_github_testids <- function(stories_df, update_tests = TRUE, test_type = c
     tests_vec <- c(tests_vec,tests_i)
   }
   for(i in 1:length(tests_vec)){
-    dd %>% filter(grepl(tests_vec[i], TestIds)) %>% print()
+    # dd %>% filter(grepl(tests_vec[i], TestIds)) %>% print()
+    # which(grepl(tests_vec[i], dd$TestIds)) %>% print()
+    match(tests_vec[i], dd$TestIds) %>% print()
   }
-
+# TODO:
+  # Assign auto generated test IDs to each element of tests_vec (could also assign to dd - pros and cons to both (hard to decide))
+  # filter down tests_vec to only contain values in dd$TestIds
+  # add new column in dd that corresponds to new test IDs (overwrite TestIDs column, but keep old column)
+  # use regex to overwrite test files with "'test description'[TestID]"
+  # make sure it still works with stories_to_yaml
+  # write tests for new function
 
 }
 
