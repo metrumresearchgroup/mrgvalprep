@@ -70,58 +70,42 @@ assign_test_ids <- function(stories_df, test_type = c("test_that", "it")){
   }
 
   TestIds <- TestIds %>% mutate(newTestID = paste0(TestName, " [",TestId,"]"))
-  # update test files
+
+  ### update test files ###
   overwrite_tests(test_scripts, TestIds)
 
-  # # Scan for missed cases
-  # tests_list <- str_match_all(dd$TestIds, "([A-Z]+-[A-Z]+-[0-9]+)")
-  # tests_list <- lapply(seq_along(tests_list), function(i) {
-  #   data.frame(tests[[i]]) [,2]
-  # })
-  # # names(tests_list) <- dd$StoryId
-  # milestone_tests <- unlist(unname(tests_list))
+  ### Scan for missed cases ###
 
   # Tests missed when scanning files
   milestone_tests_ref <- as.list(dd$TestIds)
-  # lapply(milestone_tests_ref, strsplit, split=", ")
   names(milestone_tests_ref) <- dd$StoryId
-  tmp <- lapply(milestone_tests_ref, strsplit, split=", ") %>% unlist()
-  missed_milestones <- setdiff(TestIds$TestId, tmp)
-  missed_tests <- setdiff(tmp, TestIds$TestId)
+  milestone_tests_ref <- lapply(milestone_tests_ref, strsplit, split=", ") %>% unlist()
+  # Tests in package files, but not in milestones
+  missed_milestones <- setdiff(TestIds$TestId, milestone_tests_ref)
+  # Tests in milestones, but couldnt find a matching test in package files
+  missed_tests <- setdiff(milestone_tests_ref, TestIds$TestId)
 
 
-
-  # Tests missing from milestones
-  # setdiff(milestone_tests, TestIds$TestId) # very unlikely scenario (in milestone but not test files)
-  # tests_missing <- data.frame(TestId=setdiff(TestIds$TestId, milestone_tests), missing = TRUE)
-  # TestIds <- full_join(TestIds, tests_missing)
-
-  # if(any(TestIds$missing)){
-  #   msg_dat <- TestIds %>% filter(missing==TRUE) %>% select(-c(newTestID, nchars))
-  #   message("Warning: The following tests were not found in github milestones.
-  #           The corresponding Test Id's have still been added to the test files.\n", print_and_capture(msg_dat))
-  #
-  # }
   if(length(missed_milestones) > 0){
     tests_missing <- data.frame(TestId=missed_milestones, missing = TRUE)
-    TestIds <- full_join(TestIds, tests_missing) %>% filter(missing==TRUE) %>% select(-c(newTestID, nchars, missing))
+    msg_dat <- full_join(TestIds, tests_missing) %>% filter(missing==TRUE) %>% select(-c(newTestID, nchars, missing))
     message("Warning: The following tests were not found in github milestones.
-            The corresponding Test Id's have still been added to the test files.\n", print_and_capture(msg_dat))
+            The corresponding Test Id's have still been added to the test files.\n", print_and_capture(msg_dat),"\n")
   }
   if(length(missed_tests) > 0){
-    tests_missing <- data.frame(TestId=missed_milestones, missing = TRUE)
-    TestIds <- full_join(TestIds, tests_missing) %>% filter(missing==TRUE) %>% select(-c(newTestID, nchars))
-    message("Warning: The following github issues did not have a matching test:\n", print_and_capture(data.frame(missed_tests)))
+    # tests_missing <- data.frame(TestId=missed_milestones, missing = TRUE)
+    # TestIds <- full_join(TestIds, tests_missing) %>% filter(missing==TRUE) %>% select(-c(newTestID, nchars))
+    dd$TestIds <- stringi::stri_replace_all_fixed(dd$TestIds, paste0(missed_tests,", "), "", vectorize_all=FALSE)
+    dd$TestIds <- stringi::stri_replace_all_fixed(dd$TestIds, missed_tests, "", vectorize_all=FALSE)
+    dd <- dd %>% filter(TestIds != "")
+    message("Warning: The following github issues did not have a matching test.
+            The test files containing these tests have been filtered out.\n", print_and_capture(data.frame(missed_tests)),"\n")
   }
 
 
   dd <- dd %>% dplyr::select(-TestName)
 
   return(dd)
-
-  # TODO:
-  # generate informative warnings (not a simple task)
-  # write tests for new function
 
 }
 
@@ -133,6 +117,9 @@ assign_test_ids <- function(stories_df, test_type = c("test_that", "it")){
 #' Make sure to set the following options for testing purposes:
 #' `options(TEST_DIR = system.file("fake-tests", package = "mrgvalprep"))`
 #' `options(TEST_DIR_TESTING = TRUE)`
+#'
+#' @param test_scripts list of test files
+#' @param TestIds dataframe of test Ids, generated in `assign_test_ids()`
 #'
 #' @keywords internal
 overwrite_tests <- function(test_scripts, TestIds){
@@ -148,14 +135,6 @@ overwrite_tests <- function(test_scripts, TestIds){
   TestIds$missing <- NA
   for(i in 1:length(test_lines)){
     test_file_i <- test_lines[[i]]
-
-    # # Scan for tests in files separately
-    # # m <- gregexpr("(?<=\")(.*?)(?=\")", test_file_i, perl = TRUE)
-    # tmp <- sapply(TestIds$TestName, function(test.x){
-    #   tests_i <- regmatches(test_file_i, m) %>% unlist()
-    #   grepl(test.x, test_file_i)
-    # }) %>% unlist()
-
 
     # Make replacements all at once
     test_file_new_i <- stringi::stri_replace_all_fixed(test_file_i, TestIds$TestName, TestIds$newTestID, vectorize_all=FALSE)
