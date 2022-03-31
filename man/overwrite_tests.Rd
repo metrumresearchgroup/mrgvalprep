@@ -6,6 +6,11 @@
 \usage{
 overwrite_tests(test_scripts, TestIds)
 }
+\arguments{
+\item{test_scripts}{list of test files}
+
+\item{TestIds}{dataframe of test Ids, generated in \code{assign_test_ids()}}
+}
 \description{
 Overwrite test files with new Test Id's
 }
