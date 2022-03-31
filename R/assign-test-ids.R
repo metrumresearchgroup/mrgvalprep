@@ -17,8 +17,7 @@
 #' @export
 assign_test_ids <- function(stories_df, test_type = c("test_that", "it")){
   dd <- stories_df %>%
-    rename(TestNames = TestIds) %>% mutate(TestIds = NA)
-    # mutate(TestName = sapply(.data$TestIds, toString))#, TestIds = NA)
+    rename(TestNames = .data$TestIds) %>% mutate(TestIds = NA)
 
   test_path <- getOption("TEST_DIR")
   test_scripts <- testthat::find_test_scripts(test_path)
@@ -64,13 +63,13 @@ assign_test_ids <- function(stories_df, test_type = c("test_that", "it")){
     pattern <- TestIds$TestNames[is.na(parse_test_id(TestIds$TestNames))] # wont overwrite tests with existing ids
     replacement <- TestIds$TestId
 
-    new_row <- purrr::map(str_search_i, ~ {stringi::stri_replace_all_fixed(.x, pattern, replacement, vectorize_all=FALSE) })
+    new_row <- purrr::map(str_search_i, ~ {stri_replace_all_fixed(.x, pattern, replacement, vectorize_all=FALSE) })
 
     # remove duplicates (introduced in some milestones)
     dd$TestIds[i] <- list(new_row[[1]][!duplicated(new_row[[1]])])
   }
 
-  TestIds <- TestIds %>% mutate(newTestID = paste0(TestNames, " [",TestId,"]"))
+  TestIds <- TestIds %>% mutate(newTestID = paste0(.data$TestNames, " [",.data$TestId,"]"))
 
   ### update test files ###
   overwrite_tests(test_scripts, TestIds)
@@ -88,20 +87,20 @@ assign_test_ids <- function(stories_df, test_type = c("test_that", "it")){
 
   if(length(missed_milestones) > 0){
     tests_missing <- data.frame(TestId=missed_milestones, missing = TRUE)
-    msg_dat <- full_join(TestIds, tests_missing) %>% filter(missing==TRUE) %>% select(-c(newTestID, nchars, missing))
+    msg_dat <- full_join(TestIds, tests_missing) %>% filter(missing==TRUE) %>% select(-c(.data$newTestID, .data$nchars, .data$missing))
     message("\nWarning: The following tests were not found in github milestones.
             The corresponding Test Id's have still been added to the test files:\n", print_and_capture(msg_dat),"\n")
   }
   if(length(missed_tests) > 0){
     missed_df <- purrr::map(dd$TestIds, ~ {match(missed_tests, .x) })
     missed_df <- map(missed_df, ~{!all(is.na(.x))}) %>% unlist()
-    missed_df <- dd[missed_df,] %>% select(-c(TestNames))
+    missed_df <- dd[missed_df,] %>% select(-c(.data$TestNames))
     message("\nWarning: The following github issues did not have a matching test.
             The test files containing these tests have been filtered out:\n", print_and_capture(as.list(missed_df)),"\n")
   }
 
 
-  dd <- dd %>% dplyr::select(-TestNames)
+  dd <- dd %>% dplyr::select(-c(.data$TestNames))
 
   return(dd)
 
@@ -135,7 +134,7 @@ overwrite_tests <- function(test_scripts, TestIds){
     test_file_i <- test_lines[[i]]
 
     # Make replacements all at once
-    test_file_new_i <- stringi::stri_replace_all_fixed(test_file_i, TestIds$TestNames, TestIds$newTestID, vectorize_all=FALSE)
+    test_file_new_i <- stri_replace_all_fixed(test_file_i, TestIds$TestNames, TestIds$newTestID, vectorize_all=FALSE)
     if(is.null(getOption("TEST_DIR_TESTING"))){
       test_file_loc <- test_scripts[i]
     }else{
