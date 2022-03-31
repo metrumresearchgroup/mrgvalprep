@@ -101,7 +101,7 @@ assign_test_ids <- function(stories_df, test_type = c("test_that", "it")){
   }
 
 
-  dd <- dd %>% dplyr::select(-TestName)
+  dd <- dd %>% dplyr::select(-TestNames)
 
   return(dd)
 
