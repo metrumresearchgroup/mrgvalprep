@@ -220,7 +220,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
     expect_equal(safe_based_on(.start = MODEL_DIR, .based_on = "1.yaml"), "1")
   })
 
-  test_that("safe_based_on works on happy path [TST-FOO-066] with vector [TST-FOO-067]", {
+  test_that("safe_based_on works on happy path with vector [TST-FOO-067]", {
     on.exit({ cleanup() })
     fs::file_copy(YAML_TEST_FILE, paste0(NEW_MOD2, '.yml'))
     expect_equal(safe_based_on(.start = ".", .based_on = c(YAML_TEST_FILE, NEW_MOD2)), c(tools::file_path_sans_ext(YAML_TEST_FILE), NEW_MOD2))

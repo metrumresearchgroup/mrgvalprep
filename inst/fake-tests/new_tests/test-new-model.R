@@ -6,7 +6,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
     expect_equal(read_model("model-examples/1.yaml"), REF_LIST_1)
   })
 
-  test_that("read_model() returns expected object [TST-FOO-078] from yml ext [TST-FOO-079]", {
+  test_that("read_model() returns expected object from yml ext [TST-FOO-079]", {
     # copy the .yaml to .yml to test
     .yaml_path <- "model-examples/1.yaml"
     .yml_path <- "model-examples/tmp.yml"
@@ -21,7 +21,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
     fs::file_delete(.yml_path)
   })
 
-  test_that("read_model() returns expected object [TST-FOO-078] from no ext specified [TST-FOO-080]", {
+  test_that("read_model() returns expected object from no ext specified [TST-FOO-080]", {
     # copy the .yaml to .yml to test
     .yaml_path <- "model-examples/1.yaml"
     .yml_path <- "model-examples/tmp.yml"
@@ -333,7 +333,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
 
 
 withr::with_options(list(rbabylon.model_directory = normalizePath(MODEL_DIR)), {
-  test_that("compare read_model() and new_model() objects [TST-FOO-085] with numeric input [TST-FOO-097]", {
+  test_that("compare read_model() and new_model() objects with numeric input [TST-FOO-097]", {
   # create new model with args
     .test_yaml <- 1
     .test_path <- 2

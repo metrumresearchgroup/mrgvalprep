@@ -13,7 +13,8 @@
 #'
 #'
 #' @importFrom testthat find_test_scripts
-#' @importFrom stringi stri_replace_all_fixed
+#' @importFrom stringi stri_replace_all_fixed stri_replace_all_regex
+#' @importFrom purrr map map2
 #' @export
 assign_test_ids <- function(stories_df, test_type = c("test_that", "it")){
   dd <- stories_df %>%
@@ -25,23 +26,10 @@ assign_test_ids <- function(stories_df, test_type = c("test_that", "it")){
     abort("No test files found")
   }
 
-  test_lines <- lapply(test_scripts, readLines)
-
   test_type <- match.arg(test_type)
-  tests_vec <- c()
-  for(i in 1:length(test_lines)){
-    test_file_i <- test_lines[[i]]
-    if(test_type == "test_that"){
-      test_rows <- grep('test_that\\("', test_file_i)
-    }else if(test_type == "it"){
-      test_rows <- grep('it\\("', test_file_i)
-    }
 
-    tests_str_i <- test_file_i[test_rows]
-    tests_i <- regmatches(tests_str_i, gregexpr("(?<=\")(.*?)(?=\")", tests_str_i, perl = TRUE)) %>% unlist()
-    tests_vec <- c(tests_vec,tests_i)
-  }
-  tests_vec <- tests_vec[!duplicated(tests_vec)] # remove any duplicates introduced from human error
+  # Find tests from test files
+  tests_vec <- parse_tests_from_files(test_scripts, test_type)
 
   # Generate Test ID's
   Id_vals <- seq.int(length(tests_vec))
@@ -96,7 +84,7 @@ assign_test_ids <- function(stories_df, test_type = c("test_that", "it")){
     missed_df <- map(missed_df, ~{!all(is.na(.x))}) %>% unlist()
     missed_df <- dd[missed_df,] %>% select(-c(.data$TestNames))
     message("\nWarning: The following github issues did not have a matching test.
-            The test files containing these tests have been filtered out:\n", print_and_capture(as.list(missed_df)),"\n")
+            Consider modifying the milestone/issue to ensure they are recognized.\n", print_and_capture(as.list(missed_df)),"\n")
   }
 
 
@@ -105,6 +93,34 @@ assign_test_ids <- function(stories_df, test_type = c("test_that", "it")){
   return(dd)
 
 }
+
+#' Reads and returns all tests from test files
+#' @param test_scripts character vector. File paths of tests
+#' @param test_type string. Denotes whether the tests were written via `test_that()` or
+#'        `describe()`/`it()` functionality. Specify as 'test_that' or 'it'
+#'
+#' @keywords internal
+parse_tests_from_files <- function(test_scripts, test_type){
+  test_lines <- lapply(test_scripts, readLines)
+
+  tests_vec <- c()
+  for(i in 1:length(test_lines)){
+    test_file_i <- test_lines[[i]]
+    if(test_type == "test_that"){
+      test_rows <- grep('test_that\\("', test_file_i)
+    }else if(test_type == "it"){
+      test_rows <- grep('it\\("', test_file_i)
+    }
+
+    tests_str_i <- test_file_i[test_rows]
+    tests_i <- regmatches(tests_str_i, gregexpr("(?<=\")(.*?)(?=\")", tests_str_i, perl = TRUE)) %>% unlist()
+    tests_vec <- c(tests_vec,tests_i)
+  }
+  tests_vec <- tests_vec[!duplicated(tests_vec)] # remove any duplicates introduced from human error
+  return(tests_vec)
+}
+
+
 
 
 #' Overwrite test files with new Test Id's
@@ -129,12 +145,13 @@ overwrite_tests <- function(test_scripts, TestIds){
     if(!dir.exists(test_dir)){ dir.create(test_dir) }
   }
 
-  TestIds$missing <- NA
+  # TestIds$missing <- NA
   for(i in 1:length(test_lines)){
     test_file_i <- test_lines[[i]]
 
     # Make replacements all at once
-    test_file_new_i <- stri_replace_all_fixed(test_file_i, TestIds$TestNames, TestIds$newTestID, vectorize_all=FALSE)
+    test_file_new_i <- replace_test_str(test_file_i, from = TestIds$TestNames, to = TestIds$newTestID)
+
     if(is.null(getOption("TEST_DIR_TESTING"))){
       test_file_loc <- test_scripts[i]
     }else{
@@ -145,8 +162,23 @@ overwrite_tests <- function(test_scripts, TestIds){
 
 }
 
+#'
 #' @keywords internal
 print_and_capture <- function(x)
 {
   paste(capture.output(print(x)), collapse = "\n")
+}
+
+#' Replace test names (str) in test file with string containing new TestId (str [TST-FOO-XXX] )
+#'
+#' @param test_file character vector of test file
+#' @param from character vector. To replace
+#' @param to character vector. Replacement
+#' @keywords internal
+replace_test_str <- function(test_file, from, to){
+  from <- paste0(paste0("(['\"] *)\\Q", from,"\\E( *['\"])"))
+  to <- paste0("$1",to,"$2")
+
+  test_file_new <- stringi::stri_replace_all_regex(test_file, from, to, vectorize_all=FALSE)
+  return(test_file_new)
 }
