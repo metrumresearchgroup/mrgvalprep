@@ -2,7 +2,7 @@
 % Please edit documentation in R/assign-test-ids.R
 \name{replace_test_str}
 \alias{replace_test_str}
-\title{Replace test names (str) in test file with string containing new TestId (str + TST-FOO-XXX )}
+\title{Replace test names in test file}
 \usage{
 replace_test_str(test_file, from, to)
 }
@@ -14,6 +14,6 @@ replace_test_str(test_file, from, to)
 \item{to}{character vector. Replacement}
 }
 \description{
-Replace test names (str) in test file with string containing new TestId (str + TST-FOO-XXX )
+Replace test names ('str') in test file with string containing new TestId ('str' + \code{TST-FOO-XXX})
 }
 \keyword{internal}

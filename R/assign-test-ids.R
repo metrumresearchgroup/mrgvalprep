@@ -170,7 +170,10 @@ print_and_capture <- function(x)
   paste(capture.output(print(x)), collapse = "\n")
 }
 
-#' Replace test names (str) in test file with string containing new TestId (str + TST-FOO-XXX )
+#' Replace test names in test file
+#'
+#' @description
+#' Replace test names ('str') in test file with string containing new TestId ('str' + `TST-FOO-XXX`)
 #'
 #' @param test_file character vector of test file
 #' @param from character vector. To replace
