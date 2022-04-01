@@ -17,6 +17,7 @@
 #' @importFrom purrr map map2
 #' @export
 assign_test_ids <- function(stories_df, test_type = c("test_that", "it")){
+
   dd <- stories_df %>%
     rename(TestNames = .data$TestIds) %>% mutate(TestIds = NA)
 
@@ -42,7 +43,7 @@ assign_test_ids <- function(stories_df, test_type = c("test_that", "it")){
   }
   # Order by number of characters (decreasing) - necessary for when certain tests include exact text of another test
   TestIds <- data.frame(TestNames = tests_vec, TestId = paste0("TST-FOO-", Id_vals, ""))
-  TestIds <- transform(TestIds, nchars=nchar(as.character(TestNames)))
+  TestIds <- TestIds %>% mutate(nchars=nchar(as.character(.data$TestNames)))
   TestIds <- TestIds[with(TestIds, order(nchars, TestNames, decreasing=TRUE)), ]
 
   # Replace test names with test ID's
@@ -169,7 +170,7 @@ print_and_capture <- function(x)
   paste(capture.output(print(x)), collapse = "\n")
 }
 
-#' Replace test names (str) in test file with string containing new TestId (str [TST-FOO-XXX] )
+#' Replace test names (str) in test file with string containing new TestId (str + TST-FOO-XXX )
 #'
 #' @param test_file character vector of test file
 #' @param from character vector. To replace
