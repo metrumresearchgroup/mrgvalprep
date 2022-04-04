@@ -1,6 +1,5 @@
 #' Assigns Test Id's to stories generated via milestones
 #'
-#' @details
 #'
 #' This function will generate Test Id's with the pattern 'TST-FOO-XXX',
 #' overwrite test documents to include these new IDs, and return a dataframe
@@ -9,17 +8,13 @@
 #'
 #' @param stories_df a dataframe of stories returned by `parse_github_issues()`.
 #' @param test_type string. Denotes whether the tests were written via `test_that()` or
-#'        `describe()`/`it()` functionality. Specify as 'test_that' or 'it'
+#'        `describe()`/`it()` functionality. Specify as 'test_that' or 'it'.
 #'
 #'
-#' @importFrom testthat find_test_scripts
-#' @importFrom stringi stri_replace_all_fixed stri_replace_all_regex
-#' @importFrom purrr map map2
+#' @importFrom stringi stri_replace_all_fixed
+#' @importFrom purrr map
 #' @export
 assign_test_ids <- function(stories_df, test_type = c("test_that", "it")){
-
-  dd <- stories_df %>%
-    rename(TestNames = .data$TestIds) %>% mutate(TestIds = NA)
 
   test_path <- getOption("TEST_DIR")
   test_scripts <- testthat::find_test_scripts(test_path)
@@ -45,6 +40,9 @@ assign_test_ids <- function(stories_df, test_type = c("test_that", "it")){
   TestIds <- data.frame(TestNames = tests_vec, TestId = paste0("TST-FOO-", Id_vals, ""))
   TestIds <- TestIds %>% mutate(nchars=nchar(as.character(.data$TestNames)))
   TestIds <- TestIds[with(TestIds, order(nchars, TestNames, decreasing=TRUE)), ]
+
+  dd <- stories_df %>%
+    rename(TestNames = .data$TestIds) %>% mutate(TestIds = NA)
 
   # Replace test names with test ID's
   for(i in 1:nrow(dd)){
@@ -178,11 +176,13 @@ print_and_capture <- function(x)
 #' @param test_file character vector of test file
 #' @param from character vector. To replace
 #' @param to character vector. Replacement
+#'
+#' @importFrom stringi stri_replace_all_regex
 #' @keywords internal
 replace_test_str <- function(test_file, from, to){
   from <- paste0(paste0("(['\"] *)\\Q", from,"\\E( *['\"])"))
   to <- paste0("$1",to,"$2")
 
-  test_file_new <- stringi::stri_replace_all_regex(test_file, from, to, vectorize_all=FALSE)
+  test_file_new <- stri_replace_all_regex(test_file, from, to, vectorize_all=FALSE)
   return(test_file_new)
 }

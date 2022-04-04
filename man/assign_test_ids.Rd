@@ -10,12 +10,9 @@ assign_test_ids(stories_df, test_type = c("test_that", "it"))
 \item{stories_df}{a dataframe of stories returned by \code{parse_github_issues()}.}
 
 \item{test_type}{string. Denotes whether the tests were written via \code{test_that()} or
-\code{describe()}/\code{it()} functionality. Specify as 'test_that' or 'it'}
+\code{describe()}/\code{it()} functionality. Specify as 'test_that' or 'it'.}
 }
 \description{
-Assigns Test Id's to stories generated via milestones
-}
-\details{
 This function will generate Test Id's with the pattern 'TST-FOO-XXX',
 overwrite test documents to include these new IDs, and return a dataframe
 with the new TestIds column.
