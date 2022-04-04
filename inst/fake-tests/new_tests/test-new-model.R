@@ -2,11 +2,11 @@ context("Testing function to create or read in model object")
 
 withr::with_options(list(rbabylon.model_directory = NULL), {
 
-  test_that("read_model() returns expected object [TST-FOO-078]", {
+  test_that("read_model() returns expected object [TST-FOO-0078]", {
     expect_equal(read_model("model-examples/1.yaml"), REF_LIST_1)
   })
 
-  test_that("read_model() returns expected object from yml ext [TST-FOO-079]", {
+  test_that("read_model() returns expected object from yml ext [TST-FOO-0079]", {
     # copy the .yaml to .yml to test
     .yaml_path <- "model-examples/1.yaml"
     .yml_path <- "model-examples/tmp.yml"
@@ -21,7 +21,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
     fs::file_delete(.yml_path)
   })
 
-  test_that("read_model() returns expected object from no ext specified [TST-FOO-080]", {
+  test_that("read_model() returns expected object from no ext specified [TST-FOO-0080]", {
     # copy the .yaml to .yml to test
     .yaml_path <- "model-examples/1.yaml"
     .yml_path <- "model-examples/tmp.yml"
@@ -37,15 +37,15 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
   })
 
 
-  test_that("yaml with no model type will fail [TST-FOO-081]", {
+  test_that("yaml with no model type will fail [TST-FOO-0081]", {
     expect_error(read_model("test-yaml/zz_fail_no_modtype.yaml"), regexp = "Model yaml must have keys")
   })
 
-  test_that("yaml with bad model path will fail [TST-FOO-082]", {
+  test_that("yaml with bad model path will fail [TST-FOO-0082]", {
     expect_error(read_model("test-yaml/zz_fail_bad_modpath.yaml"), regexp = "must have either a .ctl or .mod extension")
   })
 
-  test_that("yaml with no model path will return ctl [TST-FOO-083]", {
+  test_that("yaml with no model path will return ctl [TST-FOO-0083]", {
     .test_path <- "test-yaml/zz_pass_no_modpath"
     suppressSpecificWarning({
       .spec <- read_model(yaml_ext(.test_path))
@@ -54,13 +54,13 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
   })
 
 
-  test_that("new_model() fails with invalid yaml path [TST-FOO-084]", {
+  test_that("new_model() fails with invalid yaml path [TST-FOO-0084]", {
     .test_path <- "naw"
     expect_warning(new_model(.yaml_path = .test_path, .description = "naw dawg"), regexp = "Did not pass a YAML extension")
     fs::file_delete(yaml_ext(.test_path))
   })
 
-  test_that("compare read_model() and new_model() objects [TST-FOO-085]", {
+  test_that("compare read_model() and new_model() objects [TST-FOO-0085]", {
     # create new model with args
     .test_yaml <- "model-examples/1.yaml"
     .test_path <- "model-examples/tmp.yaml"
@@ -104,7 +104,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
     fs::file_delete(.test_path)
   })
 
-  test_that("new_model() works with yml path [TST-FOO-086]", {
+  test_that("new_model() works with yml path [TST-FOO-0086]", {
     # create new model with args
     .test_yaml <- "model-examples/1.yaml"
     .test_path <- "model-examples/tmp.yml"
@@ -149,7 +149,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
   })
 
 
-  test_that("new_model() .based_on arg works [TST-FOO-087]", {
+  test_that("new_model() .based_on arg works [TST-FOO-0087]", {
     # create new model with args
     .test_path <- "model-examples/tmp.yaml"
 
@@ -167,7 +167,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
     fs::file_delete(.test_path)
   })
 
-  test_that("new_model() .based_on arg errors on fake model [TST-FOO-088]", {
+  test_that("new_model() .based_on arg errors on fake model [TST-FOO-0088]", {
     # create new model with args
     .test_path <- "model-examples/tmp.yaml"
 
@@ -183,7 +183,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
     )
   })
 
-  test_that("save_model_yaml() saves to correct default path [TST-FOO-089]", {
+  test_that("save_model_yaml() saves to correct default path [TST-FOO-0089]", {
     # make a new yaml
     new_yaml <- yaml_ext(NEW_MOD2)
     fs::file_copy(YAML_TEST_FILE, new_yaml)
@@ -205,7 +205,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
     expect_true(fs::file_exists(new_yaml))
   })
 
-  test_that("save_model_yaml() saves to user supplied path [TST-FOO-090]", {
+  test_that("save_model_yaml() saves to user supplied path [TST-FOO-0090]", {
     # give fake path
     fake_path <- "model-examples/fake.yaml"
     expect_false(fs::file_exists(fake_path))
@@ -221,7 +221,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
     expect_true(fs::file_exists(fake_path))
   })
 
-  test_that("save_model_yaml() deletes the right keys [TST-FOO-091]", {
+  test_that("save_model_yaml() deletes the right keys [TST-FOO-0091]", {
     # give fake path
     fake_path <- "model-examples/fake.yaml"
     expect_false(fs::file_exists(fake_path))
@@ -239,7 +239,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
   })
 
 
-  test_that("save_model_yaml() doesn't save an empty list [TST-FOO-092]", {
+  test_that("save_model_yaml() doesn't save an empty list [TST-FOO-0092]", {
     # give fake path
     fake_path <- "model-examples/fake.yaml"
     expect_false(fs::file_exists(fake_path))
@@ -260,7 +260,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
   })
 
 
-  test_that("save_model_yaml() saves tags as an array [TST-FOO-093]", {
+  test_that("save_model_yaml() saves tags as an array [TST-FOO-0093]", {
     # give fake path
     fake_path <- "model-examples/fake.yaml"
     expect_false(fs::file_exists(fake_path))
@@ -301,7 +301,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
     expect_true(any(stringr::str_detect(glue("- {FAKE_TAG2}"), loaded_yaml)))
   })
 
-  test_that("as_model() returns the correct type from a model object [TST-FOO-094]", {
+  test_that("as_model() returns the correct type from a model object [TST-FOO-0094]", {
     # read model from disk
     mod1 <- read_model(YAML_TEST_FILE)
 
@@ -311,7 +311,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
   })
 
 
-  test_that("as_model() returns the correct type from a process object [TST-FOO-095]", {
+  test_that("as_model() returns the correct type from a process object [TST-FOO-0095]", {
     # build fake process object
     .ctl_file <- basename(ctl_ext(YAML_TEST_FILE))
     proc1 <- bbi_dry_run(.cmd_args = c("run", "nonmem", "sge", .ctl_file), .dir = MODEL_DIR)
@@ -324,7 +324,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
     expect_identical(class(mod1), MODEL_CLASS_LIST)
   })
 
-  test_that("as_model() errors with non-existent model [TST-FOO-096]", {
+  test_that("as_model() errors with non-existent model [TST-FOO-0096]", {
     proc1 <- bbi_dry_run(c("naw", "dawg"), "yea")
     expect_error(as_model(proc1), regexp = FIND_YAML_ERR_MSG)
   })
@@ -333,7 +333,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
 
 
 withr::with_options(list(rbabylon.model_directory = normalizePath(MODEL_DIR)), {
-  test_that("compare read_model() and new_model() objects with numeric input [TST-FOO-097]", {
+  test_that("compare read_model() and new_model() objects with numeric input [TST-FOO-0097]", {
   # create new model with args
     .test_yaml <- 1
     .test_path <- 2

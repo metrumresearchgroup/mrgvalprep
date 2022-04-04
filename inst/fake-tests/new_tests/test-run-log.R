@@ -13,7 +13,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
                   .inherit_tags = TRUE,
                   .update_model_file = FALSE)
 
-  test_that("run_log matches reference [TST-FOO-098]", {
+  test_that("run_log matches reference [TST-FOO-0098]", {
     log_df <- run_log(MODEL_DIR)
     expect_equal(nrow(log_df), 3)
     expect_equal(ncol(log_df), 8)
@@ -42,7 +42,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
   })
 
 
-  test_that("run_log() works with both yaml and yml [TST-FOO-099]", {
+  test_that("run_log() works with both yaml and yml [TST-FOO-0099]", {
     fake_yml <- stringr::str_replace(YAML_TEST_FILE, "1.yaml", "4.yml")
     fs::file_copy(YAML_TEST_FILE, fake_yml)
 
@@ -68,7 +68,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
   copy_model_from(YAML_TEST_FILE, LEVEL2_MOD, "level 2 copy of 1.yaml", .inherit_tags = TRUE)
   fs::dir_copy(tools::file_path_sans_ext(YAML_TEST_FILE), file.path(LEVEL2_DIR, tools::file_path_sans_ext(basename(YAML_TEST_FILE))))
 
-  test_that("run_log() works correctly with nested dirs [TST-FOO-100]", {
+  test_that("run_log() works correctly with nested dirs [TST-FOO-0100]", {
     log_df <- run_log(MODEL_DIR)
     expect_equal(nrow(log_df), 4)
     expect_equal(ncol(log_df), 8)
@@ -79,7 +79,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
     expect_identical(log_df$based_on, list(NULL, "1", c("1", "2"), "../1"))
   })
 
-  test_that("config_log() works correctly with nested dirs [TST-FOO-101]", {
+  test_that("config_log() works correctly with nested dirs [TST-FOO-0101]", {
     log_df <- config_log(MODEL_DIR)
     expect_equal(nrow(log_df), 2)
     expect_equal(ncol(log_df), 4)
@@ -90,7 +90,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
     expect_identical(log_df$model_md5, c("731923458236cc008c3adafa2f0877a7", "731923458236cc008c3adafa2f0877a7")) # these are the same because bbi_config.json was just copied through
   })
 
-  test_that("add_config() works correctly with nested dirs [TST-FOO-102]", {
+  test_that("add_config() works correctly with nested dirs [TST-FOO-0102]", {
     log_df <- expect_warning(run_log(MODEL_DIR) %>% add_config(), regexp = "found 4 runs but found 2 configs")
     expect_equal(nrow(log_df), 4)
     expect_equal(ncol(log_df), 11)
@@ -112,7 +112,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
   # testing errors after meddling
   ##########################################
 
-  test_that("run_log fails after messing with YAML [TST-FOO-103]", {
+  test_that("run_log fails after messing with YAML [TST-FOO-0103]", {
     # make the description field an array
     rogue_yaml <- yaml::read_yaml(yaml_ext(NEW_MOD3))
     rogue_yaml[[YAML_DESCRIPTION]] <- c(rogue_yaml[[YAML_DESCRIPTION]], "bad stuff")

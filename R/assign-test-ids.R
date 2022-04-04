@@ -12,6 +12,7 @@
 #'
 #'
 #' @importFrom stringi stri_replace_all_fixed
+#' @importFrom stringr str_pad
 #' @importFrom purrr map
 #' @export
 assign_test_ids <- function(stories_df, test_type = c("test_that", "it")){
@@ -28,18 +29,13 @@ assign_test_ids <- function(stories_df, test_type = c("test_that", "it")){
   tests_vec <- parse_tests_from_files(test_scripts, test_type)
 
   # Generate Test ID's
-  Id_vals <- seq.int(length(tests_vec))
-  for(i in 1:length(Id_vals)){
-    if(nchar(Id_vals[i])==1){
-      Id_vals[i] <- paste0("00",Id_vals[i])
-    }else if(nchar(Id_vals[i])==2){
-      Id_vals[i] <- paste0("0",Id_vals[i])
-    }
-  }
+  num_tests <- length(tests_vec)
+  id_vals <- str_pad(1:num_tests, nchar(num_tests) + 1, pad = "0")
+
   # Order by number of characters (decreasing) - necessary for when certain tests include exact text of another test
-  TestIds <- data.frame(TestNames = tests_vec, TestId = paste0("TST-FOO-", Id_vals, ""))
-  TestIds <- TestIds %>% mutate(nchars=nchar(as.character(.data$TestNames)))
-  TestIds <- TestIds[with(TestIds, order(nchars, TestNames, decreasing=TRUE)), ]
+  TestIds <- data.frame(TestNames = tests_vec, TestId = paste0("TST-FOO-", id_vals, ""))
+  TestIds <- TestIds %>% mutate(nchars=nchar(.data$TestNames))
+  TestIds <- TestIds %>% dplyr::arrange(desc(nchars))
 
   dd <- stories_df %>%
     rename(TestNames = .data$TestIds) %>% mutate(TestIds = NA)
@@ -136,28 +132,23 @@ parse_tests_from_files <- function(test_scripts, test_type){
 #' @keywords internal
 overwrite_tests <- function(test_scripts, TestIds){
   test_lines <- lapply(test_scripts, readLines)
-  new_test_ids <- TestIds$newTestIDs
 
   # Directory for testing, otherwise overwrite existing test files
-  if(!is.null(getOption("TEST_DIR_TESTING"))){
-    test_dir <- file.path(getOption("TEST_DIR"), "new_tests")
-    if(!dir.exists(test_dir)){ dir.create(test_dir) }
-  }
-
-  # TestIds$missing <- NA
-  for(i in 1:length(test_lines)){
-    test_file_i <- test_lines[[i]]
-
-    # Make replacements all at once
-    test_file_new_i <- replace_test_str(test_file_i, from = TestIds$TestNames, to = TestIds$newTestID)
-
-    if(is.null(getOption("TEST_DIR_TESTING"))){
-      test_file_loc <- test_scripts[i]
-    }else{
-      test_file_loc <- file.path(test_dir, basename(test_scripts[i]))
+  outfiles <-
+    if (is.null(getOption("TEST_DIR_TESTING"))) {
+      test_scripts
+    } else {
+      test_dir <- file.path(getOption("TEST_DIR"), "new_tests")
+      fs::dir_create(test_dir)
+      purrr::map_chr(test_scripts, ~ file.path(test_dir, basename(.x)))
     }
-    writeLines(test_file_new_i, test_file_loc)
-  }
+
+  purrr::walk2(test_scripts, outfiles, function(infile, outfile) {
+    writeLines(
+      replace_test_str(readLines(infile),
+                       from = TestIds$TestNames, to = TestIds$newTestID),
+      outfile)
+  })
 
 }
 

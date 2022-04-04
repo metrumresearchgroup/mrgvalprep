@@ -10,20 +10,20 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
   # get_path_from_object
   #######################
 
-  test_that("get_path_from_object.default() builds the right path [TST-FOO-033]", {
+  test_that("get_path_from_object.default() builds the right path [TST-FOO-0033]", {
     expect_identical(get_path_from_object(MOD1 , YAML_MOD_PATH), normalizePath(CTL_TEST_FILE))
   })
 
-  test_that("get_path_from_object.character() builds the right path [TST-FOO-034]", {
+  test_that("get_path_from_object.character() builds the right path [TST-FOO-0034]", {
     .mod_path <- file.path(MOD1[[WORKING_DIR]], MOD1[[YAML_MOD_PATH]])
     expect_identical(get_path_from_object(.mod_path , YAML_MOD_PATH), normalizePath(CTL_TEST_FILE))
   })
 
-  test_that("get_path_from_object.character() fails with vector [TST-FOO-035]", {
+  test_that("get_path_from_object.character() fails with vector [TST-FOO-0035]", {
     expect_error(get_path_from_object(c("naw", "dawg") , YAML_MOD_PATH), regexp = "only scaler values are permitted")
   })
 
-  test_that("get_path_from_object.character() .check_exists works [TST-FOO-036]", {
+  test_that("get_path_from_object.character() .check_exists works [TST-FOO-0036]", {
     # copy YAML but _not_ model file
     YAML2 <- stringr::str_replace(YAML_TEST_FILE, "/1\\.", "/2.")
     fs::file_copy(YAML_TEST_FILE, YAML2)
@@ -42,7 +42,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
     )
   })
 
-  test_that("get_path_from_object.bbi_run_log_df() builds the right paths [TST-FOO-037]", {
+  test_that("get_path_from_object.bbi_run_log_df() builds the right paths [TST-FOO-0037]", {
     # copy the model files and create a fake run log
     YAML2 <- stringr::str_replace(YAML_TEST_FILE, "/1\\.", "/2.")
     CTL2 <- ctl_ext(YAML2)
@@ -65,7 +65,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
 
   # testing error handling
 
-  test_that("get_path_from_object() errors on missing keys [TST-FOO-038]", {
+  test_that("get_path_from_object() errors on missing keys [TST-FOO-0038]", {
     .test_list <- list(naw = 1)
     expect_error(get_path_from_object(.test_list, "naw"), regexp = "must contain keys")
 
@@ -73,13 +73,13 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
     expect_error(get_path_from_object(.test_list, "dawg"), regexp = "must contain keys")
   })
 
-  test_that("get_path_from_object() errors on vector field [TST-FOO-039]", {
+  test_that("get_path_from_object() errors on vector field [TST-FOO-0039]", {
     .test_list <- list(naw = c(1,2))
     .test_list[[WORKING_DIR]] <- "/fake/path"
     expect_error(get_path_from_object(.test_list, "naw"), regexp = "Expected a scaler value")
   })
 
-  test_that("get_path_from_object() errors on fake path [TST-FOO-040]", {
+  test_that("get_path_from_object() errors on fake path [TST-FOO-0040]", {
     .test_list <- list(naw = 1)
     .test_list[[WORKING_DIR]] <- "/fake/path"
     expect_error(get_path_from_object(.test_list, "naw"), regexp = "nothing exists at that location")
@@ -90,15 +90,15 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
   # helpers that call get_path_from_object
   #########################################
 
-  test_that("get_model_path() builds the right path [TST-FOO-041]", {
+  test_that("get_model_path() builds the right path [TST-FOO-0041]", {
     expect_identical(get_model_path(MOD1), normalizePath(CTL_TEST_FILE))
   })
 
-  test_that("get_output_dir() builds the right path [TST-FOO-042]", {
+  test_that("get_output_dir() builds the right path [TST-FOO-0042]", {
     expect_identical(get_output_dir(MOD1), normalizePath(OUTPUT_DIR))
   })
 
-  test_that("get_yaml_path() builds the right path [TST-FOO-043]", {
+  test_that("get_yaml_path() builds the right path [TST-FOO-0043]", {
     expect_identical(get_yaml_path(MOD1), normalizePath(YAML_TEST_FILE))
   })
 
@@ -124,13 +124,13 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
     expect_identical(get_model_id(MOD1), MOD_ID)
   })
 
-  test_that("is_valid_nonmem_extension() works [TST-FOO-044]", {
+  test_that("is_valid_nonmem_extension() works [TST-FOO-0044]", {
     expect_true(is_valid_nonmem_extension(MOD_TEST_FILE))
     expect_true(is_valid_nonmem_extension(CTL_TEST_FILE))
     expect_false(is_valid_nonmem_extension(YAML_TEST_FILE))
   })
 
-  test_that("is_valid_yaml_extension() works [TST-FOO-045]", {
+  test_that("is_valid_yaml_extension() works [TST-FOO-0045]", {
     expect_true(is_valid_yaml_extension(YAML_TEST_FILE))
     expect_true(is_valid_yaml_extension("naw.yaml"))
     expect_true(is_valid_yaml_extension("naw.yml"))
@@ -170,15 +170,15 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
     })
   }
 
-  test_that("find_model_file_path returns correct ctl path [TST-FOO-046]", {
+  test_that("find_model_file_path returns correct ctl path [TST-FOO-0046]", {
     expect_identical(find_model_file_path(CTL_TEST_FILE), CTL_TEST_FILE)
   })
 
-  test_that("find_model_file_path prefers ctl path [TST-FOO-047]", {
+  test_that("find_model_file_path prefers ctl path [TST-FOO-0047]", {
     expect_identical(find_model_file_path(MOD_TEST_FILE), CTL_TEST_FILE)
   })
 
-  test_that("find_model_file_path returns ctl path when no path found [TST-FOO-048]", {
+  test_that("find_model_file_path returns ctl path when no path found [TST-FOO-0048]", {
     mod_file <- "data/1.mod"
     expect_identical(
       suppressSpecificWarning(find_model_file_path(mod_file), .regexpr = "No model file found"),
@@ -186,7 +186,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
     )
   })
 
-  test_that("find_model_file_path returns mod path when only path found [TST-FOO-049]", {
+  test_that("find_model_file_path returns mod path when only path found [TST-FOO-0049]", {
     mod_file <- "data/1.mod"
     withr::with_file(mod_file, {
       readr::write_lines(c("naw", "dawg"), mod_file)
@@ -195,11 +195,11 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
   })
 
 
-  test_that("find_yaml_file_path returns correct yaml path [TST-FOO-050]", {
+  test_that("find_yaml_file_path returns correct yaml path [TST-FOO-0050]", {
     expect_identical(find_yaml_file_path(YAML_TEST_FILE), YAML_TEST_FILE)
   })
 
-  test_that("find_yaml_file_path returns correct yml path [TST-FOO-051]", {
+  test_that("find_yaml_file_path returns correct yml path [TST-FOO-0051]", {
     new_yaml <- paste0(NEW_MOD2, '.yml')
     fs::file_copy(YAML_TEST_FILE, new_yaml)
     on.exit({ fs::file_delete(new_yaml) })
@@ -207,33 +207,33 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
 
   })
 
-  test_that("find_yaml_file_path errors when no file found [TST-FOO-052]", {
+  test_that("find_yaml_file_path errors when no file found [TST-FOO-0052]", {
     expect_error(find_yaml_file_path(NEW_MOD2), regexp = FIND_YAML_ERR_MSG)
   })
 
-  test_that("find_yaml_file_path errors when two files found [TST-FOO-053]", {
+  test_that("find_yaml_file_path errors when two files found [TST-FOO-0053]", {
     new_yaml <- paste0(tools::file_path_sans_ext(YAML_TEST_FILE), ".yml")
     fs::file_copy(YAML_TEST_FILE, new_yaml)
     on.exit({ fs::file_delete(new_yaml) })
     expect_error(find_yaml_file_path(YAML_TEST_FILE), regexp = "Files found at BOTH")
   })
 
-  test_that("combine_directory_path() builds the expected path .directory [TST-FOO-054]", {
+  test_that("combine_directory_path() builds the expected path .directory [TST-FOO-0054]", {
     res_path <- combine_directory_path(MODEL_DIR, ctl_ext(MOD_ID))
     expect_identical(res_path, ABS_CTL_PATH)
   })
 
-  test_that("combine_directory_path() builds the expected path with NULL .directory [TST-FOO-055]", {
+  test_that("combine_directory_path() builds the expected path with NULL .directory [TST-FOO-0055]", {
     res_path <- combine_directory_path(.directory = NULL, CTL_TEST_FILE)
     expect_identical(res_path, ABS_CTL_PATH)
   })
 
-  test_that("combine_directory_path() builds fake .path in real .directory [TST-FOO-056]", {
+  test_that("combine_directory_path() builds fake .path in real .directory [TST-FOO-0056]", {
     res_path <- combine_directory_path(MODEL_DIR, CTL_TEST_FILE)
     expect_identical(res_path, FAKE_CTL_PATH)
   })
 
-  test_that("combine_directory_path() errors with fake .directory [TST-FOO-057]", {
+  test_that("combine_directory_path() errors with fake .directory [TST-FOO-0057]", {
     expect_error(combine_directory_path("aaa", CTL_TEST_FILE), regexp = "No such file or directory")
   })
 

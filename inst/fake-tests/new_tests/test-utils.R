@@ -4,7 +4,7 @@ context("Utility functions for building args, etc.")
 # parsing args
 ################
 
-test_that("check_nonmem_args parses correctly [TST-FOO-115]", {
+test_that("check_nonmem_args parses correctly [TST-FOO-0104]", {
   # check some that should parse correctly
   .arg_list <- list(
     list(list("json" = T, "threads" = 4, "nm_version" = "nm74"), c("--json", "--threads=4", "--nm_version=nm74")), # check flag conversion
@@ -29,7 +29,7 @@ test_that("check_nonmem_args parses correctly [TST-FOO-115]", {
 })
 
 
-test_that("format_cmd_args parses correctly [TST-FOO-116]", {
+test_that("format_cmd_args parses correctly [TST-FOO-0105]", {
   # check some that should parse correctly
   .arg_list <- list(
     list(list("json" = T, "threads" = 4), c("json", "threads=4")), # check basic nonmem args
@@ -66,7 +66,7 @@ test_that("format_cmd_args parses correctly [TST-FOO-116]", {
 
 withr::with_options(list(rbabylon.model_directory = NULL), {
 
-  test_that("build_bbi_param_list happy path single set [TST-FOO-117]", {
+  test_that("build_bbi_param_list happy path single set [TST-FOO-0106]", {
     # read first model
     mod1 <- read_model("model-examples/1")
 
@@ -90,7 +90,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
     )
   })
 
-  test_that("build_bbi_param_list happy path two sets [TST-FOO-118]", {
+  test_that("build_bbi_param_list happy path two sets [TST-FOO-0107]", {
     # read first model
     mod1 <- read_model("model-examples/1")
 
@@ -124,7 +124,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
     )
   })
 
-  test_that("build_bbi_param_list .bbi_args works [TST-FOO-119]", {
+  test_that("build_bbi_param_list .bbi_args works [TST-FOO-0108]", {
     # read first model
     mod1 <- read_model("model-examples/1")
 
@@ -139,7 +139,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
     )
   })
 
-  test_that("build_bbi_param_list dies with a non model [TST-FOO-120]", {
+  test_that("build_bbi_param_list dies with a non model [TST-FOO-0109]", {
     # read first model
     mod1 <- read_model("model-examples/1")
 
@@ -158,32 +158,32 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
 # list manipulation
 #####################
 
-test_that("parse_args_list() merges lists as expected [TST-FOO-121]", {
+test_that("parse_args_list() merges lists as expected [TST-FOO-0110]", {
   # override `naw` with .func_args
   expect_identical(parse_args_list(.func_args = LIST1, .yaml_args = LIST2), list(naw=4, saw="hey", paw=6))
 })
 
-test_that("parse_args_list() handles NULL as expected [TST-FOO-122]", {
+test_that("parse_args_list() handles NULL as expected [TST-FOO-0111]", {
   expect_identical(parse_args_list(NULL, LIST2), LIST2)
   expect_identical(parse_args_list(LIST1, NULL), LIST1)
   expect_identical(parse_args_list(NULL, NULL), list())
 })
 
-test_that("parse_args_list() correctly fails if .func_args isn't named [TST-FOO-123]", {
+test_that("parse_args_list() correctly fails if .func_args isn't named [TST-FOO-0112]", {
   # correctly fails if .func_args isn't named
   expect_error(parse_args_list(list(4,5,6), LIST2))
 })
 
 
-test_that("combine_list_objects() merges lists as expected [TST-FOO-124]", {
+test_that("combine_list_objects() merges lists as expected [TST-FOO-0113]", {
   expect_identical(combine_list_objects(.new_list = LIST1, .old_list = LIST2), list(naw=4, paw=6, saw="hey"))
 })
 
-test_that("combine_list_objects() merges with append=TRUE [TST-FOO-125]", {
+test_that("combine_list_objects() merges with append=TRUE [TST-FOO-0114]", {
   expect_identical(combine_list_objects(.new_list = LIST1, .old_list = LIST2, .append = TRUE), list(naw=c(4, 5), paw=6, saw="hey"))
 })
 
-test_that("combine_list_objects() correctly fails if .func_args isn't named [TST-FOO-126]", {
+test_that("combine_list_objects() correctly fails if .func_args isn't named [TST-FOO-0115]", {
   # correctly fails if .func_args isn't named
   expect_error(combine_list_objects(list(4,5,6), LIST2))
   expect_error(combine_list_objects(LIST1, list(4,5,6)))
@@ -194,14 +194,14 @@ test_that("combine_list_objects() correctly fails if .func_args isn't named [TST
 # assorted utilities
 ######################
 
-test_that("check_required_keys() works correctly [TST-FOO-127]", {
+test_that("check_required_keys() works correctly [TST-FOO-0116]", {
   req_keys <- c("hey", "aww", "naw")
   expect_true(check_required_keys(list(hey = 1, aww = 2, naw = 3), req_keys))
   expect_false(check_required_keys(list(hey = 1, aww = 2), req_keys))
 })
 
 
-test_that("strict_mode_error() works correctly [TST-FOO-128]", {
+test_that("strict_mode_error() works correctly [TST-FOO-0117]", {
   withr::with_options(list(rbabylon.strict = TRUE), {
     expect_error(strict_mode_error("hello"))
   })
@@ -214,7 +214,7 @@ test_that("strict_mode_error() works correctly [TST-FOO-128]", {
 })
 
 
-test_that("suppressSpecificWarning() works [TST-FOO-129]", {
+test_that("suppressSpecificWarning() works [TST-FOO-0118]", {
   # make a new yaml
   new_yaml <- "model-examples/2.yaml"
   fs::file_copy(YAML_TEST_FILE, new_yaml)
