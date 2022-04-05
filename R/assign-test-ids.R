@@ -114,7 +114,7 @@ milestone_to_test_id <- function(stories_df, test_ids){
 #'
 #' @keywords internal
 parse_tests <- function(lines) {
-  re <- "^ *(?:test_that|it) *\\( *(['\"])(?<name>.*)\\1 *, *\\{ *$"
+  re <- "^ *(?:test_that|it) *\\( *(['\"])(?<name>.*)\\1 *, *(?:\\{ *)?$"
   stringr::str_match(lines, re) %>%
     `[`(, "name") %>%
     purrr::discard(is.na) %>%

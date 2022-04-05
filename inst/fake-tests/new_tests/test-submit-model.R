@@ -23,7 +23,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
   readr::write_file("created_by: test-submit-model part 1", "babylon.yaml")
   on.exit({ fs::file_delete("babylon.yaml")})
 
-  test_that("submit_model(.dry_run=T) returns correct command string",
+  test_that("submit_model(.dry_run=T) returns correct command string [TST-FOO-0104]",
             {
               withr::with_options(list(rbabylon.bbi_exe_path = "bbi"), {
                 # correctly parsing yaml
@@ -59,7 +59,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
             })
 
 
-  test_that("submit_model(.dry_run=T) with .ctl input parses correctly",
+  test_that("submit_model(.dry_run=T) with .ctl input parses correctly [TST-FOO-0105]",
             {
               # find YAML if it exists
               withr::with_options(list(rbabylon.bbi_exe_path = "bbi"), {
@@ -81,7 +81,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
             })
 
 
-  test_that("submit_model(.dry_run=T) with .mod input and .yml file parses correctly",
+  test_that("submit_model(.dry_run=T) with .mod input and .yml file parses correctly [TST-FOO-0106]",
             {
               withr::with_options(list(rbabylon.bbi_exe_path = "bbi"), {
                 # copy to a .mod extensions
@@ -102,7 +102,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
               })
             })
 
-  test_that("submit_model(.dry_run=T) with file path no extension parses correctly",
+  test_that("submit_model(.dry_run=T) with file path no extension parses correctly [TST-FOO-0107]",
             {
               withr::with_options(list(rbabylon.bbi_exe_path = "bbi"), {
 
@@ -131,7 +131,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
               })
             })
 
-  test_that("submit_model(.dry_run=T) with bbi_nonmem_model object parses correctly",
+  test_that("submit_model(.dry_run=T) with bbi_nonmem_model object parses correctly [TST-FOO-0108]",
             {
               withr::with_options(list(rbabylon.bbi_exe_path = "bbi"), {
                 # correctly parsing yaml
@@ -162,7 +162,7 @@ withr::with_options(list(rbabylon.bbi_exe_path = "bbi",
   readr::write_file("created_by: test-submit-model part 2", file.path(MODEL_DIR, "babylon.yaml"))
   on.exit({ fs::file_delete(file.path(MODEL_DIR, "babylon.yaml")) })
 
-  test_that("submit_model(.dry_run=T) with numeric input parses correctly",
+  test_that("submit_model(.dry_run=T) with numeric input parses correctly [TST-FOO-0109]",
             {
               # correctly parsing yaml
               expect_identical(
@@ -176,7 +176,7 @@ withr::with_options(list(rbabylon.bbi_exe_path = "bbi",
   # testing multiple model submission
   #####################################
 
-  test_that("submit_models(.dry_run=T) with list input simple",
+  test_that("submit_models(.dry_run=T) with list input simple [TST-FOO-0110]",
             {
               # read first model
               mod1 <- read_model(1)
@@ -202,7 +202,7 @@ withr::with_options(list(rbabylon.bbi_exe_path = "bbi",
               )
             })
 
-  test_that("submit_models(.dry_run=T) with list input, 2 arg sets",
+  test_that("submit_models(.dry_run=T) with list input, 2 arg sets [TST-FOO-0111]",
             {
               # read first model
               mod1 <- read_model(1)
@@ -232,7 +232,7 @@ withr::with_options(list(rbabylon.bbi_exe_path = "bbi",
               )
             })
 
-  test_that("submit_models(.dry_run=T) errors with bad input",
+  test_that("submit_models(.dry_run=T) errors with bad input [TST-FOO-0112]",
             {
               # read first model
               mod1 <- read_model(1)
@@ -262,7 +262,7 @@ withr::with_options(list(rbabylon.bbi_exe_path = "bbi",
               )
             })
 
-  test_that("submit_models(.dry_run=T) with character and numeric input yaml",
+  test_that("submit_models(.dry_run=T) with character and numeric input yaml [TST-FOO-0113]",
             {
               # read first model
               mod1 <- read_model(1)
@@ -293,7 +293,7 @@ withr::with_options(list(rbabylon.bbi_exe_path = "bbi",
             })
 
 
-  test_that("submit_models(.dry_run=T) with character mixed extensions",
+  test_that("submit_models(.dry_run=T) with character mixed extensions [TST-FOO-0114]",
             {
               # read first model
               mod1 <- read_model(1)
