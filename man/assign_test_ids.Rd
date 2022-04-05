@@ -4,13 +4,12 @@
 \alias{assign_test_ids}
 \title{Assigns Test Id's to stories generated via milestones}
 \usage{
-assign_test_ids(stories_df, test_type = c("test_that", "it"))
+assign_test_ids(test_path, overwrite_tests = TRUE)
 }
 \arguments{
-\item{stories_df}{a dataframe of stories returned by \code{parse_github_issues()}.}
+\item{test_path}{path to where tests are written.}
 
-\item{test_type}{string. Denotes whether the tests were written via \code{test_that()} or
-\code{describe()}/\code{it()} functionality. Specify as 'test_that' or 'it'.}
+\item{overwrite_tests}{(T/F) whether or not to overwrite test files with new test ids}
 }
 \description{
 This function will generate Test Id's with the pattern 'TST-FOO-XXX',

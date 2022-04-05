@@ -11,5 +11,5 @@ ALL_TESTS <- "all_tests.csv"
 
 NO_TESTS_STRING <- "No tests"
 
-options(TEST_DIR = file.path(devtools::as.package(".")$path, "tests", "testthat"))
+options(TEST_DIR = file.path(devtools::package_file("tests/testthat")))
 

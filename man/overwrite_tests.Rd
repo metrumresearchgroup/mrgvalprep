@@ -4,12 +4,14 @@
 \alias{overwrite_tests}
 \title{Overwrite test files with new Test Id's}
 \usage{
-overwrite_tests(test_scripts, TestIds)
+overwrite_tests(test_scripts, TestIds, test_path)
 }
 \arguments{
 \item{test_scripts}{list of test files}
 
 \item{TestIds}{dataframe of test Ids, generated in \code{assign_test_ids()}}
+
+\item{test_path}{path of tests. Only relevant for testing (i.e. when \code{getOption("TEST_DIR_TESTING")} returns a value)}
 }
 \description{
 Overwrite test files with new Test Id's
