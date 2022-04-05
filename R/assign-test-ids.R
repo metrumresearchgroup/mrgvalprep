@@ -14,13 +14,9 @@
 #' @importFrom purrr map flatten_chr
 #' @export
 assign_test_ids <- function(
-  test_path,
+  test_path = getOption("TEST_DIR"),
   overwrite_tests = TRUE
 ){
-
-  if(is.null(test_path)){
-    test_path <- getOption("TEST_DIR")
-  }
 
   test_scripts <- testthat::find_test_scripts(test_path)
   if (length(test_scripts) == 0) {
