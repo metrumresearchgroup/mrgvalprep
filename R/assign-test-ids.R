@@ -52,11 +52,16 @@ assign_test_ids <- function(
 #' Users must first run [assign_test_ids()] to generate a list of test ids and overwrite existing test files.
 #'
 #' @param stories_df a dataframe of stories returned by `parse_github_issues()`.
+#'        Must have the following column names: "TestNames", "TestId", and "newTestID"
+#' @param test_ids dataframe returned by [assign_test_ids()]
 #'
 #' @importFrom stringi stri_replace_all_fixed
+#' @importFrom assertthat assert_that
 #'
 #' @export
 milestone_to_test_id <- function(stories_df, test_ids){
+
+  assert_that(all(c("TestNames", "TestId", "newTestID") %in% names(test_ids)))
 
   # Ensure test ids are still sorted
   test_ids <- sort_tests_by_nchar(test_ids)
