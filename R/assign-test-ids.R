@@ -9,20 +9,20 @@
 #' @param test_path path to where tests are written.
 #' @param overwrite_tests (T/F) whether or not to overwrite test files with new test ids
 #'
-#' @importFrom dplyr mutate arrange
+#' @importFrom dplyr mutate
+#' @importFrom testthat find_test_scripts
 #' @importFrom stringr str_pad
 #' @importFrom purrr map flatten_chr
 #' @export
 assign_test_ids <- function(
   test_path = getOption("TEST_DIR"),
-  overwrite_tests = TRUE
-){
+  overwrite_tests = TRUE)
+{
 
-  test_scripts <- testthat::find_test_scripts(test_path)
+  test_scripts <- find_test_scripts(test_path)
   if (length(test_scripts) == 0) {
     abort("No test files found")
   }
-
 
   # Find tests from test files
   tests_vec <- map(test_scripts, ~ parse_tests(readLines(.x))) %>%
@@ -90,7 +90,7 @@ milestone_to_test_id <- function(stories_df, test_ids){
 
   if(length(missed_milestones) > 0){
     tests_missing <- data.frame(TestId=missed_milestones, missing = TRUE)
-    msg_dat <- full_join(test_ids, tests_missing) %>% filter(missing==TRUE) %>% select(-c(.data$newTestID, .data$nchars, .data$missing))
+    msg_dat <- full_join(test_ids, tests_missing) %>% filter(missing==TRUE) %>% select(-c(.data$newTestID, .data$missing))
     message("\nWarning: The following tests were not found in github milestones.
             The corresponding Test Id's have still been added to the test files:\n", print_and_capture(msg_dat),"\n")
   }
@@ -122,6 +122,9 @@ parse_tests <- function(lines) {
 }
 
 #' Sort test ids by number of characters in test description
+#'
+#' @importFrom dplyr arrange
+#'
 #' @param test_ids data.frame of test ids
 #' @keywords internal
 sort_tests_by_nchar <- function(test_ids){

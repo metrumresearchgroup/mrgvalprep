@@ -20,8 +20,10 @@ withr::with_options(
       MILESTONES <- c("v0.6.0", "v0.6.1")
       stories_df <- parse_github_issues(org = ORG, repo = REPO, mile = MILESTONES, domain = DOMAIN) %>%
         filter(StoryId != "mrgvalidatetestreference-3")
-      format_stories <- stories_df %>%
-        assign_test_ids(test_type = "test_that")
+
+      test_ids <- assign_test_ids()
+
+      format_stories <- milestone_to_test_id(stories_df = stories_df, test_ids = test_ids)
 
 
 
@@ -37,8 +39,11 @@ withr::with_options(
       MILESTONES <- c("v0.6.0", "v0.6.1")
       stories_df <- parse_github_issues(org = ORG, repo = REPO, mile = MILESTONES, domain = DOMAIN) %>%
         filter(StoryId != "mrgvalidatetestreference-3")
-      format_stories <- stories_df %>%
-        assign_test_ids(test_type = "test_that")
+
+      test_ids <- assign_test_ids()
+
+      format_stories <- milestone_to_test_id(stories_df = stories_df, test_ids = test_ids)
+
 
       # Overwritten tests (for testing) show up in inst/fake-tests/new_tests
       test_path <- getOption("TEST_DIR")
@@ -46,18 +51,20 @@ withr::with_options(
       test_dir <- file.path(test_path, "new_tests")
       test_file_loc <- file.path(test_dir, basename(test_scripts))
 
-      tests_vec <- parse_tests_from_files(test_file_loc, test_type = "test_that")
+      tests_vec <- map(test_file_loc, ~ parse_tests(readLines(.x))) %>%
+        flatten_chr() %>%
+        unique()
 
       expect_true(!any(is.na(parse_test_id(tests_vec))))
 
 
-      tmp <- data.frame(TestNames = tests_vec) %>%
+      overwritten_tests <- data.frame(TestNames = tests_vec) %>%
         mutate(
           TestId = parse_test_id(tests_vec),
           TestNames = strip_test_id(.data$TestNames, .data$TestId))
 
-      diff1 <- setdiff(tmp$TestId, unlist(format_stories$TestIds))
-      diff2 <- setdiff(unlist(format_stories$TestIds), tmp$TestId)
+      diff1 <- setdiff(overwritten_tests$TestId, unlist(format_stories$TestIds))
+      diff2 <- setdiff(unlist(format_stories$TestIds), overwritten_tests$TestId)
       expect_true(rlang::is_empty(diff1))
       expect_true(rlang::is_empty(diff2))
     })
@@ -70,11 +77,12 @@ withr::with_options(
       MILESTONES <- c("v0.6.0")
       stories_df <- parse_github_issues(org = ORG, repo = REPO, mile = MILESTONES, domain = DOMAIN)
 
-      expect_message(stories_df %>%
-                       assign_test_ids(test_type = "test_that"),
+      test_ids <- assign_test_ids()
+
+
+      expect_message(milestone_to_test_id(stories_df = stories_df, test_ids = test_ids),
                      "The following tests were not found in github milestones")
-      expect_message(stories_df %>%
-                       assign_test_ids(test_type = "test_that"),
+      expect_message(milestone_to_test_id(stories_df = stories_df, test_ids = test_ids),
                      "The following github issues did not have a matching test")
 
 
@@ -82,8 +90,7 @@ withr::with_options(
       MILESTONES <- c("v0.6.0", "v0.6.1")
       stories_df <- parse_github_issues(org = ORG, repo = REPO, mile = MILESTONES, domain = DOMAIN)
 
-      expect_message(stories_df %>%
-                       assign_test_ids(test_type = "test_that"),
+      expect_message(milestone_to_test_id(stories_df = stories_df, test_ids = test_ids),
                      "The following github issues did not have a matching test")
 
     })
