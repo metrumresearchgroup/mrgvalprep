@@ -128,14 +128,14 @@ parse_tests <- function(lines) {
 
 #' Sort test ids by number of characters in test description
 #'
-#' @importFrom dplyr arrange
+#' @importFrom dplyr arrange desc
 #'
 #' @param test_ids data.frame of test ids
 #' @keywords internal
 sort_tests_by_nchar <- function(test_ids){
   test_ids <- test_ids %>% mutate(nchars=nchar(.data$TestNames))
-  test_ids <- test_ids %>% arrange(desc(nchars)) %>%
-    select(-nchars)
+  test_ids <- test_ids %>% arrange(desc(.data$nchars)) %>%
+    select(-.data$nchars)
   return(test_ids)
 }
 
