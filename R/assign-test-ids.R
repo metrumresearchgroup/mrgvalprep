@@ -199,8 +199,6 @@ print_and_capture <- function(x)
 #' @importFrom stringi stri_replace_all_regex
 #' @keywords internal
 replace_test_str <- function(test_file, from, to){
-  # from <- paste0(paste0("(['\"] *)\\Q", from,"\\E( *['\"])"))
-  # to <- paste0("$1",to,"$2")
   from <- paste0("(['\"] *\\Q", from, "\\E)( *['\"])")
   to <- paste0("$1 [", to, "]$2")
 
