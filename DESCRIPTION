@@ -50,8 +50,7 @@ Imports:
     tidyr,
     withr (>= 2.3.0),
     yaml,
-    stringi,
-    assertthat
+    stringi
 Suggests:
     digest,
     ghpm (>= 0.5.1),
