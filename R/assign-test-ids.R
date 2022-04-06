@@ -63,7 +63,7 @@ assign_test_ids <- function(
 #'
 #' @param stories_df a dataframe of stories returned by `parse_github_issues()`.
 #'        Must have the following column names: "TestNames", "TestId", and "newTestID"
-#' @param test_ids dataframe returned by [assign_test_ids()]
+#' @param tests dataframe returned by [assign_test_ids()]
 #'
 #' @importFrom stringi stri_replace_all_fixed
 #' @importFrom assertthat assert_that

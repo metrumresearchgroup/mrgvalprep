@@ -10,7 +10,7 @@ milestone_to_test_id(stories_df, tests)
 \item{stories_df}{a dataframe of stories returned by \code{parse_github_issues()}.
 Must have the following column names: "TestNames", "TestId", and "newTestID"}
 
-\item{test_ids}{dataframe returned by \code{\link[=assign_test_ids]{assign_test_ids()}}}
+\item{tests}{dataframe returned by \code{\link[=assign_test_ids]{assign_test_ids()}}}
 }
 \description{
 Update stories dataframe with newly generated test ids
