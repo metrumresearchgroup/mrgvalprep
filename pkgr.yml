@@ -6,6 +6,7 @@ Packages:
   - devtools
   - renv
   - pkgdown
+  - here
 
 Repos:
   - CRAN: https://cran.rstudio.com

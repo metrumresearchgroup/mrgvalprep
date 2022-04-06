@@ -16,7 +16,7 @@
 #' @importFrom tibble tibble
 #' @export
 assign_test_ids <- function(
-  test_path = getOption("TEST_DIR"),
+  test_path = getOption("mrgvalprep.TEST_LOC"),
   overwrite = TRUE)
 {
 
@@ -148,8 +148,8 @@ sort_tests_by_nchar <- function(test_ids){
 #' @details
 #'
 #' Make sure to set the following options for testing purposes:
-#' `options(TEST_DIR = system.file("fake-tests", package = "mrgvalprep"))`
-#' `options(TEST_DIR_TESTING = TRUE)`
+#' `options(mrgvalprep.TEST_LOC = system.file("fake-tests", package = "mrgvalprep"))`
+#' `options(mrgvalprep.TESTING = TRUE)`
 #'
 #' @param test_scripts list of test files
 #' @param TestIds dataframe of test Ids, generated in `assign_test_ids()`
@@ -163,7 +163,7 @@ overwrite_tests <- function(test_scripts, TestIds, test_path){
 
   # Directory for testing, otherwise overwrite existing test files
   outfiles <-
-    if (is.null(getOption("TEST_DIR_TESTING"))) {
+    if (is.null(getOption("mrgvalprep.TESTING"))) {
       test_scripts
     } else {
       test_dir <- file.path(test_path, "new_tests")

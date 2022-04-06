@@ -4,7 +4,7 @@
 \alias{assign_test_ids}
 \title{Assigns Test Id's to stories generated via milestones}
 \usage{
-assign_test_ids(test_path = getOption("TEST_DIR"), overwrite = TRUE)
+assign_test_ids(test_path = getOption("mrgvalprep.TEST_LOC"), overwrite = TRUE)
 }
 \arguments{
 \item{test_path}{path to where tests are written.}

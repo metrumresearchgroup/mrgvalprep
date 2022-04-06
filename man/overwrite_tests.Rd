@@ -18,7 +18,7 @@ Overwrite test files with new Test Id's
 }
 \details{
 Make sure to set the following options for testing purposes:
-\code{options(TEST_DIR = system.file("fake-tests", package = "mrgvalprep"))}
-\code{options(TEST_DIR_TESTING = TRUE)}
+\code{options(mrgvalprep.TEST_LOC = system.file("fake-tests", package = "mrgvalprep"))}
+\code{options(mrgvalprep.TESTING = TRUE)}
 }
 \keyword{internal}

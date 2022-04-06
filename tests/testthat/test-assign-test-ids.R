@@ -2,8 +2,8 @@
 
 withr::with_options(
   new = list(
-    TEST_DIR = system.file("fake-tests", package = "mrgvalprep"),
-    TEST_DIR_TESTING = TRUE
+    mrgvalprep.TEST_LOC = system.file("fake-tests", package = "mrgvalprep"),
+    mrgvalprep.TESTING = TRUE
   ),{
 
     # Differs from parse_test_id, in that there are no brackets ([]) included
@@ -44,7 +44,7 @@ withr::with_options(
 
 
       # Overwritten tests (for testing) show up in inst/fake-tests/new_tests
-      test_path <- getOption("TEST_DIR")
+      test_path <- getOption("mrgvalprep.TEST_LOC")
       test_scripts <- testthat::find_test_scripts(test_path)
       test_dir <- file.path(test_path, "new_tests")
       test_file_loc <- file.path(test_dir, basename(test_scripts))
