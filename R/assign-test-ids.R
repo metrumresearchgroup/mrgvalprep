@@ -78,9 +78,7 @@ milestone_to_test_id <- function(stories_df, tests){
   # Ensure test ids are sorted (necessary for replacement)
   tests <- sort_tests_by_nchar(tests)
 
-  dd <- stories_df %>%
-    rename(TestNames = .data$TestIds) #%>% mutate(TestIds = NA)
-
+  dd <- stories_df %>% rename(TestNames = .data$TestIds)
 
   merged <- unnest(dd, "TestNames") %>%
     mutate(TestNames = str_trim(.data$TestNames, "both")) %>%
