@@ -62,16 +62,18 @@ assign_test_ids <- function(
 #' Users must first run [assign_test_ids()] to generate a list of test ids and overwrite existing test files.
 #'
 #' @param stories_df a dataframe of stories returned by `parse_github_issues()`.
-#'        Must have the following column names: "TestNames", "TestId", and "newTestID"
 #' @param tests dataframe returned by [assign_test_ids()]
+#'        Must have the following column names: "TestNames", "TestId", and "newTestID"
 #'
 #' @importFrom stringi stri_replace_all_fixed
-#' @importFrom assertthat assert_that
 #'
 #' @export
 milestone_to_test_id <- function(stories_df, tests){
 
-  assert_that(all(c("TestNames", "TestId", "newTestID") %in% names(tests)))
+  if(!all(c("TestNames", "TestId", "newTestID") %in% names(tests))){
+    abort("Check dataframe passed to tests arg. Must have column names 'TestNames', 'TestId', and 'newTestID'")
+  }
+
 
   # Ensure test ids are sorted (necessary for replacement)
   tests <- sort_tests_by_nchar(tests)
@@ -170,7 +172,6 @@ sort_tests_by_nchar <- function(test_ids){
 #'
 #' @keywords internal
 overwrite_tests <- function(test_scripts, TestIds, test_path){
-  test_lines <- lapply(test_scripts, readLines)
 
   # Directory for testing, otherwise overwrite existing test files
   outfiles <-
@@ -185,7 +186,7 @@ overwrite_tests <- function(test_scripts, TestIds, test_path){
   walk2(test_scripts, outfiles, function(infile, outfile) {
     writeLines(
       replace_test_str(readLines(infile),
-                       from = TestIds$TestNames, to = TestIds$newTestID),
+                       from = TestIds$TestNames, to = TestIds$TestId),
       outfile)
   })
 
@@ -210,8 +211,10 @@ print_and_capture <- function(x)
 #' @importFrom stringi stri_replace_all_regex
 #' @keywords internal
 replace_test_str <- function(test_file, from, to){
-  from <- paste0(paste0("(['\"] *)\\Q", from,"\\E( *['\"])"))
-  to <- paste0("$1",to,"$2")
+  # from <- paste0(paste0("(['\"] *)\\Q", from,"\\E( *['\"])"))
+  # to <- paste0("$1",to,"$2")
+  from <- paste0("(['\"] *\\Q", from, "\\E)( *['\"])")
+  to <- paste0("$1 [", to, "]$2")
 
   test_file_new <- stri_replace_all_regex(test_file, from, to, vectorize_all=FALSE)
   return(test_file_new)

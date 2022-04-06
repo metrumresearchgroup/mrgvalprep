@@ -25,7 +25,7 @@ withr::with_options(
 
 
 
-      TestIds <- purrr::map(format_stories$TestIds, ~ {parse_test_id2(.x)})
+      TestIds <- map(format_stories$TestIds, ~ {parse_test_id2(.x)})
       expect_true(any(unlist(map(TestIds, ~ {!is.na(.x)}))))
 
     })
