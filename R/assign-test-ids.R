@@ -7,7 +7,7 @@
 #'
 #'
 #' @param test_path path to where tests are written.
-#' @param overwrite_tests (T/F) whether or not to overwrite test files with new test ids
+#' @param overwrite (T/F) whether or not to overwrite test files with new test ids
 #'
 #' @importFrom dplyr mutate
 #' @importFrom testthat find_test_scripts

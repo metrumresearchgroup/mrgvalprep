@@ -9,7 +9,7 @@ assign_test_ids(test_path = getOption("TEST_DIR"), overwrite = TRUE)
 \arguments{
 \item{test_path}{path to where tests are written.}
 
-\item{overwrite_tests}{(T/F) whether or not to overwrite test files with new test ids}
+\item{overwrite}{(T/F) whether or not to overwrite test files with new test ids}
 }
 \description{
 This function will generate Test Id's with the pattern 'TST-FOO-XXX',
