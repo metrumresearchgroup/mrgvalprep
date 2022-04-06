@@ -31,20 +31,18 @@ assign_test_ids <- function(
     unique()
 
   # Generate Test ID's
-  tests <- tibble(TestId = parse_test_id(tests_vec),
-                          TestNames = strip_test_id(tests_vec, .data$TestId),
-                          new = is.na(.data$TestId))
+  tests <- tibble(TestIds = parse_test_id(tests_vec),
+                  TestNames = strip_test_id(tests_vec, .data$TestIds),
+                  new = is.na(.data$TestIds))
 
   n_missing <- sum(tests$new)
   if (n_missing == 0) {
     message("All tests have IDs")
   } else {
-    tests[tests$new, "TestId"] <- paste0(
+    tests[tests$new, "TestIds"] <- paste0(
       "TST-FOO-",
       str_pad(1:n_missing, max(nchar(n_missing) + 1, 3), pad = "0"))
   }
-
-  tests <- tests %>% mutate(newTestID = paste0(.data$TestNames, " [",.data$TestId,"]"))
 
   ### update test files (Don't overwrite tests with existing ids) ###
   if(overwrite){
@@ -63,66 +61,58 @@ assign_test_ids <- function(
 #'
 #' @param stories_df a dataframe of stories returned by `parse_github_issues()`.
 #' @param tests dataframe returned by [assign_test_ids()]
-#'        Must have the following column names: "TestNames", "TestId", and "newTestID"
+#'        Must have the following column names: "TestNames", "TestIds"
 #'
 #' @importFrom stringi stri_replace_all_fixed
+#' @importFrom tidyr chop unnest
+#' @importFrom dplyr full_join
+#' @importFrom stringr str_trim
 #'
 #' @export
 milestone_to_test_id <- function(stories_df, tests){
 
-  if(!all(c("TestNames", "TestId", "newTestID") %in% names(tests))){
-    abort("Check dataframe passed to tests arg. Must have column names 'TestNames', 'TestId', and 'newTestID'")
+  if(!all(c("TestNames", "TestIds") %in% names(tests))){
+    abort("Check dataframe passed to tests arg. Must have column names 'TestNames' and 'TestIds'")
   }
-
 
   # Ensure test ids are sorted (necessary for replacement)
   tests <- sort_tests_by_nchar(tests)
 
   dd <- stories_df %>%
-    rename(TestNames = .data$TestIds) %>% mutate(TestIds = NA)
+    rename(TestNames = .data$TestIds) #%>% mutate(TestIds = NA)
 
-  # Replace test names with test ID's
-  for(i in 1:nrow(dd)){
-    str_search_i <- dd$TestNames[i]
-    pattern <- tests$TestNames
-    replacement <- tests$TestId
 
-    new_row <- map(str_search_i, ~ {stri_replace_all_fixed(.x, pattern, replacement, vectorize_all=FALSE) })
+  merged <- unnest(dd, "TestNames") %>%
+    mutate(TestNames = str_trim(.data$TestNames, "both")) %>%
+    full_join(tests, by = c("TestNames" = "TestNames"))
 
-    # remove duplicates (introduced in some milestones)
-    dd$TestIds[i] <- list(new_row[[1]][!duplicated(new_row[[1]])])
-  }
-
+  # remove duplicates (introduced in some milestones)
+  merged <- merged[!duplicated(merged),]
 
   ### Scan for missed cases ###
+  missing_ids <- filter(merged, is.na(.data$TestIds)) %>%
+    select(.data$StoryId, .data$StoryName, .data$StoryDescription, .data$TestNames)
+  missing_milestones <- filter(merged, is.na(.data$StoryId)) %>%
+    select(.data$TestNames, .data$TestIds, .data$new)
 
-  # Tests missed when scanning files
-  milestone_tests_ref <- dd$TestIds
-  # names(milestone_tests_ref) <- dd$StoryId
-  milestone_tests_ref <- lapply(milestone_tests_ref, strsplit, split=", ") %>% unlist()
-  # Tests in package files, but not in milestones
-  missed_milestones <- setdiff(tests$TestId, milestone_tests_ref)
-  # Tests in milestones, but couldnt find a matching test in package files
-  missed_tests <- setdiff(milestone_tests_ref, tests$TestId)
-
-  if(length(missed_milestones) > 0){
-    tests_missing <- data.frame(TestId=missed_milestones, missing = TRUE)
-    msg_dat <- full_join(tests, tests_missing) %>% filter(missing==TRUE) %>% select(-c(.data$newTestID, .data$missing))
+  if(nrow(missing_milestones) > 0){
+    msg_dat <- data.frame(missing_milestones) # tibble will be truncated
     message("\nWarning: The following tests were not found in github milestones.
             The corresponding Test Id's have still been added to the test files:\n", print_and_capture(msg_dat),"\n")
   }
-  if(length(missed_tests) > 0){
-    missed_df <- map(dd$TestIds, ~ {match(missed_tests, .x) })
-    missed_df <- map(missed_df, ~{!all(is.na(.x))}) %>% unlist()
-    missed_df <- dd[missed_df,] %>% select(-c(.data$TestNames))
+  if(nrow(missing_ids) > 0){
+    msg_dat <- missing_ids %>% chop(c(TestNames))
     message("\nWarning: The following github issues did not have a matching test.
-            Consider modifying the milestone/issue to ensure they are recognized.\n", print_and_capture(as.list(missed_df)),"\n")
+            Consider modifying the milestone/issue to ensure they are recognized.\n", print_and_capture(as.list(msg_dat)),"\n")
   }
 
 
-  dd <- dd %>% select(-c(.data$TestNames))
+  merged <- merged %>% filter(!is.na(.data$StoryId)) %>%
+    mutate(TestIds = ifelse(is.na(.data$TestIds), .data$TestNames, .data$TestIds)) %>%
+    select(-c(.data$TestNames, .data$new)) %>%
+    chop(c(TestIds))
 
-  return(dd)
+  return(merged)
 
 }
 
@@ -186,7 +176,7 @@ overwrite_tests <- function(test_scripts, TestIds, test_path){
   walk2(test_scripts, outfiles, function(infile, outfile) {
     writeLines(
       replace_test_str(readLines(infile),
-                       from = TestIds$TestNames, to = TestIds$TestId),
+                       from = TestIds$TestNames, to = TestIds$TestIds),
       outfile)
   })
 
