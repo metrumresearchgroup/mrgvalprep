@@ -13,10 +13,11 @@
 #' @importFrom testthat find_test_scripts
 #' @importFrom stringr str_pad
 #' @importFrom purrr map flatten_chr
+#' @importFrom tibble tibble
 #' @export
 assign_test_ids <- function(
   test_path = getOption("TEST_DIR"),
-  overwrite_tests = TRUE)
+  overwrite = TRUE)
 {
 
   test_scripts <- find_test_scripts(test_path)
@@ -30,18 +31,27 @@ assign_test_ids <- function(
     unique()
 
   # Generate Test ID's
-  num_tests <- length(tests_vec)
-  id_vals <- str_pad(1:num_tests, nchar(num_tests) + 1, pad = "0")
+  tests <- tibble(TestId = parse_test_id(tests_vec),
+                          TestNames = strip_test_id(tests_vec, .data$TestId),
+                          new = is.na(.data$TestId))
 
-  # Order by number of characters (decreasing) - necessary for when certain tests include exact text of another test
-  test_ids <- data.frame(TestNames = tests_vec, TestId = paste0("TST-FOO-", id_vals, ""))
-  test_ids <- sort_tests_by_nchar(test_ids)
-  test_ids <- test_ids %>% mutate(newTestID = paste0(.data$TestNames, " [",.data$TestId,"]"))
+  n_missing <- sum(tests$new)
+  if (n_missing == 0) {
+    message("All tests have IDs")
+  } else {
+    tests[tests$new, "TestId"] <- paste0(
+      "TST-FOO-",
+      str_pad(1:n_missing, max(nchar(n_missing) + 1, 3), pad = "0"))
+  }
 
-  ### update test files ###
-  overwrite_tests(test_scripts, test_ids, test_path)
+  tests <- tests %>% mutate(newTestID = paste0(.data$TestNames, " [",.data$TestId,"]"))
 
-  return(test_ids)
+  ### update test files (Don't overwrite tests with existing ids) ###
+  if(overwrite){
+    overwrite_tests(test_scripts, filter(tests, .data$new), test_path)
+  }
+
+  return(tests)
 }
 
 
@@ -59,12 +69,12 @@ assign_test_ids <- function(
 #' @importFrom assertthat assert_that
 #'
 #' @export
-milestone_to_test_id <- function(stories_df, test_ids){
+milestone_to_test_id <- function(stories_df, tests){
 
-  assert_that(all(c("TestNames", "TestId", "newTestID") %in% names(test_ids)))
+  assert_that(all(c("TestNames", "TestId", "newTestID") %in% names(tests)))
 
-  # Ensure test ids are still sorted
-  test_ids <- sort_tests_by_nchar(test_ids)
+  # Ensure test ids are sorted (necessary for replacement)
+  tests <- sort_tests_by_nchar(tests)
 
   dd <- stories_df %>%
     rename(TestNames = .data$TestIds) %>% mutate(TestIds = NA)
@@ -72,8 +82,8 @@ milestone_to_test_id <- function(stories_df, test_ids){
   # Replace test names with test ID's
   for(i in 1:nrow(dd)){
     str_search_i <- dd$TestNames[i]
-    pattern <- test_ids$TestNames[is.na(parse_test_id(test_ids$TestNames))] # wont overwrite tests with existing ids
-    replacement <- test_ids$TestId
+    pattern <- tests$TestNames
+    replacement <- tests$TestId
 
     new_row <- map(str_search_i, ~ {stri_replace_all_fixed(.x, pattern, replacement, vectorize_all=FALSE) })
 
@@ -89,18 +99,18 @@ milestone_to_test_id <- function(stories_df, test_ids){
   # names(milestone_tests_ref) <- dd$StoryId
   milestone_tests_ref <- lapply(milestone_tests_ref, strsplit, split=", ") %>% unlist()
   # Tests in package files, but not in milestones
-  missed_milestones <- setdiff(test_ids$TestId, milestone_tests_ref)
+  missed_milestones <- setdiff(tests$TestId, milestone_tests_ref)
   # Tests in milestones, but couldnt find a matching test in package files
-  missed_tests <- setdiff(milestone_tests_ref, test_ids$TestId)
+  missed_tests <- setdiff(milestone_tests_ref, tests$TestId)
 
   if(length(missed_milestones) > 0){
     tests_missing <- data.frame(TestId=missed_milestones, missing = TRUE)
-    msg_dat <- full_join(test_ids, tests_missing) %>% filter(missing==TRUE) %>% select(-c(.data$newTestID, .data$missing))
+    msg_dat <- full_join(tests, tests_missing) %>% filter(missing==TRUE) %>% select(-c(.data$newTestID, .data$missing))
     message("\nWarning: The following tests were not found in github milestones.
             The corresponding Test Id's have still been added to the test files:\n", print_and_capture(msg_dat),"\n")
   }
   if(length(missed_tests) > 0){
-    missed_df <- purrr::map(dd$TestIds, ~ {match(missed_tests, .x) })
+    missed_df <- map(dd$TestIds, ~ {match(missed_tests, .x) })
     missed_df <- map(missed_df, ~{!all(is.na(.x))}) %>% unlist()
     missed_df <- dd[missed_df,] %>% select(-c(.data$TestNames))
     message("\nWarning: The following github issues did not have a matching test.
@@ -108,22 +118,25 @@ milestone_to_test_id <- function(stories_df, test_ids){
   }
 
 
-  dd <- dd %>% dplyr::select(-c(.data$TestNames))
+  dd <- dd %>% select(-c(.data$TestNames))
 
   return(dd)
 
 }
 
 #' Reads and returns all tests from test files
+#' @importFrom purrr discard
+#' @importFrom stringr str_trim str_match
+#'
 #' @param lines character vector. Output of `readLines()` for a single test
 #'
 #' @keywords internal
 parse_tests <- function(lines) {
   re <- "^ *(?:test_that|it) *\\( *(['\"])(?<name>.*)\\1 *, *(?:\\{ *)?$"
-  stringr::str_match(lines, re) %>%
+  str_match(lines, re) %>%
     `[`(, "name") %>%
-    purrr::discard(is.na) %>%
-    stringr::str_trim(side = "both")
+    discard(is.na) %>%
+    str_trim(side = "both")
 }
 
 #' Sort test ids by number of characters in test description
@@ -152,6 +165,9 @@ sort_tests_by_nchar <- function(test_ids){
 #' @param TestIds dataframe of test Ids, generated in `assign_test_ids()`
 #' @param test_path path of tests. Only relevant for testing (i.e. when `getOption("TEST_DIR_TESTING")` returns a value)
 #'
+#' @importFrom purrr map_chr walk2
+#' @importFrom fs dir_create
+#'
 #' @keywords internal
 overwrite_tests <- function(test_scripts, TestIds, test_path){
   test_lines <- lapply(test_scripts, readLines)
@@ -162,11 +178,11 @@ overwrite_tests <- function(test_scripts, TestIds, test_path){
       test_scripts
     } else {
       test_dir <- file.path(test_path, "new_tests")
-      fs::dir_create(test_dir)
-      purrr::map_chr(test_scripts, ~ file.path(test_dir, basename(.x)))
+      dir_create(test_dir)
+      map_chr(test_scripts, ~ file.path(test_dir, basename(.x)))
     }
 
-  purrr::walk2(test_scripts, outfiles, function(infile, outfile) {
+  walk2(test_scripts, outfiles, function(infile, outfile) {
     writeLines(
       replace_test_str(readLines(infile),
                        from = TestIds$TestNames, to = TestIds$newTestID),

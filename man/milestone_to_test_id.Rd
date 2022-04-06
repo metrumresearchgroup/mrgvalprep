@@ -4,7 +4,7 @@
 \alias{milestone_to_test_id}
 \title{Update stories dataframe with newly generated test ids}
 \usage{
-milestone_to_test_id(stories_df, test_ids)
+milestone_to_test_id(stories_df, tests)
 }
 \arguments{
 \item{stories_df}{a dataframe of stories returned by \code{parse_github_issues()}.

@@ -5,8 +5,6 @@ withr::with_options(
     TEST_DIR = system.file("fake-tests", package = "mrgvalprep"),
     TEST_DIR_TESTING = TRUE
   ),{
-    # getOption("TEST_DIR") %>% print()
-    # getOption("TEST_DIR_TESTING")%>% print()
 
     # Differs from parse_test_id, in that there are no brackets ([]) included
     parse_test_id2 <- function(string) {
@@ -23,7 +21,7 @@ withr::with_options(
 
       test_ids <- assign_test_ids()
 
-      format_stories <- milestone_to_test_id(stories_df = stories_df, test_ids = test_ids)
+      format_stories <- milestone_to_test_id(stories_df = stories_df, tests = test_ids)
 
 
 
@@ -42,7 +40,7 @@ withr::with_options(
 
       test_ids <- assign_test_ids()
 
-      format_stories <- milestone_to_test_id(stories_df = stories_df, test_ids = test_ids)
+      format_stories <- milestone_to_test_id(stories_df = stories_df, tests = test_ids)
 
 
       # Overwritten tests (for testing) show up in inst/fake-tests/new_tests
@@ -80,9 +78,9 @@ withr::with_options(
       test_ids <- assign_test_ids()
 
 
-      expect_message(milestone_to_test_id(stories_df = stories_df, test_ids = test_ids),
+      expect_message(milestone_to_test_id(stories_df = stories_df, tests = test_ids),
                      "The following tests were not found in github milestones")
-      expect_message(milestone_to_test_id(stories_df = stories_df, test_ids = test_ids),
+      expect_message(milestone_to_test_id(stories_df = stories_df, tests = test_ids),
                      "The following github issues did not have a matching test")
 
 
@@ -90,7 +88,7 @@ withr::with_options(
       MILESTONES <- c("v0.6.0", "v0.6.1")
       stories_df <- parse_github_issues(org = ORG, repo = REPO, mile = MILESTONES, domain = DOMAIN)
 
-      expect_message(milestone_to_test_id(stories_df = stories_df, test_ids = test_ids),
+      expect_message(milestone_to_test_id(stories_df = stories_df, tests = test_ids),
                      "The following github issues did not have a matching test")
 
     })
