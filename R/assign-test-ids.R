@@ -99,7 +99,7 @@ milestone_to_test_id <- function(stories_df, tests){
             The corresponding Test Id's have still been added to the test files:\n", print_and_capture(msg_dat),"\n")
   }
   if(nrow(missing_ids) > 0){
-    msg_dat <- missing_ids %>% chop(c(TestNames))
+    msg_dat <- missing_ids %>% chop(c(.data$TestNames))
     message("\nWarning: The following github issues did not have a matching test.
             Consider modifying the milestone/issue to ensure they are recognized.\n", print_and_capture(as.list(msg_dat)),"\n")
   }
@@ -108,7 +108,7 @@ milestone_to_test_id <- function(stories_df, tests){
   merged <- merged %>% filter(!is.na(.data$StoryId)) %>%
     mutate(TestIds = ifelse(is.na(.data$TestIds), .data$TestNames, .data$TestIds)) %>%
     select(-c(.data$TestNames, .data$new)) %>%
-    chop(c(TestIds))
+    chop(c(.data$TestIds))
 
   return(merged)
 
