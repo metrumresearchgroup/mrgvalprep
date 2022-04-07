@@ -52,7 +52,7 @@ stories_to_yaml <- function(
     map(~ {
       .x <- as.list(.x)
       .x$StoryId <- NULL
-      .x$tests <- unlist(stringr::str_split(.x$tests, "[\\s,;]+"))
+      .x$tests <- unlist(stringr::str_split(.x$tests, ", *"))
       .x
     })
   yaml::write_yaml(dl, file)
