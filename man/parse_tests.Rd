@@ -4,7 +4,7 @@
 \alias{parse_tests}
 \title{Reads and returns all tests from test files}
 \usage{
-parse_tests(lines)
+parse_tests(test_file)
 }
 \arguments{
 \item{lines}{character vector. Output of \code{readLines()} for a single test}

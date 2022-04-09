@@ -4,7 +4,7 @@
 \alias{parse_github_issues}
 \title{Process issues from Github into a tibble of properly formatted stories}
 \usage{
-parse_github_issues(org, repo, mile, domain = VALID_DOMAINS)
+parse_github_issues(org, repo, mile, domain = VALID_DOMAINS, prefix = NULL)
 }
 \arguments{
 \item{org}{Github organization that the repo is under.}
@@ -14,6 +14,8 @@ parse_github_issues(org, repo, mile, domain = VALID_DOMAINS)
 \item{mile}{The name of the milestone associated with the release you are validating. All issues tied to this milestone with be pulled.}
 
 \item{domain}{Domain where repo lives. Either "github.com" or "ghe.metrumrg.com", defaulting to "github.com".}
+
+\item{prefix}{character string. Prefix for StoryId; usually an acronym of 3 letters signifying the associated package.}
 }
 \description{
 Reads issues from a Github milestone and parses to a tibble in the format

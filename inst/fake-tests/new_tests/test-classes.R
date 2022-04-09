@@ -6,7 +6,7 @@ SUM_CLASS <- "bbi_nonmem_summary"
 PROC_CLASS <- "babylon_process"
 LOG_CLASS <- "bbi_run_log_df"
 
-test_that("create_model_object() correctly assigns class [TST-FOO-0001]", {
+test_that("create_model_object() correctly assigns class [mrgval-TEST-0001]", {
   .mod <- list()
   .mod[[WORKING_DIR]] <- "naw"
   .mod[[YAML_YAML_NAME]] <- "naw"
@@ -20,7 +20,7 @@ test_that("create_model_object() correctly assigns class [TST-FOO-0001]", {
   expect_true(inherits(.mod, MOD_CLASS))
 })
 
-test_that("create_model_object() fails with non-valid model type [TST-FOO-0002]", {
+test_that("create_model_object() fails with non-valid model type [mrgval-TEST-0002]", {
   .mod <- list()
   .mod[[WORKING_DIR]] <- "naw"
   .mod[[YAML_MOD_TYPE]] <- "naw"
@@ -30,7 +30,7 @@ test_that("create_model_object() fails with non-valid model type [TST-FOO-0002]"
   expect_error(create_model_object(.mod), regexp = "Invalid model_type")
 })
 
-test_that("create_model_object() fails with non-valid model file extension [TST-FOO-0003]", {
+test_that("create_model_object() fails with non-valid model file extension [mrgval-TEST-0003]", {
   .mod <- list()
   .mod[[WORKING_DIR]] <- "naw"
   .mod[[YAML_YAML_NAME]] <- "naw"
@@ -42,7 +42,7 @@ test_that("create_model_object() fails with non-valid model file extension [TST-
   expect_error(create_model_object(.mod), regexp = "model_path defined in yaml at naw must have either a .ctl or .mod extension")
 })
 
-test_that("create_model_object() errors if keys are missing [TST-FOO-0004]", {
+test_that("create_model_object() errors if keys are missing [mrgval-TEST-0004]", {
   .mod <- list()
   .mod[[WORKING_DIR]] <- "naw"
   .mod[[YAML_MOD_TYPE]] <- "naw"
@@ -51,7 +51,7 @@ test_that("create_model_object() errors if keys are missing [TST-FOO-0004]", {
 })
 
 
-test_that("create_summary_object() correctly assigns class [TST-FOO-0005]", {
+test_that("create_summary_object() correctly assigns class [mrgval-TEST-0005]", {
   .sum <- list()
   .sum[[SUMMARY_DETAILS]] <- "naw"
   expect_false(inherits(.sum, SUM_CLASS))
@@ -59,7 +59,7 @@ test_that("create_summary_object() correctly assigns class [TST-FOO-0005]", {
   expect_true(inherits(.sum, SUM_CLASS))
 })
 
-test_that("create_summary_object() errors if keys are missing [TST-FOO-0006]", {
+test_that("create_summary_object() errors if keys are missing [mrgval-TEST-0006]", {
   .sum <- list()
   #.sum[[SUMMARY_DETAILS]] <- "naw"
   .sum$naw <- "naw"
@@ -67,7 +67,7 @@ test_that("create_summary_object() errors if keys are missing [TST-FOO-0006]", {
 })
 
 
-test_that("create_process_object() correctly assigns class [TST-FOO-0007]", {
+test_that("create_process_object() correctly assigns class [mrgval-TEST-0007]", {
   .proc <- list()
   .proc[[PROC_PROCESS]] <- "naw"
   .proc[[PROC_STDOUT]] <- "naw"
@@ -79,7 +79,7 @@ test_that("create_process_object() correctly assigns class [TST-FOO-0007]", {
   expect_true(inherits(.proc, PROC_CLASS))
 })
 
-test_that("create_process_object() errors if keys are missing [TST-FOO-0008]", {
+test_that("create_process_object() errors if keys are missing [mrgval-TEST-0008]", {
   .proc <- list()
   .proc[[PROC_PROCESS]] <- "naw"
   .proc[[PROC_STDOUT]] <- "naw"
@@ -90,7 +90,7 @@ test_that("create_process_object() errors if keys are missing [TST-FOO-0008]", {
 })
 
 
-test_that("create_run_log_object() correctly assigns class [TST-FOO-0009]", {
+test_that("create_run_log_object() correctly assigns class [mrgval-TEST-0009]", {
   .log_df <- tibble::tibble(
     !!ABS_MOD_PATH      := c("naw", "dawg"),
     !!YAML_YAML_MD5     := c("naw", "dawg"),
@@ -106,7 +106,7 @@ test_that("create_run_log_object() correctly assigns class [TST-FOO-0009]", {
   expect_true(inherits(.log_df, LOG_CLASS))
 })
 
-test_that("create_run_log_object() errors if keys are missing [TST-FOO-0010]", {
+test_that("create_run_log_object() errors if keys are missing [mrgval-TEST-0010]", {
   .log_df <- tibble::tibble(
     !!ABS_MOD_PATH      := c("naw", "dawg"),
     !!YAML_YAML_MD5     := c("naw", "dawg"),
@@ -121,7 +121,7 @@ test_that("create_run_log_object() errors if keys are missing [TST-FOO-0010]", {
 })
 
 
-test_that("create_run_log_object() errors if ABS_MOD_PATH is not character [TST-FOO-0011]", {
+test_that("create_run_log_object() errors if ABS_MOD_PATH is not character [mrgval-TEST-0011]", {
   .log_df <- tibble::tibble(
     !!ABS_MOD_PATH      := c(1, 2),
     !!YAML_YAML_MD5     := c("naw", "dawg"),
@@ -135,7 +135,7 @@ test_that("create_run_log_object() errors if ABS_MOD_PATH is not character [TST-
   expect_error(create_run_log_object(.log_df), regexp = "column must be character type")
 })
 
-test_that("create_run_log_object() errors if ABS_MOD_PATH is not unique [TST-FOO-0012]", {
+test_that("create_run_log_object() errors if ABS_MOD_PATH is not unique [mrgval-TEST-0012]", {
   .log_df <- tibble::tibble(
     !!ABS_MOD_PATH      := c("naw", "naw"),
     !!YAML_YAML_MD5     := c("naw", "dawg"),
@@ -149,7 +149,7 @@ test_that("create_run_log_object() errors if ABS_MOD_PATH is not unique [TST-FOO
   expect_error(create_run_log_object(.log_df), regexp = "column must contain unique values")
 })
 
-test_that("create_run_log_object() errors if ABS_MOD_PATH has missing values [TST-FOO-0013]", {
+test_that("create_run_log_object() errors if ABS_MOD_PATH has missing values [mrgval-TEST-0013]", {
   .log_df <- tibble::tibble(
     !!ABS_MOD_PATH      := c(NA_character_, "naw", NA_character_),
     !!YAML_YAML_MD5     := c("aww", "naw", "dawg"),
