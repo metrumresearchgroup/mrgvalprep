@@ -5,7 +5,7 @@
 #' overwrite test documents to include these new IDs, and return a dataframe
 #' with the new TestIds column.
 #'
-#' @param test_prefix character string. Prefix for TestIds; usually an acronym of 3 letters signifying the associated package.
+#' @param prefix character string. Prefix for TestIds; usually an acronym of 3 letters signifying the associated package.
 #' @param test_path path to where tests are written.
 #' @param overwrite (T/F) whether or not to overwrite test files with new test ids
 #'
@@ -14,12 +14,17 @@
 #' @importFrom stringr str_pad
 #' @importFrom purrr map flatten_chr
 #' @importFrom tibble tibble
+#' @importFrom devtools as.package
 #' @export
 assign_test_ids <- function(
-  test_prefix = "FOO",
+  prefix = NULL,
   test_path = getOption("mrgvalprep.TEST_LOC"),
   overwrite = TRUE)
 {
+
+  if (!is.null(prefix) & !inherits(prefix, "character")) {
+    abort("`prefix` must be a character string")
+  }
 
   test_scripts <- find_test_scripts(test_path)
   if (length(test_scripts) == 0) {
@@ -41,8 +46,9 @@ assign_test_ids <- function(
   if (n_missing == 0) {
     message("All tests have IDs")
   } else {
+    prefix <- ifelse(is.null(prefix), as.package(".")$package, prefix)
     tests[tests$new, "TestIds"] <- paste0(
-      test_prefix,"-TEST-",
+      prefix,"-TEST-",
       str_pad(1:n_missing, max(nchar(n_missing) + 1, 3), pad = "0"))
   }
 

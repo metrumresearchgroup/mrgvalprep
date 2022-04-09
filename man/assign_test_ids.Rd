@@ -5,13 +5,13 @@
 \title{Assigns Test Id's to stories generated via milestones}
 \usage{
 assign_test_ids(
-  test_prefix = "FOO",
+  prefix = NULL,
   test_path = getOption("mrgvalprep.TEST_LOC"),
   overwrite = TRUE
 )
 }
 \arguments{
-\item{test_prefix}{character string. Prefix for TestIds; usually an acronym of 3 letters signifying the associated package.}
+\item{prefix}{character string. Prefix for TestIds; usually an acronym of 3 letters signifying the associated package.}
 
 \item{test_path}{path to where tests are written.}
 
