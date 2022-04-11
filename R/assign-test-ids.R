@@ -23,7 +23,7 @@ assign_test_ids <- function(
   overwrite = TRUE)
 {
 
-  assert_string(prefix, null.ok = TRUE)
+  assert_string(prefixå)
 
   test_scripts <- find_test_scripts(test_path)
   if (length(test_scripts) == 0) {
@@ -45,9 +45,8 @@ assign_test_ids <- function(
   if (n_missing == 0) {
     message("All tests have IDs")
   } else {
-    prefix <- toupper(ifelse(is.null(prefix), as.package(".")$package, prefix))
     tests[tests$new, "TestIds"] <- paste0(
-      prefix,"-TEST-",
+      toupper(prefix),"-TEST-",
       str_pad(1:n_missing, max(nchar(n_missing) + 1, 3), pad = "0"))
   }
 

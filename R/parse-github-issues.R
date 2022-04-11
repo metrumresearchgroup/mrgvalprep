@@ -20,7 +20,7 @@ parse_github_issues <- function(org, repo, mile, domain = VALID_DOMAINS, prefix)
 
   domain <- match.arg(domain)
 
-  assert_string(prefix, null.ok = TRUE)
+  assert_string(prefix)
 
   release_issues <- get_issues(org, repo, mile, domain)
 
