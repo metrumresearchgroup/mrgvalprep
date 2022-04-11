@@ -8,7 +8,7 @@ withr::with_options(
 
     # Differs from parse_test_id, in that there are no brackets ([]) included
     parse_test_id2 <- function(string) {
-      str_match(string, "([A-Z]+-[A-Z]+-[0-9]+)")[, 2]
+      str_match(string, regex("([A-Z]+-[A-Z]+-[0-9]+)", ignore_case = TRUE))[, 2]
     }
 
     test_that("assign_test_ids() returns the correct dataframe", {
@@ -16,10 +16,11 @@ withr::with_options(
       skip_if_no_github_pat()
 
       MILESTONES <- c("v0.6.0", "v0.6.1")
-      stories_df <- parse_github_issues(org = ORG, repo = REPO, mile = MILESTONES, domain = DOMAIN) %>%
-        filter(StoryId != "mrgvalidatetestreference-3")
+      stories_df <- parse_github_issues(org = ORG, repo = REPO, mile = MILESTONES,
+                                        domain = DOMAIN, prefix = "mrgvalref") %>%
+        filter(StoryId != "mrgvalref-S003")
 
-      test_ids <- assign_test_ids()
+      test_ids <- assign_test_ids(prefix = "MRGVAL")
 
       format_stories <- milestone_to_test_id(stories_df = stories_df, tests = test_ids)
 
@@ -35,10 +36,11 @@ withr::with_options(
       skip_if_no_github_pat()
 
       MILESTONES <- c("v0.6.0", "v0.6.1")
-      stories_df <- parse_github_issues(org = ORG, repo = REPO, mile = MILESTONES, domain = DOMAIN) %>%
-        filter(StoryId != "mrgvalidatetestreference-3")
+      stories_df <- parse_github_issues(org = ORG, repo = REPO, mile = MILESTONES,
+                                        domain = DOMAIN, prefix = "mrgvalref") %>%
+        filter(StoryId != "mrgvalref-S003")
 
-      test_ids <- assign_test_ids()
+      test_ids <- assign_test_ids(prefix = "MRGVAL")
 
       format_stories <- milestone_to_test_id(stories_df = stories_df, tests = test_ids)
 
@@ -49,7 +51,7 @@ withr::with_options(
       test_dir <- file.path(test_path, "new_tests")
       test_file_loc <- file.path(test_dir, basename(test_scripts))
 
-      tests_vec <- map(test_file_loc, ~ parse_tests(readLines(.x))) %>%
+      tests_vec <- map(test_file_loc, ~ parse_tests(.x)) %>%
         flatten_chr() %>%
         unique()
 
@@ -73,9 +75,10 @@ withr::with_options(
 
       # expect both warnings
       MILESTONES <- c("v0.6.0")
-      stories_df <- parse_github_issues(org = ORG, repo = REPO, mile = MILESTONES, domain = DOMAIN)
+      stories_df <- parse_github_issues(org = ORG, repo = REPO, mile = MILESTONES,
+                                        domain = DOMAIN, prefix = "mrgvalref")
 
-      test_ids <- assign_test_ids()
+      test_ids <- assign_test_ids(prefix = "MRGVAL")
 
 
       expect_message(milestone_to_test_id(stories_df = stories_df, tests = test_ids),
@@ -86,7 +89,8 @@ withr::with_options(
 
       # expect github issue warning only
       MILESTONES <- c("v0.6.0", "v0.6.1")
-      stories_df <- parse_github_issues(org = ORG, repo = REPO, mile = MILESTONES, domain = DOMAIN)
+      stories_df <- parse_github_issues(org = ORG, repo = REPO, mile = MILESTONES,
+                                        domain = DOMAIN, prefix = "mrgvalref")
 
       expect_message(milestone_to_test_id(stories_df = stories_df, tests = test_ids),
                      "The following github issues did not have a matching test")

@@ -6,7 +6,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
   # modify_model_field and its wrappers
   ######################################
 
-  test_that("modify_model_field() works correctly [mrgval-TEST-0058]", {
+  test_that("modify_model_field() works correctly [MRGVAL-TEST-0058]", {
     on.exit({ cleanup() })
 
     # make a new yaml
@@ -30,7 +30,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
     expect_identical(rogue_spec[[YAML_TAGS]], c(ORIG_TAGS, NEW_TAGS))
   })
 
-  test_that("modify_model_field() de-duplication works [mrgval-TEST-0059]", {
+  test_that("modify_model_field() de-duplication works [MRGVAL-TEST-0059]", {
     on.exit({ cleanup() })
 
     dupe_tags <- c("ha", "hey", "ha")
@@ -57,7 +57,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
     expect_identical(new_mod[[YAML_TAGS]], c(ORIG_TAGS, uniq_tags))
   })
 
-  test_that("add_tags() and replace_tags() work correctly [mrgval-TEST-0060]", {
+  test_that("add_tags() and replace_tags() work correctly [MRGVAL-TEST-0060]", {
     on.exit({ cleanup() })
 
     # make a new yaml
@@ -81,7 +81,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
     expect_identical(new_mod[[YAML_TAGS]], NEW_TAGS)
   })
 
-  test_that("add_decisions() and replace_decisions() work correctly [mrgval-TEST-0061]", {
+  test_that("add_decisions() and replace_decisions() work correctly [MRGVAL-TEST-0061]", {
     on.exit({ cleanup() })
 
     # make a new yaml
@@ -107,7 +107,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
     expect_identical(new_mod[[YAML_DECISIONS]], NEW_TEXT2)
   })
 
-  test_that("replace_description() works correctly [mrgval-TEST-0062]", {
+  test_that("replace_description() works correctly [MRGVAL-TEST-0062]", {
     on.exit({ cleanup() })
 
     # make a new yaml
@@ -128,7 +128,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
   })
 
 
-  test_that("add_bbi_args() and replace_bbi_args() work correctly [mrgval-TEST-0063]", {
+  test_that("add_bbi_args() and replace_bbi_args() work correctly [MRGVAL-TEST-0063]", {
     on.exit({ cleanup() })
 
     # make a new yaml
@@ -155,7 +155,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
   })
 
 
-  test_that("add_tags etc. can be chained [mrgval-TEST-0064]", {
+  test_that("add_tags etc. can be chained [MRGVAL-TEST-0064]", {
     on.exit({ cleanup() })
 
     # make a new yaml
@@ -181,7 +181,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
     expect_identical(new_mod[[YAML_DESCRIPTION]], NEW_DESC)
   })
 
-  test_that("add_based_on() and replace_based_on() work correctly [mrgval-TEST-0065]", {
+  test_that("add_based_on() and replace_based_on() work correctly [MRGVAL-TEST-0065]", {
     on.exit({ cleanup() })
 
     # make a new yaml
@@ -213,21 +213,21 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
   # helper functions for model fields
   ####################################
 
-  test_that("safe_based_on works on happy path [mrgval-TEST-0066]", {
+  test_that("safe_based_on works on happy path [MRGVAL-TEST-0066]", {
     on.exit({ cleanup() })
     # test on 1.yaml
     expect_equal(safe_based_on(.start = ".", .based_on = YAML_TEST_FILE), tools::file_path_sans_ext(YAML_TEST_FILE))
     expect_equal(safe_based_on(.start = MODEL_DIR, .based_on = "1.yaml"), "1")
   })
 
-  test_that("safe_based_on works on happy path with vector [mrgval-TEST-0067]", {
+  test_that("safe_based_on works on happy path with vector [MRGVAL-TEST-0067]", {
     on.exit({ cleanup() })
     fs::file_copy(YAML_TEST_FILE, paste0(NEW_MOD2, '.yml'))
     expect_equal(safe_based_on(.start = ".", .based_on = c(YAML_TEST_FILE, NEW_MOD2)), c(tools::file_path_sans_ext(YAML_TEST_FILE), NEW_MOD2))
     expect_equal(safe_based_on(.start = MODEL_DIR, .based_on = c("1", "2")), c("1", "2"))
   })
 
-  test_that("safe_based_on works on nested dirs [mrgval-TEST-0068]", {
+  test_that("safe_based_on works on nested dirs [MRGVAL-TEST-0068]", {
     on.exit({ cleanup() })
 
     # copy model 1 to level deeper
@@ -243,7 +243,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
     expect_equal(safe_based_on(.start = MODEL_DIR, .based_on = c("1", "2", "level2/1")), c("1", "2", "level2/1"))
   })
 
-  test_that("safe_based_on works with absolute path [mrgval-TEST-0069]" , {
+  test_that("safe_based_on works with absolute path [MRGVAL-TEST-0069]" , {
     on.exit({ cleanup() })
 
     # copy model 1 to level deeper
@@ -256,7 +256,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
     expect_identical(safe_based_on(mod4[[WORKING_DIR]], c("1", new_model_path)), c("1", "../2"))
   })
 
-  test_that("safe_based_on fails when yaml can't be found [mrgval-TEST-0070]", {
+  test_that("safe_based_on fails when yaml can't be found [MRGVAL-TEST-0070]", {
     expect_error(safe_based_on(.start = ".", .based_on = c(YAML_TEST_FILE, NEW_MOD2)), regexp = "cannot find .yaml or .yml files")
     expect_error(safe_based_on(.start = MODEL_DIR, .based_on = c("1", "2")), regexp = "cannot find .yaml or .yml files")
   })
@@ -266,7 +266,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
   # check_yaml_in_sync gets triggered when it should
   ####################################################
 
-  test_that("reconcile_yaml() pulls in new tags [mrgval-TEST-0071]", {
+  test_that("reconcile_yaml() pulls in new tags [MRGVAL-TEST-0071]", {
     on.exit({ cleanup() })
 
     # make a new yaml
@@ -293,12 +293,12 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
   })
 
 
-  test_that("check_yaml_in_sync() passes when nothing has changed [mrgval-TEST-0072]", {
+  test_that("check_yaml_in_sync() passes when nothing has changed [MRGVAL-TEST-0072]", {
     new_mod <- read_model(YAML_TEST_FILE)
     expect_invisible(check_yaml_in_sync(new_mod))
   })
 
-  test_that("check_yaml_in_sync() fails when YAML has changed and passes after reconciled [mrgval-TEST-0073]", {
+  test_that("check_yaml_in_sync() fails when YAML has changed and passes after reconciled [MRGVAL-TEST-0073]", {
     on.exit({ cleanup() })
 
     # make a new yaml
@@ -328,7 +328,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
     expect_identical(new_mod[[YAML_TAGS]], c(ORIG_TAGS, NEW_TAGS))
   })
 
-  test_that("add_tags fails if it wasn't re-assigned previously (testing check_yaml_in_sync) [mrgval-TEST-0074]", {
+  test_that("add_tags fails if it wasn't re-assigned previously (testing check_yaml_in_sync) [MRGVAL-TEST-0074]", {
     on.exit({ cleanup() })
 
     # make a new yaml
@@ -354,7 +354,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
     expect_error(new_mod %>% replace_description(NEW_DESC), regexp = "Model NOT in sync with corresponding YAML file")
   })
 
-  test_that("submit_model() fails YAML out of sync (testing check_yaml_in_sync) [mrgval-TEST-0075]", {
+  test_that("submit_model() fails YAML out of sync (testing check_yaml_in_sync) [MRGVAL-TEST-0075]", {
     on.exit({ cleanup() })
 
     # make a new yaml
@@ -373,7 +373,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
     expect_error(submit_model(new_mod, .dry_run = T), regexp = "Model NOT in sync with corresponding YAML file")
   })
 
-  test_that("model_summary() fails YAML out of sync (testing check_yaml_in_sync) [mrgval-TEST-0076]", {
+  test_that("model_summary() fails YAML out of sync (testing check_yaml_in_sync) [MRGVAL-TEST-0076]", {
     on.exit({ cleanup() })
 
     # make a new yaml
@@ -392,7 +392,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
     expect_error(model_summary(new_mod, .dry_run = T), regexp = "Model NOT in sync with corresponding YAML file")
   })
 
-  test_that("copy_model_from() fails YAML out of sync (testing check_yaml_in_sync) [mrgval-TEST-0077]", {
+  test_that("copy_model_from() fails YAML out of sync (testing check_yaml_in_sync) [MRGVAL-TEST-0077]", {
     on.exit({ cleanup() })
 
     # make a new yaml

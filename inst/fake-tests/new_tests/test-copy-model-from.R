@@ -8,7 +8,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
 
   cleanup()
 
-  test_that("copy_from_model creates accurate copy [mrgval-TEST-0014]", {
+  test_that("copy_from_model creates accurate copy [MRGVAL-TEST-0014]", {
     on.exit({ cleanup() })
 
     # run copy_model_from
@@ -39,7 +39,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
   })
 
 
-  test_that("copy_from_model options work [mrgval-TEST-0015]", {
+  test_that("copy_from_model options work [MRGVAL-TEST-0015]", {
     on.exit({ cleanup() })
 
     # run copy_model_from
@@ -70,7 +70,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
     )
   })
 
-  test_that("copy_from_model bbi_nonmem_model [mrgval-TEST-0016]", {
+  test_that("copy_from_model bbi_nonmem_model [MRGVAL-TEST-0016]", {
     on.exit({ cleanup() })
 
     # run copy_model_from on a model object
@@ -97,7 +97,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
   })
 
 
-  test_that("copy_from_model .overwrite=TRUE works [mrgval-TEST-0017]", {
+  test_that("copy_from_model .overwrite=TRUE works [MRGVAL-TEST-0017]", {
     on.exit({ cleanup() })
 
     # set up model object
@@ -123,7 +123,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
     expect_true(grepl(new_desc_pattern, new_mod_str))
   })
 
-  test_that("copy_from_model .overwrite=FALSE works [mrgval-TEST-0018]", {
+  test_that("copy_from_model .overwrite=FALSE works [MRGVAL-TEST-0018]", {
     on.exit({ cleanup() })
 
     # set up model object
@@ -155,7 +155,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
 
 
 withr::with_options(list(rbabylon.model_directory = normalizePath(MODEL_DIR)), {
-  test_that("copy_from_model numeric [mrgval-TEST-0019]", {
+  test_that("copy_from_model numeric [MRGVAL-TEST-0019]", {
     on.exit({ cleanup() })
 
     # get integer input and check for related paths

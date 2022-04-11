@@ -4,7 +4,7 @@ context("Utility functions for building args, etc.")
 # parsing args
 ################
 
-test_that("check_nonmem_args parses correctly [mrgval-TEST-0115]", {
+test_that("check_nonmem_args parses correctly [MRGVAL-TEST-0115]", {
   # check some that should parse correctly
   .arg_list <- list(
     list(list("json" = T, "threads" = 4, "nm_version" = "nm74"), c("--json", "--threads=4", "--nm_version=nm74")), # check flag conversion
@@ -29,7 +29,7 @@ test_that("check_nonmem_args parses correctly [mrgval-TEST-0115]", {
 })
 
 
-test_that("format_cmd_args parses correctly [mrgval-TEST-0116]", {
+test_that("format_cmd_args parses correctly [MRGVAL-TEST-0116]", {
   # check some that should parse correctly
   .arg_list <- list(
     list(list("json" = T, "threads" = 4), c("json", "threads=4")), # check basic nonmem args
@@ -66,7 +66,7 @@ test_that("format_cmd_args parses correctly [mrgval-TEST-0116]", {
 
 withr::with_options(list(rbabylon.model_directory = NULL), {
 
-  test_that("build_bbi_param_list happy path single set [mrgval-TEST-0117]", {
+  test_that("build_bbi_param_list happy path single set [MRGVAL-TEST-0117]", {
     # read first model
     mod1 <- read_model("model-examples/1")
 
@@ -90,7 +90,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
     )
   })
 
-  test_that("build_bbi_param_list happy path two sets [mrgval-TEST-0118]", {
+  test_that("build_bbi_param_list happy path two sets [MRGVAL-TEST-0118]", {
     # read first model
     mod1 <- read_model("model-examples/1")
 
@@ -124,7 +124,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
     )
   })
 
-  test_that("build_bbi_param_list .bbi_args works [mrgval-TEST-0119]", {
+  test_that("build_bbi_param_list .bbi_args works [MRGVAL-TEST-0119]", {
     # read first model
     mod1 <- read_model("model-examples/1")
 
@@ -139,7 +139,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
     )
   })
 
-  test_that("build_bbi_param_list dies with a non model [mrgval-TEST-0120]", {
+  test_that("build_bbi_param_list dies with a non model [MRGVAL-TEST-0120]", {
     # read first model
     mod1 <- read_model("model-examples/1")
 
@@ -158,32 +158,32 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
 # list manipulation
 #####################
 
-test_that("parse_args_list() merges lists as expected [mrgval-TEST-0121]", {
+test_that("parse_args_list() merges lists as expected [MRGVAL-TEST-0121]", {
   # override `naw` with .func_args
   expect_identical(parse_args_list(.func_args = LIST1, .yaml_args = LIST2), list(naw=4, saw="hey", paw=6))
 })
 
-test_that("parse_args_list() handles NULL as expected [mrgval-TEST-0122]", {
+test_that("parse_args_list() handles NULL as expected [MRGVAL-TEST-0122]", {
   expect_identical(parse_args_list(NULL, LIST2), LIST2)
   expect_identical(parse_args_list(LIST1, NULL), LIST1)
   expect_identical(parse_args_list(NULL, NULL), list())
 })
 
-test_that("parse_args_list() correctly fails if .func_args isn't named [mrgval-TEST-0123]", {
+test_that("parse_args_list() correctly fails if .func_args isn't named [MRGVAL-TEST-0123]", {
   # correctly fails if .func_args isn't named
   expect_error(parse_args_list(list(4,5,6), LIST2))
 })
 
 
-test_that("combine_list_objects() merges lists as expected [mrgval-TEST-0124]", {
+test_that("combine_list_objects() merges lists as expected [MRGVAL-TEST-0124]", {
   expect_identical(combine_list_objects(.new_list = LIST1, .old_list = LIST2), list(naw=4, paw=6, saw="hey"))
 })
 
-test_that("combine_list_objects() merges with append=TRUE [mrgval-TEST-0125]", {
+test_that("combine_list_objects() merges with append=TRUE [MRGVAL-TEST-0125]", {
   expect_identical(combine_list_objects(.new_list = LIST1, .old_list = LIST2, .append = TRUE), list(naw=c(4, 5), paw=6, saw="hey"))
 })
 
-test_that("combine_list_objects() correctly fails if .func_args isn't named [mrgval-TEST-0126]", {
+test_that("combine_list_objects() correctly fails if .func_args isn't named [MRGVAL-TEST-0126]", {
   # correctly fails if .func_args isn't named
   expect_error(combine_list_objects(list(4,5,6), LIST2))
   expect_error(combine_list_objects(LIST1, list(4,5,6)))
@@ -194,14 +194,14 @@ test_that("combine_list_objects() correctly fails if .func_args isn't named [mrg
 # assorted utilities
 ######################
 
-test_that("check_required_keys() works correctly [mrgval-TEST-0127]", {
+test_that("check_required_keys() works correctly [MRGVAL-TEST-0127]", {
   req_keys <- c("hey", "aww", "naw")
   expect_true(check_required_keys(list(hey = 1, aww = 2, naw = 3), req_keys))
   expect_false(check_required_keys(list(hey = 1, aww = 2), req_keys))
 })
 
 
-test_that("strict_mode_error() works correctly [mrgval-TEST-0128]", {
+test_that("strict_mode_error() works correctly [MRGVAL-TEST-0128]", {
   withr::with_options(list(rbabylon.strict = TRUE), {
     expect_error(strict_mode_error("hello"))
   })
@@ -214,7 +214,7 @@ test_that("strict_mode_error() works correctly [mrgval-TEST-0128]", {
 })
 
 
-test_that("suppressSpecificWarning() works [mrgval-TEST-0129]", {
+test_that("suppressSpecificWarning() works [MRGVAL-TEST-0129]", {
   # make a new yaml
   new_yaml <- "model-examples/2.yaml"
   fs::file_copy(YAML_TEST_FILE, new_yaml)
