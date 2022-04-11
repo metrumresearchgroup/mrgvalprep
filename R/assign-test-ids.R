@@ -15,6 +15,7 @@
 #' @importFrom purrr map flatten_chr
 #' @importFrom tibble tibble
 #' @importFrom devtools as.package
+#' @importFrom checkmate assert_string
 #' @export
 assign_test_ids <- function(
   prefix = NULL,
@@ -22,9 +23,7 @@ assign_test_ids <- function(
   overwrite = TRUE)
 {
 
-  if (!is.null(prefix) & !inherits(prefix, "character")) {
-    abort("`prefix` must be a character string")
-  }
+  assert_string(prefix, null.ok = TRUE)
 
   test_scripts <- find_test_scripts(test_path)
   if (length(test_scripts) == 0) {
@@ -46,7 +45,7 @@ assign_test_ids <- function(
   if (n_missing == 0) {
     message("All tests have IDs")
   } else {
-    prefix <- ifelse(is.null(prefix), as.package(".")$package, prefix)
+    prefix <- toupper(ifelse(is.null(prefix), as.package(".")$package, prefix))
     tests[tests$new, "TestIds"] <- paste0(
       prefix,"-TEST-",
       str_pad(1:n_missing, max(nchar(n_missing) + 1, 3), pad = "0"))

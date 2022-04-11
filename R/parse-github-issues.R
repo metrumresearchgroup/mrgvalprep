@@ -8,6 +8,7 @@
 #' @importFrom dplyr select mutate left_join
 #' @importFrom rlang .data
 #' @importFrom stringr str_pad
+#' @importFrom checkmate assert_string
 #' @param org Github organization that the repo is under.
 #' @param repo The name of the repo for the package you are validating.
 #' @param mile The name of the milestone associated with the release you are validating. All issues tied to this milestone with be pulled.
@@ -19,9 +20,7 @@ parse_github_issues <- function(org, repo, mile, domain = VALID_DOMAINS, prefix 
 
   domain <- match.arg(domain)
 
-  if (!is.null(prefix) & !inherits(prefix, "character")) {
-    abort("`prefix` must be a character string")
-  }
+  assert_string(prefix, null.ok = TRUE)
 
   release_issues <- get_issues(org, repo, mile, domain)
   n_stories <- length(release_issues$issue)
