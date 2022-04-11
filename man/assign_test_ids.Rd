@@ -5,7 +5,7 @@
 \title{Assigns Test Id's to stories generated via milestones}
 \usage{
 assign_test_ids(
-  prefix = NULL,
+  prefix,
   test_path = getOption("mrgvalprep.TEST_LOC"),
   overwrite = TRUE
 )

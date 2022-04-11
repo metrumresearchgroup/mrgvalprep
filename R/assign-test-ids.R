@@ -18,7 +18,7 @@
 #' @importFrom checkmate assert_string
 #' @export
 assign_test_ids <- function(
-  prefix = NULL,
+  prefix,
   test_path = getOption("mrgvalprep.TEST_LOC"),
   overwrite = TRUE)
 {

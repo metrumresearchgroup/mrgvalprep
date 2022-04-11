@@ -15,7 +15,7 @@
 #' @param domain Domain where repo lives. Either "github.com" or "ghe.metrumrg.com", defaulting to "github.com".
 #' @param prefix character string. Prefix for StoryId; usually an acronym of 3 letters signifying the associated package.
 #' @export
-parse_github_issues <- function(org, repo, mile, domain = VALID_DOMAINS, prefix = NULL) {
+parse_github_issues <- function(org, repo, mile, domain = VALID_DOMAINS, prefix) {
   check_for_ghpm("parse_github_issues()")
 
   domain <- match.arg(domain)
@@ -23,17 +23,13 @@ parse_github_issues <- function(org, repo, mile, domain = VALID_DOMAINS, prefix 
   assert_string(prefix, null.ok = TRUE)
 
   release_issues <- get_issues(org, repo, mile, domain)
+
   n_stories <- length(release_issues$issue)
-  release_issues <- release_issues %>% mutate(
-    StoryId = paste0("S",str_pad(1:n_stories, max(nchar(n_stories) + 1, 3), pad = "0")),
-    prefix = ifelse(is.null(prefix), NA_character_, prefix),
-  )
+  story_ids <- paste0("S",str_pad(1:n_stories, max(nchar(n_stories) + 1, 3), pad = "0"))
 
   release_issues %>%
     mutate(
-      StoryId = ifelse(is.na(.data$prefix),
-                       paste(repo, .data$StoryId, sep = "-"),
-                       paste(prefix, .data$StoryId, sep = "-")),
+      StoryId = paste(toupper(prefix), story_ids, sep = "-"),
       StoryName = .data$title,
       StoryDescription = map_chr(.data$body, extract_issue_summary),
       TestIds = map(.data$body, extract_issue_tests)

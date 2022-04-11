@@ -4,7 +4,7 @@
 \alias{parse_github_issues}
 \title{Process issues from Github into a tibble of properly formatted stories}
 \usage{
-parse_github_issues(org, repo, mile, domain = VALID_DOMAINS, prefix = NULL)
+parse_github_issues(org, repo, mile, domain = VALID_DOMAINS, prefix)
 }
 \arguments{
 \item{org}{Github organization that the repo is under.}
