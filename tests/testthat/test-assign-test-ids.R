@@ -18,7 +18,7 @@ withr::with_options(
       MILESTONES <- c("v0.6.0", "v0.6.1")
       stories_df <- parse_github_issues(org = ORG, repo = REPO, mile = MILESTONES,
                                         domain = DOMAIN, prefix = "mrgvalref") %>%
-        filter(StoryId != "mrgvalref-S003")
+        filter(StoryId != "MRGVALREF-S003")
 
       test_ids <- assign_test_ids(prefix = "MRGVAL")
 
@@ -38,7 +38,7 @@ withr::with_options(
       MILESTONES <- c("v0.6.0", "v0.6.1")
       stories_df <- parse_github_issues(org = ORG, repo = REPO, mile = MILESTONES,
                                         domain = DOMAIN, prefix = "mrgvalref") %>%
-        filter(StoryId != "mrgvalref-S003")
+        filter(StoryId != "MRGVALREF-S003")
 
       test_ids <- assign_test_ids(prefix = "MRGVAL")
 
