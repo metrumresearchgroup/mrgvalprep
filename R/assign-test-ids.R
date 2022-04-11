@@ -32,7 +32,7 @@ assign_test_ids <- function(
   }
 
   # Find tests from test files
-  tests_vec <- map(test_scripts, ~ parse_tests(.x)) %>%
+  tests_vec <- map(test_scripts, parse_tests) %>%
     unlist()
 
   # Generate Test ID's
