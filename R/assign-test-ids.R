@@ -5,20 +5,24 @@
 #' overwrite test documents to include these new IDs, and return a dataframe
 #' with the new TestIds column.
 #'
-#'
+#' @param prefix character string. Prefix for TestIds; usually an acronym of 3 letters signifying the associated package.
 #' @param test_path path to where tests are written.
 #' @param overwrite (T/F) whether or not to overwrite test files with new test ids
 #'
-#' @importFrom dplyr mutate
+#' @importFrom dplyr mutate distinct
 #' @importFrom testthat find_test_scripts
 #' @importFrom stringr str_pad
 #' @importFrom purrr map flatten_chr
 #' @importFrom tibble tibble
+#' @importFrom checkmate assert_string
 #' @export
 assign_test_ids <- function(
+  prefix,
   test_path = getOption("mrgvalprep.TEST_LOC"),
   overwrite = TRUE)
 {
+
+  assert_string(prefix)
 
   test_scripts <- find_test_scripts(test_path)
   if (length(test_scripts) == 0) {
@@ -26,21 +30,22 @@ assign_test_ids <- function(
   }
 
   # Find tests from test files
-  tests_vec <- map(test_scripts, ~ parse_tests(readLines(.x))) %>%
-    flatten_chr() %>%
-    unique()
+  tests_vec <- map(test_scripts, parse_tests) %>%
+    unlist()
 
   # Generate Test ID's
-  tests <- tibble(TestIds = parse_test_id(tests_vec),
+  tests <- tibble(TestFile = names(tests_vec),
+                  TestIds = parse_test_id(tests_vec),
                   TestNames = strip_test_id(tests_vec, .data$TestIds),
-                  new = is.na(.data$TestIds))
+                  new = is.na(.data$TestIds)) %>%
+    distinct()
 
   n_missing <- sum(tests$new)
   if (n_missing == 0) {
     message("All tests have IDs")
   } else {
     tests[tests$new, "TestIds"] <- paste0(
-      "TST-FOO-",
+      toupper(prefix),"-TEST-",
       str_pad(1:n_missing, max(nchar(n_missing) + 1, 3), pad = "0"))
   }
 
@@ -71,8 +76,8 @@ assign_test_ids <- function(
 #' @export
 milestone_to_test_id <- function(stories_df, tests){
 
-  if(!all(c("TestNames", "TestIds") %in% names(tests))){
-    abort("Check dataframe passed to tests arg. Must have column names 'TestNames' and 'TestIds'")
+  if(!all(c("TestNames", "TestIds", "TestFile") %in% names(tests))){
+    abort("Check dataframe passed to tests arg. Must have column names 'TestNames', 'TestIds', and 'TestFile'")
   }
 
   # Ensure test ids are sorted (necessary for replacement)
@@ -91,7 +96,7 @@ milestone_to_test_id <- function(stories_df, tests){
   missing_ids <- filter(merged, is.na(.data$TestIds)) %>%
     select(.data$StoryId, .data$StoryName, .data$StoryDescription, .data$TestNames)
   missing_milestones <- filter(merged, is.na(.data$StoryId)) %>%
-    select(.data$TestNames, .data$TestIds, .data$new)
+    select(.data$TestNames, .data$TestIds, .data$TestFile, .data$new)
 
   if(nrow(missing_milestones) > 0){
     msg_dat <- data.frame(missing_milestones) # tibble will be truncated
@@ -107,7 +112,8 @@ milestone_to_test_id <- function(stories_df, tests){
 
   merged <- merged %>% filter(!is.na(.data$StoryId)) %>%
     mutate(TestIds = ifelse(is.na(.data$TestIds), .data$TestNames, .data$TestIds)) %>%
-    select(-c(.data$TestNames, .data$new)) %>%
+    select(.data$StoryId, .data$StoryName, .data$StoryDescription, .data$ProductRisk, .data$TestIds) %>%
+    distinct() %>%
     chop(c(.data$TestIds))
 
   return(merged)
@@ -121,12 +127,14 @@ milestone_to_test_id <- function(stories_df, tests){
 #' @param lines character vector. Output of `readLines()` for a single test
 #'
 #' @keywords internal
-parse_tests <- function(lines) {
+parse_tests <- function(test_file) {
+  lines <- readLines(test_file)
   re <- "^ *(?:test_that|it) *\\( *(['\"])(?<name>.*)\\1 *, *(?:\\{ *)?$"
-  str_match(lines, re) %>%
+  tmp <- str_match(lines, re) %>%
     `[`(, "name") %>%
     discard(is.na) %>%
     str_trim(side = "both")
+  setNames(tmp, rep(basename(test_file), length(tmp)))
 }
 
 #' Sort test ids by number of characters in test description

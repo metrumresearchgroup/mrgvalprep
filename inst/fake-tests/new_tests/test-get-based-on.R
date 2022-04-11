@@ -2,7 +2,7 @@ context("Extract model paths from based_on fields")
 
 withr::with_options(list(rbabylon.model_directory = NULL), {
 
-  test_that("get_based_on works happy path model object [TST-FOO-0020]" , {
+  test_that("get_based_on works happy path model object [MRGVAL-TEST-0020]" , {
     on.exit({ cleanup() })
 
     # create copy
@@ -11,7 +11,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
     expect_identical(get_based_on(mod2), MOD1_ABS_PATH)
   })
 
-  test_that("get_based_on works happy path character [TST-FOO-0021]" , {
+  test_that("get_based_on works happy path character [MRGVAL-TEST-0021]" , {
     on.exit({ cleanup() })
 
     # create copy
@@ -20,11 +20,11 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
     expect_identical(get_based_on(NEW_MOD2), MOD1_ABS_PATH)
   })
 
-  test_that("get_based_on.character() fails with vector [TST-FOO-0022]", {
+  test_that("get_based_on.character() fails with vector [MRGVAL-TEST-0022]", {
     expect_error(get_based_on(c("naw", "dawg")), regexp = "only scaler values are permitted")
   })
 
-  test_that("get_based_on works happy path run_log tibble [TST-FOO-0023]" , {
+  test_that("get_based_on works happy path run_log tibble [MRGVAL-TEST-0023]" , {
     on.exit({ cleanup() })
     create_all_models()
 
@@ -44,7 +44,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
     )
   })
 
-  test_that("get_based_on constructs ancestry manually [TST-FOO-0024]" , {
+  test_that("get_based_on constructs ancestry manually [MRGVAL-TEST-0024]" , {
     on.exit({ cleanup() })
     create_all_models()
 
@@ -70,7 +70,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
     }
   })
 
-  test_that("get_based_on .check_exists=TRUE errors if model is gone [TST-FOO-0025]" , {
+  test_that("get_based_on .check_exists=TRUE errors if model is gone [MRGVAL-TEST-0025]" , {
     on.exit({ cleanup() })
     create_all_models()
 
@@ -87,7 +87,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
     expect_error(get_based_on(mod3, .check_exists = TRUE), regexp = "but cannot find .yaml or .yml")
   })
 
-  test_that("get_based_on() behaves correctly on missing keys [TST-FOO-0026]", {
+  test_that("get_based_on() behaves correctly on missing keys [MRGVAL-TEST-0026]", {
     # missing YAML_BASED_ON
     .test_list <- list()
     .test_list[[WORKING_DIR]] <- "/fake/path"
@@ -102,7 +102,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
   })
 
 
-  test_that("get_model_ancestry works happy path model object [TST-FOO-0027]" , {
+  test_that("get_model_ancestry works happy path model object [MRGVAL-TEST-0027]" , {
     on.exit({ cleanup() })
     create_all_models()
 
@@ -121,7 +121,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
     expect_equal(2, log_df %>% filter(absolute_model_path %in% get_model_ancestry(mod4)) %>% nrow())
   })
 
-  test_that("get_model_ancestry works happy path character [TST-FOO-0028]" , {
+  test_that("get_model_ancestry works happy path character [MRGVAL-TEST-0028]" , {
     on.exit({ cleanup() })
     create_all_models()
 
@@ -135,11 +135,11 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
     )
   })
 
-  test_that("get_model_ancestry.character() fails with vector [TST-FOO-0029]", {
+  test_that("get_model_ancestry.character() fails with vector [MRGVAL-TEST-0029]", {
     expect_error(get_model_ancestry(c("naw", "dawg")), regexp = "only scaler values are permitted")
   })
 
-  test_that("get_model_ancestry works happy path run_log tibble [TST-FOO-0030]" , {
+  test_that("get_model_ancestry works happy path run_log tibble [MRGVAL-TEST-0030]" , {
     on.exit({ cleanup() })
     create_all_models()
 
@@ -159,7 +159,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
     )
   })
 
-  test_that("get_model_ancestry errors if model is gone [TST-FOO-0031]" , {
+  test_that("get_model_ancestry errors if model is gone [MRGVAL-TEST-0031]" , {
     on.exit({ cleanup() })
     create_all_models()
 
@@ -171,7 +171,7 @@ withr::with_options(list(rbabylon.model_directory = NULL), {
     expect_error(get_model_ancestry(mod4), regexp = "get_model_ancestry.+could not find a YAML")
   })
 
-  test_that("get_model_ancestry works on run_log tibble with more complicated ancestry [TST-FOO-0032]" , {
+  test_that("get_model_ancestry works on run_log tibble with more complicated ancestry [MRGVAL-TEST-0032]" , {
     on.exit({ cleanup() })
     create_all_models()
 
