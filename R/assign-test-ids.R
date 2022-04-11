@@ -14,7 +14,6 @@
 #' @importFrom stringr str_pad
 #' @importFrom purrr map flatten_chr
 #' @importFrom tibble tibble
-#' @importFrom devtools as.package
 #' @importFrom checkmate assert_string
 #' @export
 assign_test_ids <- function(
