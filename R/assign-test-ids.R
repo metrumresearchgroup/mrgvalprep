@@ -23,7 +23,7 @@ assign_test_ids <- function(
   overwrite = TRUE)
 {
 
-  assert_string(prefixå)
+  assert_string(prefix)
 
   test_scripts <- find_test_scripts(test_path)
   if (length(test_scripts) == 0) {
