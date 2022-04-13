@@ -32,12 +32,15 @@ assign_test_ids <- function(
   # Find tests from test files
   tests_vec <- map(test_scripts, parse_tests) %>%
     unlist()
+  tests_vec_full <- map(test_scripts, parse_tests, full_string = TRUE) %>%
+    unlist()
 
   # Generate Test ID's
   tests <- tibble(TestFile = names(tests_vec),
                   TestIds = parse_test_id(tests_vec),
                   TestNames = strip_test_id(tests_vec, .data$TestIds),
-                  new = is.na(.data$TestIds)) %>%
+                  new = is.na(.data$TestIds),
+                  replace_str = unname(tests_vec_full)) %>%
     distinct()
 
   n_missing <- sum(tests$new)
@@ -54,6 +57,7 @@ assign_test_ids <- function(
     overwrite_tests(test_scripts, filter(tests, .data$new), test_path)
   }
 
+  tests <- tests %>% select(-c(.data$replace_str))
   return(tests)
 }
 
@@ -124,17 +128,25 @@ milestone_to_test_id <- function(stories_df, tests){
 #' @importFrom purrr discard
 #' @importFrom stringr str_trim str_match
 #'
-#' @param lines character vector. Output of `readLines()` for a single test
+#' @param lines character vector. Output of `readLines()` for a single test.
+#' @param full_string logical. Whether or not to return the test_that call surrounding the test name .
 #'
 #' @keywords internal
-parse_tests <- function(test_file) {
+parse_tests <- function(test_file, full_string = FALSE) {
   lines <- readLines(test_file)
   re <- "^ *(?:test_that|it) *\\( *(['\"])(?<name>.*)\\1 *, *(?:\\{ *)?$"
-  tmp <- str_match(lines, re) %>%
-    `[`(, "name") %>%
-    discard(is.na) %>%
-    str_trim(side = "both")
-  setNames(tmp, rep(basename(test_file), length(tmp)))
+  if(full_string){
+    test_names <- str_match(lines, re) %>%
+      `[`(, 1) %>%
+      discard(is.na) %>%
+      str_trim(side = "both")
+  }else{
+    test_names <- str_match(lines, re) %>%
+      `[`(, "name") %>%
+      discard(is.na) %>%
+      str_trim(side = "both")
+  }
+  setNames(test_names, rep(basename(test_file), length(test_names)))
 }
 
 #' Sort test ids by number of characters in test description
@@ -206,10 +218,12 @@ print_and_capture <- function(x)
 #'
 #' @importFrom stringi stri_replace_all_regex
 #' @keywords internal
+
 replace_test_str <- function(test_file, from, to){
-  from <- paste0("(['\"] *\\Q", from, "\\E)( *['\"])")
+  from <- paste0("^( *(?:test_that|it) *\\( *['\"] *\\Q", from, "\\E)( *['\"])")
   to <- paste0("$1 [", to, "]$2")
 
   test_file_new <- stri_replace_all_regex(test_file, from, to, vectorize_all=FALSE)
   return(test_file_new)
 }
+
