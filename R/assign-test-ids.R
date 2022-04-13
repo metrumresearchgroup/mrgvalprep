@@ -8,21 +8,24 @@
 #' @param prefix character string. Prefix for TestIds; usually an acronym of 3 letters signifying the associated package.
 #' @param test_path path to where tests are written.
 #' @param overwrite (T/F) whether or not to overwrite test files with new test ids
+#' @param start_after integer. Desired starting point for test ids; must be greater than or equal to 1.
 #'
 #' @importFrom dplyr mutate distinct
 #' @importFrom testthat find_test_scripts
 #' @importFrom stringr str_pad
 #' @importFrom purrr map flatten_chr
 #' @importFrom tibble tibble
-#' @importFrom checkmate assert_string
+#' @importFrom checkmate assert_string checkIntegerish
 #' @export
 assign_test_ids <- function(
   prefix,
   test_path = getOption("mrgvalprep.TEST_LOC"),
-  overwrite = TRUE)
+  overwrite = TRUE,
+  start_after = 1)
 {
 
   assert_string(prefix)
+  checkIntegerish(start_after, lower = 1)
 
   test_scripts <- find_test_scripts(test_path)
   if (length(test_scripts) == 0) {
@@ -46,7 +49,7 @@ assign_test_ids <- function(
   } else {
     tests[tests$new, "TestIds"] <- paste0(
       toupper(prefix),"-TEST-",
-      str_pad(1:n_missing, max(nchar(n_missing) + 1, 3), pad = "0"))
+      str_pad(start_after:(n_missing + start_after - 1), max(nchar(n_missing + start_after) + 1, 3), pad = "0"))
   }
 
   ### update test files (Don't overwrite tests with existing ids) ###
