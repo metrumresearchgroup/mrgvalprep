@@ -32,15 +32,12 @@ assign_test_ids <- function(
   # Find tests from test files
   tests_vec <- map(test_scripts, parse_tests) %>%
     unlist()
-  tests_vec_full <- map(test_scripts, parse_tests, full_string = TRUE) %>%
-    unlist()
 
   # Generate Test ID's
   tests <- tibble(TestFile = names(tests_vec),
                   TestIds = parse_test_id(tests_vec),
                   TestNames = strip_test_id(tests_vec, .data$TestIds),
-                  new = is.na(.data$TestIds),
-                  replace_str = unname(tests_vec_full)) %>%
+                  new = is.na(.data$TestIds)) %>%
     distinct()
 
   n_missing <- sum(tests$new)
@@ -57,7 +54,6 @@ assign_test_ids <- function(
     overwrite_tests(test_scripts, filter(tests, .data$new), test_path)
   }
 
-  tests <- tests %>% select(-c(.data$replace_str))
   return(tests)
 }
 
