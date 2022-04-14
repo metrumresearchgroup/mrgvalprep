@@ -70,6 +70,8 @@ assign_test_ids <- function(
 #' @param stories_df a dataframe of stories returned by `parse_github_issues()`.
 #' @param tests dataframe returned by [assign_test_ids()]
 #'        Must have the following column names: "TestNames", "TestIds"
+#' @param return_warnings logical (T/F). Whether or not to return the warning messages as well.
+#'        Note that this will affect piping to other functions.
 #'
 #' @importFrom stringi stri_replace_all_fixed
 #' @importFrom tidyr chop unnest
@@ -77,7 +79,7 @@ assign_test_ids <- function(
 #' @importFrom stringr str_trim
 #'
 #' @export
-milestone_to_test_id <- function(stories_df, tests){
+milestone_to_test_id <- function(stories_df, tests, return_warnings=FALSE){
 
   if(!all(c("TestNames", "TestIds", "TestFile") %in% names(tests))){
     abort("Check dataframe passed to tests arg. Must have column names 'TestNames', 'TestIds', and 'TestFile'")
@@ -119,7 +121,17 @@ milestone_to_test_id <- function(stories_df, tests){
     distinct() %>%
     chop(c(.data$TestIds))
 
-  return(merged)
+  if(return_warnings){
+    return(
+      list(
+        merged = merged,
+        missing_milestones = missing_milestones,
+        missing_ids = missing_ids
+      )
+    )
+  }else{
+    return(merged)
+  }
 
 }
 
