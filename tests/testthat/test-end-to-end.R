@@ -35,7 +35,7 @@ test_that("Github end-to-end works", {
   skip_if_over_rate_limit_github()
   skip_if_no_github_pat()
 
-  spec <- parse_github_issues(org = ORG, repo = REPO, mile = MILESTONE, domain = DOMAIN)
+  spec <- parse_github_issues(org = ORG, repo = REPO, mile = MILESTONE, domain = DOMAIN, prefix = "FOO")
 
   # run test to generate output
   dir_prefix <- "mrgvalprep_end_to_end_github"
