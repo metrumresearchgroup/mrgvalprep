@@ -4,11 +4,9 @@
 \alias{parse_tests}
 \title{Reads and returns all tests from test files}
 \usage{
-parse_tests(test_file, full_string = FALSE)
+parse_tests(test_file)
 }
 \arguments{
-\item{full_string}{logical. Whether or not to return the test_that call surrounding the test name .}
-
 \item{lines}{character vector. Output of \code{readLines()} for a single test.}
 }
 \description{

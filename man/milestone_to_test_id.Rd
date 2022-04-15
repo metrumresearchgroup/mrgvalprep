@@ -4,7 +4,7 @@
 \alias{milestone_to_test_id}
 \title{Update stories dataframe with newly generated test ids}
 \usage{
-milestone_to_test_id(stories_df, tests, return_warnings = FALSE)
+milestone_to_test_id(stories_df, tests, return_missing_ids = FALSE)
 }
 \arguments{
 \item{stories_df}{a dataframe of stories returned by \code{parse_github_issues()}.}
@@ -12,8 +12,8 @@ milestone_to_test_id(stories_df, tests, return_warnings = FALSE)
 \item{tests}{dataframe returned by \code{\link[=assign_test_ids]{assign_test_ids()}}
 Must have the following column names: "TestNames", "TestIds"}
 
-\item{return_warnings}{logical (T/F). Whether or not to return the warning messages as well.
-Note that this will affect piping to other functions.}
+\item{return_missing_ids}{logical (T/F). Whether or not to return the warning messages pertaining to missing ids.
+Note that this will affect piping to other functions, as the returned object will be a named list.}
 }
 \description{
 Update stories dataframe with newly generated test ids

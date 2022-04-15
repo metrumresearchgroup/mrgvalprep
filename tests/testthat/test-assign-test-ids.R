@@ -97,5 +97,26 @@ withr::with_options(
 
     })
 
+    test_that("milestone_to_test_id() with return_missing_ids", {
+      skip_if_over_rate_limit_github()
+      skip_if_no_github_pat()
+
+      # expect both warnings
+      MILESTONES <- c("v0.6.0", "v0.6.1")
+      stories_df <- parse_github_issues(org = ORG, repo = REPO, mile = MILESTONES,
+                                        domain = DOMAIN, prefix = "mrgvalref")
+
+      test_ids <- assign_test_ids(prefix = "MRGVAL", overwrite = TRUE)
+
+
+      dd <- milestone_to_test_id(stories_df = stories_df, tests = test_ids, return_missing_ids = TRUE)
+
+      expect_true(all(c("merged", "missing_milestones", "missing_ids") %in% names(dd)))
+      expect_true(nrow(dd$missing_ids) == 25)
+
+    })
+
+
+
   }
 )
