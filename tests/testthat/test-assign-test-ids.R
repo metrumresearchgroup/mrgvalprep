@@ -40,7 +40,8 @@ withr::with_options(
                                         domain = DOMAIN, prefix = "mrgvalref") %>%
         filter(StoryId != "MRGVALREF-S003")
 
-      test_ids <- assign_test_ids(prefix = "MRGVAL")
+      test_ids <- assign_test_ids(prefix = "MRGVAL") %>%
+        filter(TestFile != "test-repeated-text.R")
 
       format_stories <- milestone_to_test_id(stories_df = stories_df, tests = test_ids)
 
@@ -51,20 +52,20 @@ withr::with_options(
       test_dir <- file.path(test_path, "new_tests")
       test_file_loc <- file.path(test_dir, basename(test_scripts))
 
-      tests_vec <- map(test_file_loc, ~ parse_tests(.x)) %>%
-        flatten_chr() %>%
-        unique()
+      tests_vec <- map(test_file_loc, parse_tests) %>%
+        unlist()
 
       expect_true(!any(is.na(parse_test_id(tests_vec))))
 
 
-      overwritten_tests <- data.frame(TestNames = tests_vec) %>%
-        mutate(
-          TestId = parse_test_id(tests_vec),
-          TestNames = strip_test_id(.data$TestNames, .data$TestId))
+      overwritten_tests <- tibble(TestFile = names(tests_vec),
+             TestIds = parse_test_id(tests_vec),
+             TestNames = strip_test_id(tests_vec, .data$TestIds),
+             new = is.na(.data$TestIds)) %>%
+        distinct() %>% filter(TestFile != "test-repeated-text.R")
 
-      diff1 <- setdiff(overwritten_tests$TestId, unlist(format_stories$TestIds))
-      diff2 <- setdiff(unlist(format_stories$TestIds), overwritten_tests$TestId)
+      diff1 <- setdiff(overwritten_tests$TestIds, unlist(format_stories$TestIds))
+      diff2 <- setdiff(unlist(format_stories$TestIds), overwritten_tests$TestIds)
       expect_true(rlang::is_empty(diff1))
       expect_true(rlang::is_empty(diff2))
     })
@@ -124,10 +125,11 @@ withr::with_options(
       test_ids <- assign_test_ids(prefix = "MRGVAL", overwrite = TRUE)
 
       fake_test_path <- file.path(getOption("mrgvalprep.TEST_LOC"), "new_tests", "test-repeated-text.R")
-      fake_test <- readLines(fake_test_path)
+      fake_test <- parse_tests(fake_test_path)
 
-      expect_true(all(c("merged", "missing_milestones", "missing_ids") %in% names(dd)))
-      expect_true(nrow(dd$missing_ids) == 25)
+      expect_true(length(fake_test) == 3)
+      expect_true(any(duplicated(fake_test)))
+      expect_true(dplyr::n_distinct(fake_test) == 2)
 
     })
 

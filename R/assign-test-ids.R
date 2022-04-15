@@ -139,7 +139,7 @@ milestone_to_test_id <- function(stories_df, tests, return_missing_ids=FALSE){
 #' @importFrom purrr discard
 #' @importFrom stringr str_trim str_match
 #'
-#' @param lines character vector. Output of `readLines()` for a single test.
+#' @param test_file file path to test script
 #'
 #' @keywords internal
 parse_tests <- function(test_file) {
