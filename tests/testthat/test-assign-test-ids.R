@@ -116,7 +116,20 @@ withr::with_options(
 
     })
 
+    test_that("test name string is repeated in a non-testthat() environment", {
+      skip_if_over_rate_limit_github()
+      skip_if_no_github_pat()
 
+
+      test_ids <- assign_test_ids(prefix = "MRGVAL", overwrite = TRUE)
+
+      fake_test_path <- file.path(getOption("mrgvalprep.TEST_LOC"), "new_tests", "test-repeated-text.R")
+      fake_test <- readLines(fake_test_path)
+
+      expect_true(all(c("merged", "missing_milestones", "missing_ids") %in% names(dd)))
+      expect_true(nrow(dd$missing_ids) == 25)
+
+    })
 
   }
 )

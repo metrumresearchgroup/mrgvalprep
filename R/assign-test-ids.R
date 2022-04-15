@@ -8,24 +8,24 @@
 #' @param prefix character string. Prefix for TestIds; usually an acronym of 3 letters signifying the associated package.
 #' @param test_path path to where tests are written.
 #' @param overwrite (T/F) whether or not to overwrite test files with new test ids
-#' @param start_after integer. Desired starting point for test ids; must be greater than or equal to 1.
+#' @param first_id integer. Desired starting point for test ids; must be greater than or equal to 1.
 #'
 #' @importFrom dplyr mutate distinct
 #' @importFrom testthat find_test_scripts
 #' @importFrom stringr str_pad
 #' @importFrom purrr map flatten_chr
 #' @importFrom tibble tibble
-#' @importFrom checkmate assert_string checkIntegerish
+#' @importFrom checkmate assert_string check_integerish
 #' @export
 assign_test_ids <- function(
   prefix,
   test_path = getOption("mrgvalprep.TEST_LOC"),
   overwrite = TRUE,
-  start_after = 1)
+  first_id = 1)
 {
 
   assert_string(prefix)
-  checkIntegerish(start_after, lower = 1)
+  check_integerish(first_id, lower = 1)
 
   test_scripts <- find_test_scripts(test_path)
   if (length(test_scripts) == 0) {
@@ -49,7 +49,7 @@ assign_test_ids <- function(
   } else {
     tests[tests$new, "TestIds"] <- paste0(
       toupper(prefix),"-TEST-",
-      str_pad(start_after:(n_missing + start_after - 1), max(nchar(n_missing + start_after) + 1, 3), pad = "0"))
+      str_pad(first_id:(n_missing + first_id - 1), max(nchar(n_missing + first_id) + 1, 3), pad = "0"))
   }
 
   ### update test files (Don't overwrite tests with existing ids) ###
@@ -70,8 +70,8 @@ assign_test_ids <- function(
 #' @param stories_df a dataframe of stories returned by `parse_github_issues()`.
 #' @param tests dataframe returned by [assign_test_ids()]
 #'        Must have the following column names: "TestNames", "TestIds"
-#' @param return_warnings logical (T/F). Whether or not to return the warning messages as well.
-#'        Note that this will affect piping to other functions.
+#' @param return_missing_ids logical (T/F). Whether or not to return the warning messages pertaining to missing ids.
+#'        Note that this will affect piping to other functions, as a named list will be returned instead of a dataframe.
 #'
 #' @importFrom stringi stri_replace_all_fixed
 #' @importFrom tidyr chop unnest
@@ -79,7 +79,7 @@ assign_test_ids <- function(
 #' @importFrom stringr str_trim
 #'
 #' @export
-milestone_to_test_id <- function(stories_df, tests, return_warnings=FALSE){
+milestone_to_test_id <- function(stories_df, tests, return_missing_ids=FALSE){
 
   if(!all(c("TestNames", "TestIds", "TestFile") %in% names(tests))){
     abort("Check dataframe passed to tests arg. Must have column names 'TestNames', 'TestIds', and 'TestFile'")
@@ -121,7 +121,7 @@ milestone_to_test_id <- function(stories_df, tests, return_warnings=FALSE){
     distinct() %>%
     chop(c(.data$TestIds))
 
-  if(return_warnings){
+  if(return_missing_ids){
     return(
       list(
         merged = merged,
@@ -140,23 +140,15 @@ milestone_to_test_id <- function(stories_df, tests, return_warnings=FALSE){
 #' @importFrom stringr str_trim str_match
 #'
 #' @param lines character vector. Output of `readLines()` for a single test.
-#' @param full_string logical. Whether or not to return the test_that call surrounding the test name .
 #'
 #' @keywords internal
-parse_tests <- function(test_file, full_string = FALSE) {
+parse_tests <- function(test_file) {
   lines <- readLines(test_file)
   re <- "^ *(?:test_that|it) *\\( *(['\"])(?<name>.*)\\1 *, *(?:\\{ *)?$"
-  if(full_string){
-    test_names <- str_match(lines, re) %>%
-      `[`(, 1) %>%
-      discard(is.na) %>%
-      str_trim(side = "both")
-  }else{
     test_names <- str_match(lines, re) %>%
       `[`(, "name") %>%
       discard(is.na) %>%
       str_trim(side = "both")
-  }
   setNames(test_names, rep(basename(test_file), length(test_names)))
 }
 
@@ -229,7 +221,6 @@ print_and_capture <- function(x)
 #'
 #' @importFrom stringi stri_replace_all_regex
 #' @keywords internal
-
 replace_test_str <- function(test_file, from, to){
   from <- paste0("^( *(?:test_that|it) *\\( *['\"] *\\Q", from, "\\E)( *['\"])")
   to <- paste0("$1 [", to, "]$2")
