@@ -7,7 +7,7 @@
 parse_tests(test_file)
 }
 \arguments{
-\item{lines}{character vector. Output of \code{readLines()} for a single test}
+\item{test_file}{file path to test script}
 }
 \description{
 Reads and returns all tests from test files

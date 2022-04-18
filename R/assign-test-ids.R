@@ -8,21 +8,24 @@
 #' @param prefix character string. Prefix for TestIds; usually an acronym of 3 letters signifying the associated package.
 #' @param test_path path to where tests are written.
 #' @param overwrite (T/F) whether or not to overwrite test files with new test ids
+#' @param first_id integer. Desired starting point for test ids; must be greater than or equal to 1.
 #'
 #' @importFrom dplyr mutate distinct
 #' @importFrom testthat find_test_scripts
 #' @importFrom stringr str_pad
 #' @importFrom purrr map flatten_chr
 #' @importFrom tibble tibble
-#' @importFrom checkmate assert_string
+#' @importFrom checkmate assert_string check_integerish
 #' @export
 assign_test_ids <- function(
   prefix,
   test_path = getOption("mrgvalprep.TEST_LOC"),
-  overwrite = TRUE)
+  overwrite = TRUE,
+  first_id = 1)
 {
 
   assert_string(prefix)
+  check_integerish(first_id, lower = 1)
 
   test_scripts <- find_test_scripts(test_path)
   if (length(test_scripts) == 0) {
@@ -46,7 +49,7 @@ assign_test_ids <- function(
   } else {
     tests[tests$new, "TestIds"] <- paste0(
       toupper(prefix),"-TEST-",
-      str_pad(1:n_missing, max(nchar(n_missing) + 1, 3), pad = "0"))
+      str_pad(first_id:(n_missing + first_id - 1), max(nchar(n_missing + first_id) + 1, 3), pad = "0"))
   }
 
   ### update test files (Don't overwrite tests with existing ids) ###
@@ -67,6 +70,8 @@ assign_test_ids <- function(
 #' @param stories_df a dataframe of stories returned by `parse_github_issues()`.
 #' @param tests dataframe returned by [assign_test_ids()]
 #'        Must have the following column names: "TestNames", "TestIds"
+#' @param return_missing_ids logical (T/F). Whether or not to return the warning messages pertaining to missing ids.
+#'        Note that this will affect piping to other functions, as a named list will be returned instead of a dataframe.
 #'
 #' @importFrom stringi stri_replace_all_fixed
 #' @importFrom tidyr chop unnest
@@ -74,7 +79,7 @@ assign_test_ids <- function(
 #' @importFrom stringr str_trim
 #'
 #' @export
-milestone_to_test_id <- function(stories_df, tests){
+milestone_to_test_id <- function(stories_df, tests, return_missing_ids=FALSE){
 
   if(!all(c("TestNames", "TestIds", "TestFile") %in% names(tests))){
     abort("Check dataframe passed to tests arg. Must have column names 'TestNames', 'TestIds', and 'TestFile'")
@@ -116,7 +121,17 @@ milestone_to_test_id <- function(stories_df, tests){
     distinct() %>%
     chop(c(.data$TestIds))
 
-  return(merged)
+  if(return_missing_ids){
+    return(
+      list(
+        merged = merged,
+        missing_milestones = missing_milestones,
+        missing_ids = missing_ids
+      )
+    )
+  }else{
+    return(merged)
+  }
 
 }
 
@@ -124,17 +139,17 @@ milestone_to_test_id <- function(stories_df, tests){
 #' @importFrom purrr discard
 #' @importFrom stringr str_trim str_match
 #'
-#' @param lines character vector. Output of `readLines()` for a single test
+#' @param test_file file path to test script
 #'
 #' @keywords internal
 parse_tests <- function(test_file) {
   lines <- readLines(test_file)
   re <- "^ *(?:test_that|it) *\\( *(['\"])(?<name>.*)\\1 *, *(?:\\{ *)?$"
-  tmp <- str_match(lines, re) %>%
-    `[`(, "name") %>%
-    discard(is.na) %>%
-    str_trim(side = "both")
-  setNames(tmp, rep(basename(test_file), length(tmp)))
+    test_names <- str_match(lines, re) %>%
+      `[`(, "name") %>%
+      discard(is.na) %>%
+      str_trim(side = "both")
+  setNames(test_names, rep(basename(test_file), length(test_names)))
 }
 
 #' Sort test ids by number of characters in test description
@@ -207,9 +222,10 @@ print_and_capture <- function(x)
 #' @importFrom stringi stri_replace_all_regex
 #' @keywords internal
 replace_test_str <- function(test_file, from, to){
-  from <- paste0("(['\"] *\\Q", from, "\\E)( *['\"])")
+  from <- paste0("^( *(?:test_that|it) *\\( *['\"] *\\Q", from, "\\E)( *['\"])")
   to <- paste0("$1 [", to, "]$2")
 
   test_file_new <- stri_replace_all_regex(test_file, from, to, vectorize_all=FALSE)
   return(test_file_new)
 }
+

@@ -35,7 +35,7 @@ test_that("stories_to_yaml() works correctly with github issues", {
   MILESTONES <- c("v0.6.0", "v0.6.1")
 
   spec <- parse_github_issues(
-    org = ORG, repo = REPO, mile = MILESTONES, domain = DOMAIN) %>%
+    org = ORG, repo = REPO, mile = MILESTONES, domain = DOMAIN, prefix = "FOO") %>%
     stories_to_yaml(file = file.path(tempdir(), "temp.yaml"))
 
   spec_txt <- spec %>% yaml::read_yaml()

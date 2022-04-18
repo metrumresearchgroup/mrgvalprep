@@ -7,7 +7,8 @@
 assign_test_ids(
   prefix,
   test_path = getOption("mrgvalprep.TEST_LOC"),
-  overwrite = TRUE
+  overwrite = TRUE,
+  first_id = 1
 )
 }
 \arguments{
@@ -16,6 +17,8 @@ assign_test_ids(
 \item{test_path}{path to where tests are written.}
 
 \item{overwrite}{(T/F) whether or not to overwrite test files with new test ids}
+
+\item{first_id}{integer. Desired starting point for test ids; must be greater than or equal to 1.}
 }
 \description{
 This function will generate Test Id's with the pattern 'TST-FOO-XXX',
