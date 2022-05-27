@@ -114,26 +114,29 @@ read_spec_yaml <- function(stories, requirements = NULL) {
   res <- dplyr::bind_rows(
     purrr::map(
       stories,
-      ~ read_stories_yaml(yaml::read_yaml(.x), stories_only)))
+      ~ read_stories_yaml(yaml::read_yaml(.x), stories_only))) %>%
+    check_uniq_col_vals("StoryId")
 
-  if (stories_only) {
-    col_uniq <- "StoryId"
-  } else {
-    col_uniq <- "RequirementId"
+  if (!stories_only) {
     df_reqs <- dplyr::bind_rows(
       purrr::map(
         requirements,
-        ~ read_requirements_yaml(yaml::read_yaml(.x))))
-    res <- merge_requirements_and_stories(res, df_reqs)
+        ~ read_requirements_yaml(yaml::read_yaml(.x)))) %>%
+      check_uniq_col_vals("RequirementId")
+    res <- mrgvalprep:::merge_requirements_and_stories(res, df_reqs)
   }
 
-  uids <- res[[col_uniq]]
+  return(res)
+}
+
+#' Check unique values of column
+check_uniq_col_vals <- function(df, col_uniq) {
+  uids <- df[[col_uniq]]
   if (any(duplicated(uids))) {
     rlang::abort(paste0("Duplicate values for ", col_uniq, " found:\n",
                         paste0(" - ", uids[duplicated(uids)],
                                collapse = "\n")),
                  "mrgvalprep_input_error")
   }
-
-  return(res)
+  return(df)
 }
