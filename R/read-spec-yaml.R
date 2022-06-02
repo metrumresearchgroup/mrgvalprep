@@ -123,7 +123,7 @@ read_spec_yaml <- function(stories, requirements = NULL) {
         requirements,
         ~ read_requirements_yaml(yaml::read_yaml(.x)))) %>%
       check_uniq_col_vals("RequirementId")
-    res <- mrgvalprep:::merge_requirements_and_stories(res, df_reqs)
+    res <- merge_requirements_and_stories(res, df_reqs)
   }
 
   return(res)
