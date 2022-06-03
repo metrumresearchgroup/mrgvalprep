@@ -11,5 +11,6 @@ S002:
   description: >
     S002 description
   requirements:
+  - R002
   - R003
   ProductRisk: low

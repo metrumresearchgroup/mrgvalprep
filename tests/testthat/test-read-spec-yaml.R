@@ -22,9 +22,10 @@ test_that("read_spec_yaml() supports requirements", {
                      yaml_file("requirements-2.yaml")))
 
   expect_setequal(names(spec), STORIES_AND_REQS_COLS)
-  expect_equal(nrow(spec), 3)
+  expect_equal(nrow(spec), 4)
   expect_setequal(spec$TestIds,
                   list(c("TEST-ID-001", "TEST-ID-002"),
+                       "TEST-ID-001",
                        "TEST-ID-001",
                        "TEST-ID-003"))
 })
@@ -37,7 +38,7 @@ test_that("read_spec_yaml() aborts on repeated IDs", {
     class = "mrgvalprep_input_error")
 
   # With stories and requirements, it's the requirement ID that can't be
-  # repeated.
+  # repeated with requirements spec
   expect_error(
     read_spec_yaml(
       stories = yaml_file("stories-1.yaml"),
