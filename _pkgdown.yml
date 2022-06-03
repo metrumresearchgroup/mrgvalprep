@@ -12,13 +12,21 @@ navbar:
 reference:
 - title: Format test outputs
   contents:
-  - validate_tests
-  - get_sys_info
   - parse_testthat_list_reporter
   - parse_golang_test_json
+  - get_sys_info
+  - validate_tests
 - title: Format stories and requirements
   contents:
-  - read_spec_gsheets
   - read_spec_yaml
+  - read_spec_gsheets
   - parse_github_issues
   - get_issues
+- title: Convert from legacy formats
+  contents:
+  - stories_to_yaml
+  - assign_test_ids
+  - milestone_to_test_id
+  - req_df_from_tests
+  - req_df_to_yaml
+  - stories_replace_tests_with_reqs
