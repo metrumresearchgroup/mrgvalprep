@@ -1,3 +1,17 @@
+# mrgvalprep 0.0.5
+
+## New features and changes
+
+* Added some helpers for converting legacy formats of specifying stories and requirements into the preferred YAML format.
+  * `stories_to_yaml()` helper for helping to convert stories specified in either Googlesheets or Github milestones into YAML. (#31, #35)
+  * `assign_test_ids()` and `milestone_to_test_id()` for converting tests specified with full test names into test IDs. (#36, #39, #42)
+
+## Bug fixes
+
+* Moved `checkmate` to `Imports` instead of `Suggests` because it is used in core functionality. (#29)
+
+* Fixed check for unique requirement IDs in `read_spec_yaml()`. (#43)
+
 # mrgvalprep 0.0.4
 
 ## New features and changes
