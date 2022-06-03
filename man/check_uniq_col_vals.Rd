@@ -6,6 +6,12 @@
 \usage{
 check_uniq_col_vals(df, col_uniq)
 }
+\arguments{
+\item{df}{Tibble to check}
+
+\item{col_uniq}{Column that should be unique}
+}
 \description{
 Check unique values of column
 }
+\keyword{internal}

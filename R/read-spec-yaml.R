@@ -130,6 +130,9 @@ read_spec_yaml <- function(stories, requirements = NULL) {
 }
 
 #' Check unique values of column
+#' @param df Tibble to check
+#' @param col_uniq Column that should be unique
+#' @keywords internal
 check_uniq_col_vals <- function(df, col_uniq) {
   uids <- df[[col_uniq]]
   if (any(duplicated(uids))) {

@@ -39,6 +39,8 @@ NULL
 
 #' @describeIn requirements_from_tests Create new requirements tibble from test
 #'   results tibble.
+#' @param test_df Tibble of tests results, as returned from
+#'   [parse_testthat_list_reporter()] or [parse_golang_test_json()]
 #' @export
 req_df_from_tests <- function(test_df) {
   test_df %>%
@@ -49,11 +51,13 @@ req_df_from_tests <- function(test_df) {
       req_desc = .data$TestName,
       test_ids = .data$TestId
     ) %>%
-    select(req_id, req_desc, test_ids)
+    select(.data$req_id, .data$req_desc, .data$test_ids)
 }
 
 #' @describeIn requirements_from_tests Write requirements YAML file from
 #'   requirements tibble.
+#' @param req_df Tibble of requirements, as returned from [req_df_from_tests()].
+#' @param out_file Path to write requirements YAML file to.
 #' @export
 req_df_to_yaml <- function(req_df, out_file) {
   req_df %>%
@@ -71,6 +75,9 @@ req_df_to_yaml <- function(req_df, out_file) {
 
 #' @describeIn requirements_from_tests Modify existing stories YAML to reference
 #'   new requirements instead of tests.
+#' @param req_spec Tibble of requirements, as returned from [req_df_from_tests()].
+#' @param stories_file Path to write stories YAML file that will be modified on
+#'   disk.
 #' @export
 stories_replace_tests_with_reqs <- function(stories_file, req_spec) {
   stories_str <- readr::read_lines(stories_file)

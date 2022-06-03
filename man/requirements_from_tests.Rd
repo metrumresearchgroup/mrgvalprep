@@ -13,6 +13,19 @@ req_df_to_yaml(req_df, out_file)
 
 stories_replace_tests_with_reqs(stories_file, req_spec)
 }
+\arguments{
+\item{test_df}{Tibble of tests results, as returned from
+\code{\link[=parse_testthat_list_reporter]{parse_testthat_list_reporter()}} or \code{\link[=parse_golang_test_json]{parse_golang_test_json()}}}
+
+\item{req_df}{Tibble of requirements, as returned from \code{\link[=req_df_from_tests]{req_df_from_tests()}}.}
+
+\item{out_file}{Path to write requirements YAML file to.}
+
+\item{stories_file}{Path to write stories YAML file that will be modified on
+disk.}
+
+\item{req_spec}{Tibble of requirements, as returned from \code{\link[=req_df_from_tests]{req_df_from_tests()}}.}
+}
 \description{
 If you were previously linking stories directly to tests, and
 you would like to begin using requirements, use \code{\link[=req_df_from_tests]{req_df_from_tests()}} and
@@ -50,7 +63,7 @@ test_res <- mrgvalprep::parse_testthat_list_reporter(
 
 # create requirements tibble and write to new YAML
 req_df <- req_df_from_tests(test_res)
-req_df_to_yaml(req_df, "inst/validation/stories.yaml")
+req_df_to_yaml(req_df, "inst/validation/requirements.yaml")
 
 # edit existing stories YAML
 stories_replace_tests_with_reqs("inst/validation/stories.yaml", req_df)
