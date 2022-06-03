@@ -22,7 +22,9 @@ data frame that is ready to be passed as the \code{specs} argument to
 \subsection{Option 1: Stories and requirements}{
 
 If you provide a value for both \code{stories} and \code{requirements}, the \code{stories}
-argument should be one or more YAML files with the following structure:\preformatted{STORY-ID-001:
+argument should be one or more YAML files with the following structure:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{STORY-ID-001:
   name: Story name
   description: >
     Longer story description
@@ -32,16 +34,18 @@ argument should be one or more YAML files with the following structure:\preforma
   ProductRisk: risk
 STORY-ID-002:
 [...]
-}
+}\if{html}{\out{</div>}}
 
 The \code{requirements} argument should be a set of YAML files that have entries
-that link those requirements to tests:\preformatted{REQ-ID-001:
+that link those requirements to tests:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{REQ-ID-001:
   description: >
     Description
   tests:
   - TEST-ID-001
   - TEST-ID-001
-}
+}\if{html}{\out{</div>}}
 
 The information above is used to construct a data frame with the following
 columns:
@@ -59,7 +63,9 @@ columns:
 \subsection{Option 2: Stories linked directly to tests}{
 
 If you provide only a \code{stories} argument, the YAML entries should specify a
-list of tests rather than a set of requirements:\preformatted{STORY-ID-001:
+list of tests rather than a set of requirements:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{STORY-ID-001:
   name: Story name
   description: >
     Longer story description
@@ -69,7 +75,7 @@ list of tests rather than a set of requirements:\preformatted{STORY-ID-001:
   ProductRisk: risk
 STORY-ID-002:
 [...]
-}
+}\if{html}{\out{</div>}}
 
 Those entries are used to construct a data frame with the following columns:
 \itemize{
