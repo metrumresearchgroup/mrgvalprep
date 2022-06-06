@@ -39,6 +39,7 @@ NULL
 
 #' @describeIn requirements_from_tests Create new requirements tibble from test
 #'   results tibble.
+#' @importFrom dplyr mutate select
 #' @param test_df Tibble of tests results, as returned from
 #'   [parse_testthat_list_reporter()] or [parse_golang_test_json()]
 #' @export
@@ -56,40 +57,45 @@ req_df_from_tests <- function(test_df) {
 
 #' @describeIn requirements_from_tests Write requirements YAML file from
 #'   requirements tibble.
+#' @importFrom purrr pmap
+#' @importFrom rlang set_names
+#' @importFrom yaml write_yaml
 #' @param req_df Tibble of requirements, as returned from [req_df_from_tests()].
 #' @param out_file Path to write requirements YAML file to.
 #' @export
 req_df_to_yaml <- function(req_df, out_file) {
   req_df %>%
-    purrr::pmap(function(...) {
+    pmap(function(...) {
       .row <- list(...)
       list(
         description = .row$req_desc,
         tests = as.list(.row$test_ids)
       )
     }) %>%
-    rlang::set_names(req_df$req_id) %>%
-    yaml::write_yaml(out_file)
+    set_names(req_df$req_id) %>%
+    write_yaml(out_file)
   message(paste("Requirements YAML written to", out_file))
 }
 
 #' @describeIn requirements_from_tests Modify existing stories YAML to reference
 #'   new requirements instead of tests.
+#' @importFrom readr read_lines
+#' @importFrom stringr str_replace_all
 #' @param req_spec Tibble of requirements, as returned from [req_df_from_tests()].
 #' @param stories_file Path to write stories YAML file that will be modified on
 #'   disk.
 #' @export
 stories_replace_tests_with_reqs <- function(stories_file, req_spec) {
-  stories_str <- readr::read_lines(stories_file)
+  stories_str <- read_lines(stories_file)
 
-  stories_str <- stringr::str_replace_all(
+  stories_str <- str_replace_all(
     stories_str,
     "tests:",
     "requirements:"
   )
 
   for (i in 1:nrow(req_spec)) {
-    stories_str <- stringr::str_replace_all(
+    stories_str <- str_replace_all(
       stories_str,
       req_spec$test_ids[i],
       req_spec$req_id[i]
