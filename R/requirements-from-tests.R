@@ -97,7 +97,7 @@ stories_replace_tests_with_reqs <- function(stories_file, req_spec) {
   for (i in 1:nrow(req_spec)) {
     stories_str <- str_replace_all(
       stories_str,
-      req_spec$test_ids[i],
+      paste0("\\b\\Q", req_spec$test_ids[i], "\\E\\b"),
       req_spec$req_id[i]
     )
   }
