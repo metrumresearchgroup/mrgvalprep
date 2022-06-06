@@ -3,7 +3,7 @@
 ## New features and changes
 
 * Added helpers for converting legacy formats of specifying stories and requirements into the preferred YAML format.
-  * `stories_to_yaml()` helper for helping to convert stories specified in either Googlesheets or Github milestones into YAML. (#31, #35)
+  * `stories_to_yaml()` helper for converting stories specified in either Googlesheets or Github milestones into YAML. (#31, #35)
   * `assign_test_ids()` and `milestone_to_test_id()` for converting tests specified with full test names into test IDs. (#36, #39, #42)
   
 * Added helpers for converting from using only stories to using stories and requirements. (#44)
