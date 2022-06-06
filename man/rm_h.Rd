@@ -12,3 +12,4 @@ rm_h(x)
 \description{
 remove leading hyphen
 }
+\keyword{internal}

@@ -7,25 +7,32 @@
 #' @importFrom tidyr unnest nest
 #' @importFrom dplyr select mutate left_join
 #' @importFrom rlang .data
+#' @importFrom stringr str_pad
+#' @importFrom checkmate assert_string
 #' @param org Github organization that the repo is under.
 #' @param repo The name of the repo for the package you are validating.
 #' @param mile The name of the milestone associated with the release you are validating. All issues tied to this milestone with be pulled.
 #' @param domain Domain where repo lives. Either "github.com" or "ghe.metrumrg.com", defaulting to "github.com".
+#' @param prefix character string. Prefix for StoryId; usually an acronym of 3 letters signifying the associated package.
 #' @export
-parse_github_issues <- function(org, repo, mile, domain = VALID_DOMAINS) {
+parse_github_issues <- function(org, repo, mile, domain = VALID_DOMAINS, prefix) {
   check_for_ghpm("parse_github_issues()")
 
   domain <- match.arg(domain)
 
+  assert_string(prefix)
+
   release_issues <- get_issues(org, repo, mile, domain)
+
+  n_stories <- length(release_issues$issue)
+  story_ids <- paste0("S",str_pad(1:n_stories, max(nchar(n_stories) + 1, 3), pad = "0"))
 
   release_issues %>%
     mutate(
-      StoryId = paste(repo, .data$issue, sep = "-"),
+      StoryId = paste(toupper(prefix), story_ids, sep = "-"),
       StoryName = .data$title,
       StoryDescription = map_chr(.data$body, extract_issue_summary),
       TestIds = map(.data$body, extract_issue_tests)
-      #'
     ) %>%
     left_join(
       get_risk(org, repo, domain),
@@ -53,7 +60,7 @@ get_issues <- function(org, repo, mile, domain = VALID_DOMAINS) {
     domain <- paste0("api.", domain)
   }
   pkg_issues <- ghpm::get_issues(org, repo, ghpm::api_url(hostname = domain))
-  release_issues <- pkg_issues %>% filter(.data$milestone == mile)
+  release_issues <- pkg_issues %>% filter(.data$milestone %in% mile)
 
   return(release_issues)
 }

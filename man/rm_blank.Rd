@@ -12,3 +12,4 @@ rm_blank(x)
 \description{
 drop blanks
 }
+\keyword{internal}

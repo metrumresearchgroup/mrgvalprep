@@ -12,3 +12,4 @@ extract_issue_summary(txt)
 \description{
 Extract Summary section from Github issue
 }
+\keyword{internal}

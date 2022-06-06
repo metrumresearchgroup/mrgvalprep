@@ -16,3 +16,4 @@ These are all things that were copied out of internal functions called by testth
 They are necessary because testthat::test_dir does NOT do this, which causes some tests to fail.
 Specifically, this code came mostly from testthat:::test_package_dir and testthat:::test_pkg_env and some from test_check itself.
 }
+\keyword{internal}

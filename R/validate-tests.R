@@ -208,6 +208,7 @@ run_tests <- function(pkg, test_path = "tests/testthat", root_dir = tempdir()) {
 #' Specifically, this code came mostly from testthat:::test_package_dir and testthat:::test_pkg_env and some from test_check itself.
 #' @param package the package name
 #' @param test_path path to folder with tests in it
+#' @keywords internal
 setup_package_env <- function(package, test_path) {
 
   if (!utils::file_test("-d", test_path)) {

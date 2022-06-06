@@ -1,7 +1,7 @@
 Package: mrgvalprep
 Type: Package
 Title: Preprocessing for mrgvalidate
-Version: 0.0.4
+Version: 0.0.5
 Authors@R: 
     c(person(given = "Devin",
            family = "Pastoor",
@@ -28,9 +28,10 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 VignetteBuilder: knitr
-RoxygenNote: 7.1.1
+RoxygenNote: 7.2.0
 Imports: 
     callr,
+    checkmate,
     devtools,
     dplyr,
     fs,
@@ -47,13 +48,13 @@ Imports:
     testthat,
     tibble,
     tidyr,
-    withr (>= 2.3.0)
+    withr (>= 2.3.0),
+    yaml,
+    stringi
 Suggests:
-    checkmate,
     digest,
     ghpm (>= 0.5.1),
     googlesheets4,
-    yaml,
     forcats,
     cli,
     httpuv,

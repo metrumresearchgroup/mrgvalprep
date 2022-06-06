@@ -12,3 +12,4 @@ rm_s(x)
 \description{
 remove leading star/bullet
 }
+\keyword{internal}
