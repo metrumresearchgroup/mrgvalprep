@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">mrgvalprep</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.5</span>
       </span>
     </div>
 
@@ -26,7 +26,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -58,43 +58,47 @@
     </div>
 
     <div class="section level2">
+<h2 class="page-header" data-toc-text="0.0.5" id="mrgvalprep-005">mrgvalprep 0.0.5<a class="anchor" aria-label="anchor" href="#mrgvalprep-005"></a></h2>
+<div class="section level3">
+<h3 id="new-features-and-changes-0-0-5">New features and changes<a class="anchor" aria-label="anchor" href="#new-features-and-changes-0-0-5"></a></h3>
+<ul><li>Added helpers for converting legacy formats of specifying stories and requirements into the preferred YAML format.<ul><li>
+<code><a href="../reference/stories_to_yaml.html">stories_to_yaml()</a></code> helper for converting stories specified in either Googlesheets or Github milestones into YAML. (#31, #35)</li>
+<li>
+<code><a href="../reference/assign_test_ids.html">assign_test_ids()</a></code> and <code><a href="../reference/milestone_to_test_id.html">milestone_to_test_id()</a></code> for converting tests specified with full test names into test IDs. (#36, #39, #42)</li>
+</ul></li>
+<li>Added helpers for converting from using only stories to using stories and requirements. (#44)</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-0-0-5">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-0-5"></a></h3>
+<ul><li><p>Moved <code>checkmate</code> to <code>Imports</code> instead of <code>Suggests</code> because it is used in core functionality. (#29)</p></li>
+<li><p>Fixed check for unique requirement IDs in <code><a href="../reference/read_spec_yaml.html">read_spec_yaml()</a></code>. (#43)</p></li>
+</ul></div>
+</div>
+    <div class="section level2">
 <h2 class="page-header" data-toc-text="0.0.4" id="mrgvalprep-004">mrgvalprep 0.0.4<a class="anchor" aria-label="anchor" href="#mrgvalprep-004"></a></h2>
 <div class="section level3">
 <h3 id="new-features-and-changes-0-0-4">New features and changes<a class="anchor" aria-label="anchor" href="#new-features-and-changes-0-0-4"></a></h3>
-<ul><li><p>With the new function <code><a href="../reference/read_spec_yaml.html">read_spec_yaml()</a></code>, stories and
-requirements can now be provided through YAML files. (#23)</p></li>
-<li><p><code>googlesheets4</code> has been moved from
-<code>Imports</code> to <code>Suggests</code> so that users that only
-want to use YAML input don’t need to install it. (#24)</p></li>
-<li><p><code><a href="../reference/parse_testthat_list_reporter.html">parse_testthat_list_reporter()</a></code> and
-<code><a href="../reference/parse_golang_test_json.html">parse_golang_test_json()</a></code> now strip a trailing colon from
-the test name when rolling up test IDs. (#19)</p></li>
+<ul><li><p>With the new function <code><a href="../reference/read_spec_yaml.html">read_spec_yaml()</a></code>, stories and requirements can now be provided through YAML files. (#23)</p></li>
+<li><p><code>googlesheets4</code> has been moved from <code>Imports</code> to <code>Suggests</code> so that users that only want to use YAML input don’t need to install it. (#24)</p></li>
+<li><p><code><a href="../reference/parse_testthat_list_reporter.html">parse_testthat_list_reporter()</a></code> and <code><a href="../reference/parse_golang_test_json.html">parse_golang_test_json()</a></code> now strip a trailing colon from the test name when rolling up test IDs. (#19)</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="docs-0-0-4">Docs<a class="anchor" aria-label="anchor" href="#docs-0-0-4"></a></h3>
-<ul><li>The documentation for <code><a href="../reference/parse_testthat_list_reporter.html">parse_testthat_list_reporter()</a></code>
-and <code><a href="../reference/parse_golang_test_json.html">parse_golang_test_json()</a></code> now describe the requirements
-for the test name when <code>roll_up_ids = TRUE</code>. (#19)</li>
-</ul></div>
+<ul><li>The documentation for <code><a href="../reference/parse_testthat_list_reporter.html">parse_testthat_list_reporter()</a></code> and <code><a href="../reference/parse_golang_test_json.html">parse_golang_test_json()</a></code> now describe the requirements for the test name when <code>roll_up_ids = TRUE</code>. (#19)</li></ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.0.3" id="mrgvalprep-003">mrgvalprep 0.0.3<a class="anchor" aria-label="anchor" href="#mrgvalprep-003"></a></h2>
 <div class="section level3">
 <h3 id="new-features-and-changes-0-0-3">New features and changes<a class="anchor" aria-label="anchor" href="#new-features-and-changes-0-0-3"></a></h3>
-<ul><li><p>Added <code>roll_up_ids</code> argument to
-<code><a href="../reference/parse_testthat_list_reporter.html">parse_testthat_list_reporter()</a></code> and
-<code><a href="../reference/parse_golang_test_json.html">parse_golang_test_json()</a></code> (#16)</p></li>
-<li><p>Moved <code>ghpm</code> to Suggests and put checks on all
-functions that touch Github (#15)</p></li>
+<ul><li><p>Added <code>roll_up_ids</code> argument to <code><a href="../reference/parse_testthat_list_reporter.html">parse_testthat_list_reporter()</a></code> and <code><a href="../reference/parse_golang_test_json.html">parse_golang_test_json()</a></code> (#16)</p></li>
+<li><p>Moved <code>ghpm</code> to Suggests and put checks on all functions that touch Github (#15)</p></li>
 </ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.0.2" id="mrgvalprep-002">mrgvalprep 0.0.2<a class="anchor" aria-label="anchor" href="#mrgvalprep-002"></a></h2>
 <div class="section level3">
 <h3 id="new-features-and-changes-0-0-2">New features and changes<a class="anchor" aria-label="anchor" href="#new-features-and-changes-0-0-2"></a></h3>
-<ul><li>Added <code><a href="../reference/parse_golang_test_json.html">parse_golang_test_json()</a></code> for Go test
-<code>go test --json</code> output (#10)</li>
-</ul></div>
+<ul><li>Added <code><a href="../reference/parse_golang_test_json.html">parse_golang_test_json()</a></code> for Go test <code>go test --json</code> output (#10)</li></ul></div>
 <div class="section level3">
 <h3 id="developer-facing-changes-0-0-2">Developer-facing changes<a class="anchor" aria-label="anchor" href="#developer-facing-changes-0-0-2"></a></h3>
 <ul><li>Enabled drone CI (#11)</li>
@@ -103,21 +107,13 @@ functions that touch Github (#15)</p></li>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.0.1" id="mrgvalprep-001">mrgvalprep 0.0.1<a class="anchor" aria-label="anchor" href="#mrgvalprep-001"></a></h2>
-<p>First release! This release moved some functionality that used to be
-in <code>mrgvalidate 0.1.2</code> into its own package. Much of the old
-code has been heavily refactored, and new functionality has been added
-as well.</p>
+<p>First release! This release moved some functionality that used to be in <code>mrgvalidate 0.1.2</code> into its own package. Much of the old code has been heavily refactored, and new functionality has been added as well.</p>
 <div class="section level3">
 <h3 id="current-capabilities-0-0-1">Current capabilities<a class="anchor" aria-label="anchor" href="#current-capabilities-0-0-1"></a></h3>
-<ul><li>Pull an R package Github repo at a specific tag and run its test
-suite, then format the output for <code>mrgvalidate</code>
-(<code><a href="../reference/validate_tests.html">validate_tests()</a></code>)</li>
-<li>Parses output from <code><a href="https://testthat.r-lib.org/reference/ListReporter.html" class="external-link">testthat::ListReporter</a></code>
-(<code><a href="../reference/parse_testthat_list_reporter.html">parse_testthat_list_reporter()</a></code>)</li>
-<li>Pulls Stories and Requirements from Googlesheets
-(<code><a href="../reference/read_spec_gsheets.html">read_spec_gsheets()</a></code>)</li>
-<li>Pulls Stories and Requirements from Github issues and milestones
-(<code><a href="../reference/parse_github_issues.html">parse_github_issues()</a></code>)</li>
+<ul><li>Pull an R package Github repo at a specific tag and run its test suite, then format the output for <code>mrgvalidate</code> (<code><a href="../reference/validate_tests.html">validate_tests()</a></code>)</li>
+<li>Parses output from <code><a href="https://testthat.r-lib.org/reference/ListReporter.html" class="external-link">testthat::ListReporter</a></code> (<code><a href="../reference/parse_testthat_list_reporter.html">parse_testthat_list_reporter()</a></code>)</li>
+<li>Pulls Stories and Requirements from Googlesheets (<code><a href="../reference/read_spec_gsheets.html">read_spec_gsheets()</a></code>)</li>
+<li>Pulls Stories and Requirements from Github issues and milestones (<code><a href="../reference/parse_github_issues.html">parse_github_issues()</a></code>)</li>
 </ul></div>
 </div>
   </div>
@@ -130,13 +126,11 @@ suite, then format the output for <code>mrgvalidate</code>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Devin Pastoor, Seth Green, Kyle Meyer, Kyle T Baron,
-Sean Wilson.</p>
+  <p></p><p>Developed by Devin Pastoor, Seth Green, Kyle Meyer, Kyle T Baron, Sean Wilson.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer></div>

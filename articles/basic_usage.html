@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">mrgvalprep</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.5</span>
       </span>
     </div>
 
@@ -43,7 +43,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -91,21 +91,13 @@
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>The <code>mrgvalprep</code> package contains helper functions for
-gathering, formatting, and preprocessing input data for
-<code>mrgvalidate</code>. The <code>mrgvalidate</code> package is used
-specifically to generate three documents that are necessary for the
-software validation process at Mertrum Research Group. Those documents
-are:</p>
+<p>The <code>mrgvalprep</code> package contains helper functions for gathering, formatting, and preprocessing input data for <code>mrgvalidate</code>. The <code>mrgvalidate</code> package is used specifically to generate three documents that are necessary for the software validation process at Mertrum Research Group. Those documents are:</p>
 <ul>
 <li><code>requirements-specification.docx</code></li>
 <li><code>validation-testing.docx</code></li>
 <li><code>traceability-matrix.docx</code></li>
 </ul>
-<p>This vignette demonstrates some of the primary functionality for
-using <code>mrgvalprep</code> to validate an R package and build
-validation docs from content stored in either Github issues or
-Googlesheets.</p>
+<p>This vignette demonstrates some of the primary functionality for using <code>mrgvalprep</code> to validate an R package and build validation docs from content stored in either Github issues or Googlesheets.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">mrgvalprep</span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">mrgvalidate</span><span class="op">)</span></code></pre></div>
@@ -116,33 +108,21 @@ Googlesheets.</p>
 </h2>
 <p><code>mrgvalidate</code> requires two primary inputs:</p>
 <ul>
-<li>A directory of test outputs (<code>.csv</code> and
-<code>.json</code> files, described below)</li>
-<li>A tibble of user stories and, optionally, technical
-requirements</li>
+<li>A directory of test outputs (<code>.csv</code> and <code>.json</code> files, described below)</li>
+<li>A tibble of user stories and, optionally, technical requirements</li>
 </ul>
-<p><strong>These inputs <em>must</em> be in the format described in <a href="https://metrumresearchgroup.github.io/mrgvalidate/reference/input_formats.html" class="external-link">?mrgvalidate::input_formats</a>.</strong>
-The purpose of <code>mrgvalprep</code> is to take test outputs and
-stories from a variety of formats and transform them into the format
-that <code>mrgvalidate</code> expects.</p>
+<p><strong>These inputs <em>must</em> be in the format described in <a href="https://metrumresearchgroup.github.io/mrgvalidate/reference/input_formats.html" class="external-link">?mrgvalidate::input_formats</a>.</strong> The purpose of <code>mrgvalprep</code> is to take test outputs and stories from a variety of formats and transform them into the format that <code>mrgvalidate</code> expects.</p>
 <p>Below we show a few examples of how to do this.</p>
 <ul>
-<li><a href="#example1">Example 1: Automated and Manual Tests, with
-Stories from Googlesheets</a></li>
-<li><a href="#example2">Example 2: An R package on Github, with Stories
-from Github Issues</a></li>
+<li><a href="#example1">Example 1: Automated and Manual Tests, with Stories from Googlesheets</a></li>
+<li><a href="#example2">Example 2: An R package on Github, with Stories from Github Issues</a></li>
 </ul>
 </div>
 <div class="section level2">
-<h2 id="example1">Example 1: Automated and Manual Tests, with Stories from
-Googlesheets<a class="anchor" aria-label="anchor" href="#example1"></a>
+<h2 id="example1">Example 1: Automated and Manual Tests, with Stories from Googlesheets<a class="anchor" aria-label="anchor" href="#example1"></a>
 </h2>
-<p>This example shows how to validate software that contains both
-automated <em>and</em> manual tests, as well as how to pull Stories and
-Requirements from Googlesheets.</p>
-<p>The full code (replicated in each section below) is included here for
-ease of reference. See below for details about each of these functions
-and their inputs.</p>
+<p>This example shows how to validate software that contains both automated <em>and</em> manual tests, as well as how to pull Stories and Requirements from Googlesheets.</p>
+<p>The full code (replicated in each section below) is included here for ease of reference. See below for details about each of these functions and their inputs.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="co"># run automated test suite</span>
@@ -175,155 +155,89 @@ and their inputs.</p>
 <div class="section level3">
 <h3 id="test-outputs">Test outputs<a class="anchor" aria-label="anchor" href="#test-outputs"></a>
 </h3>
-<p>This section shows how to include the results of both automated and
-manual tests in your validation documents. It is never required (by the
-package) to use <em>both</em> of these. You can use either one or both
-as is appropriate for the software you’re validating.</p>
+<p>This section shows how to include the results of both automated and manual tests in your validation documents. It is never required (by the package) to use <em>both</em> of these. You can use either one or both as is appropriate for the software you’re validating.</p>
 <div class="section level4">
 <h4 id="automated-test-outputs">Automated test outputs<a class="anchor" aria-label="anchor" href="#automated-test-outputs"></a>
 </h4>
 <p>The format required for automated test outputs is described in <a href="https://metrumresearchgroup.github.io/mrgvalidate/reference/input_formats.html" class="external-link">?mrgvalidate::input_formats</a>.</p>
-<p>Note that <code>mrgvalidate</code> can accept test outputs from an
-arbitrary number of test suites for a single set of validation
-documents. If you have more than one relevant test suite, simply repeat
-the steps below for each suite and include the <code>.csv</code> and
-<code>.json</code> files for all of them in the same directory.</p>
+<p>Note that <code>mrgvalidate</code> can accept test outputs from an arbitrary number of test suites for a single set of validation documents. If you have more than one relevant test suite, simply repeat the steps below for each suite and include the <code>.csv</code> and <code>.json</code> files for all of them in the same directory.</p>
 <div class="section level5">
 <h5 id="testthat-outputs">
 <code>testthat</code> outputs<a class="anchor" aria-label="anchor" href="#testthat-outputs"></a>
 </h5>
-<p>Currently, <code>mrgvalprep</code> only has a formatter for R’s
-<code>testthat</code> package (<a href="https://metrumresearchgroup.github.io/mrgvalprep/reference/parse_testthat_list_reporter.html"><code>parse_testthat_list_reporter()</code></a>),
-though we are planning to add more functions to take the output from
-other test frameworks (for example <code>go test --json</code> output)
-and return a tibble that conforms to <a href="https://metrumresearchgroup.github.io/mrgvalidate/reference/input_formats.html" class="external-link">?mrgvalidate::input_formats</a>.</p>
-<p>To create test outputs from an R package using <code>testthat</code>,
-navigate to your package directory and run to following.</p>
+<p>Currently, <code>mrgvalprep</code> only has a formatter for R’s <code>testthat</code> package (<a href="https://metrumresearchgroup.github.io/mrgvalprep/reference/parse_testthat_list_reporter.html"><code>parse_testthat_list_reporter()</code></a>), though we are planning to add more functions to take the output from other test frameworks (for example <code>go test --json</code> output) and return a tibble that conforms to <a href="https://metrumresearchgroup.github.io/mrgvalidate/reference/input_formats.html" class="external-link">?mrgvalidate::input_formats</a>.</p>
+<p>To create test outputs from an R package using <code>testthat</code>, navigate to your package directory and run to following.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/test.html" class="external-link">test</a></span><span class="op">(</span>reporter <span class="op">=</span> <span class="fu">testthat</span><span class="fu">::</span><span class="va"><a href="https://testthat.r-lib.org/reference/ListReporter.html" class="external-link">ListReporter</a></span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="co"># run testthat tests suite</span>
   <span class="fu">mrgvalprep</span><span class="fu">::</span><span class="fu"><a href="../reference/parse_testthat_list_reporter.html">parse_testthat_list_reporter</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>      <span class="co"># parse test results to tibble</span>
   <span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/write_delim.html" class="external-link">write_csv</a></span><span class="op">(</span><span class="st">"auto_tests/test_res.csv"</span><span class="op">)</span>         <span class="co"># write tibble for .csv file</span></code></pre></div>
-<p>This will run your full test suite, format the output appropriately,
-and then write the formatted output to a <code>.csv</code> for <a href="https://metrumresearchgroup.github.io/mrgvalidate/reference/create_validation_docs.html" class="external-link"><code>mrgvalidate::create_validation_docs()</code></a>
-to consume.</p>
+<p>This will run your full test suite, format the output appropriately, and then write the formatted output to a <code>.csv</code> for <a href="https://metrumresearchgroup.github.io/mrgvalidate/reference/create_validation_docs.html" class="external-link"><code>mrgvalidate::create_validation_docs()</code></a> to consume.</p>
 </div>
 <div class="section level5">
 <h5 id="test-ids">Test Id’s<a class="anchor" aria-label="anchor" href="#test-ids"></a>
 </h5>
-<p>For these tests to be mapped to the Stories described below, they
-will need to contain Test Id’s. This is simply a string that uniquely
-identifies each test. These Id’s will look like <code>ABC-XYZ-001</code>
-and contain the following three pieces, separated by a hypen
-(<code>-</code>):</p>
+<p>For these tests to be mapped to the Stories described below, they will need to contain Test Id’s. This is simply a string that uniquely identifies each test. These Id’s will look like <code>ABC-XYZ-001</code> and contain the following three pieces, separated by a hypen (<code>-</code>):</p>
 <ul>
-<li>Any number of capital letters (typically identifies the test
-suite)</li>
-<li>Any number of capital letters (typically identifies some category,
-for example <code>CFG</code> for “configuration”)</li>
+<li>Any number of capital letters (typically identifies the test suite)</li>
+<li>Any number of capital letters (typically identifies some category, for example <code>CFG</code> for “configuration”)</li>
 <li>Any number of integers, optionally zero-padded for readability</li>
 </ul>
-<p>These <em>must</em> be included, with square brackets, in the Test
-Name of any test that will be mapped to a Story. For example:</p>
+<p>These <em>must</em> be included, with square brackets, in the Test Name of any test that will be mapped to a Story. For example:</p>
 <pre><code><span class="fu">test_that</span><span class="op">(</span><span class="st">"feature X works correctly [MRGV-CFG-001]"</span>, <span class="op">{</span>
   <span class="co"># test code</span>
 <span class="op">}</span><span class="op">)</span></code></pre>
-<p>In this case, <code>MRGV-CFG-001</code> will automatically be parsed
-out by <a href="https://metrumresearchgroup.github.io/mrgvalprep/reference/parse_testthat_list_reporter.html"><code>parse_testthat_list_reporter()</code></a>
-and will be matched against any Stories or Requirements containing
-<code>MRGV-CFG-001</code> in the <code>TestIds</code> column described
-below.</p>
+<p>In this case, <code>MRGV-CFG-001</code> will automatically be parsed out by <a href="https://metrumresearchgroup.github.io/mrgvalprep/reference/parse_testthat_list_reporter.html"><code>parse_testthat_list_reporter()</code></a> and will be matched against any Stories or Requirements containing <code>MRGV-CFG-001</code> in the <code>TestIds</code> column described below.</p>
 </div>
 <div class="section level5">
 <h5 id="system-information">System information<a class="anchor" aria-label="anchor" href="#system-information"></a>
 </h5>
-<p>It is typically necessary to capture some system information about
-where and when the tests were run. This is passed to <a href="https://metrumresearchgroup.github.io/mrgvalidate/reference/create_validation_docs.html" class="external-link"><code>mrgvalidate::create_validation_docs()</code></a>
-via a <code>.json</code> file that can be easily created with <a href="https://metrumresearchgroup.github.io/mrgvalprep/reference/get_sys_info.html"><code>get_sys_info()</code></a>.</p>
+<p>It is typically necessary to capture some system information about where and when the tests were run. This is passed to <a href="https://metrumresearchgroup.github.io/mrgvalidate/reference/create_validation_docs.html" class="external-link"><code>mrgvalidate::create_validation_docs()</code></a> via a <code>.json</code> file that can be easily created with <a href="https://metrumresearchgroup.github.io/mrgvalprep/reference/get_sys_info.html"><code>get_sys_info()</code></a>.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/get_sys_info.html">get_sys_info</a></span><span class="op">(</span>
   out_path <span class="op">=</span> <span class="st">"auto_tests/test_res.json"</span>,
   env_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"METWORX_AMI_VERSION"</span><span class="op">)</span>,    <span class="co"># optionally pull with Sys.getenv() and include in .json</span>
   sys_info <span class="op">=</span> <span class="cn">TRUE</span>                         <span class="co"># optionally write results of Sys.info() to .json</span>
 <span class="op">)</span></code></pre></div>
-<p><em>Note:</em> <a href="https://metrumresearchgroup.github.io/mrgvalidate/reference/create_validation_docs.html" class="external-link"><code>mrgvalidate::create_validation_docs()</code></a>
-will expect to find a <code>.csv</code> and <code>.json</code> with the
-same basename for each test suite, so be sure that what you pass to
-<code>create_sys_info(out_path)</code> matches the <code>.csv</code> of
-test ouputs that you wrote in the previous section.</p>
+<p><em>Note:</em> <a href="https://metrumresearchgroup.github.io/mrgvalidate/reference/create_validation_docs.html" class="external-link"><code>mrgvalidate::create_validation_docs()</code></a> will expect to find a <code>.csv</code> and <code>.json</code> with the same basename for each test suite, so be sure that what you pass to <code>create_sys_info(out_path)</code> matches the <code>.csv</code> of test ouputs that you wrote in the previous section.</p>
 </div>
 </div>
 <div class="section level4">
 <h4 id="manual-test-results">Manual test results<a class="anchor" aria-label="anchor" href="#manual-test-results"></a>
 </h4>
-<p>Sometimes manual tests are required to fully validate your software.
-<a href="https://metrumresearchgroup.github.io/mrgvalidate/reference/create_validation_docs.html" class="external-link"><code>mrgvalidate::create_validation_docs()</code></a>
-allows you to pass a directory containing <code>.md</code> files which
-contain the “results” of these manual tests (typically things like
-screenshots and accompanying narratives). The required format for this
-directory, as well as the <code>.md</code> and image files in it, is
-described in <a href="https://metrumresearchgroup.github.io/mrgvalidate/reference/input_formats.html#arguments" class="external-link"><code>?mrgvalidate::input_formats</code></a>.</p>
+<p>Sometimes manual tests are required to fully validate your software. <a href="https://metrumresearchgroup.github.io/mrgvalidate/reference/create_validation_docs.html" class="external-link"><code>mrgvalidate::create_validation_docs()</code></a> allows you to pass a directory containing <code>.md</code> files which contain the “results” of these manual tests (typically things like screenshots and accompanying narratives). The required format for this directory, as well as the <code>.md</code> and image files in it, is described in <a href="https://metrumresearchgroup.github.io/mrgvalidate/reference/input_formats.html#arguments" class="external-link"><code>?mrgvalidate::input_formats</code></a>.</p>
 </div>
 </div>
 <div class="section level3">
 <h3 id="stories-from-googlesheets">Stories from Googlesheets<a class="anchor" aria-label="anchor" href="#stories-from-googlesheets"></a>
 </h3>
-<p>The validation process typically requires defining “user stories”
-that capture the promised functionality of the software, and mapping
-them to tests that verify this functionality. The easist way to do this
-with <code>mrgvalidate</code> is by keeping your Stories (and optionally
-accompanying Technical Requirements) in a Googlesheet that can be read
-in directly using <a href="https://metrumresearchgroup.github.io/mrgvalprep/reference/read_spec_gsheets.html"><code>read_spec_gsheets()</code></a>.</p>
-<p>The format of these Googlesheets is described in <a href="https://metrumresearchgroup.github.io/mrgvalprep/reference/read_spec_gsheets.html#details">the
-<code>read_spec_gsheets()</code> docs</a>. At a high-level, the Stories
-sheet must have the following columns:</p>
+<p>The validation process typically requires defining “user stories” that capture the promised functionality of the software, and mapping them to tests that verify this functionality. The easist way to do this with <code>mrgvalidate</code> is by keeping your Stories (and optionally accompanying Technical Requirements) in a Googlesheet that can be read in directly using <a href="https://metrumresearchgroup.github.io/mrgvalprep/reference/read_spec_gsheets.html"><code>read_spec_gsheets()</code></a>.</p>
+<p>The format of these Googlesheets is described in <a href="https://metrumresearchgroup.github.io/mrgvalprep/reference/read_spec_gsheets.html#details">the <code>read_spec_gsheets()</code> docs</a>. At a high-level, the Stories sheet must have the following columns:</p>
 <ul>
 <li>
 <code>StoryId</code> – Unique identifier for the Story.</li>
 <li>
-<code>StoryName</code> – Short human-readable name for the Story, to
-be printed in resulting docs.</li>
+<code>StoryName</code> – Short human-readable name for the Story, to be printed in resulting docs.</li>
 <li>
-<code>StoryDescription</code> – Short description of the Story,
-typically beginning with something like “As a user…”.</li>
+<code>StoryDescription</code> – Short description of the Story, typically beginning with something like “As a user…”.</li>
 <li>
-<code>ProductRisk</code> – Label that conveys the level of product
-risk associated with this Story, typically “Low”, “Medium”, or
-“High”.</li>
-<li>Either <code>TestIds</code> or <code>RequirementIds</code> – Comma
-separated list of Id’s for mapping Story to any associated tests or
-Technical Requirements.</li>
+<code>ProductRisk</code> – Label that conveys the level of product risk associated with this Story, typically “Low”, “Medium”, or “High”.</li>
+<li>Either <code>TestIds</code> or <code>RequirementIds</code> – Comma separated list of Id’s for mapping Story to any associated tests or Technical Requirements.</li>
 </ul>
 <div class="section level5">
 <h5 id="requirements">Requirements<a class="anchor" aria-label="anchor" href="#requirements"></a>
 </h5>
-<p>While Stories can be mapped directly to tests, it is often useful to
-instead map them to associated Technical Requirements, which are then
-mapped to specific tests. If you want to do this, you will need to
-include the <code>RequirementIds</code> column (and <em>not</em> the
-<code>TestIds</code> column) in your Stories Googlesheet, and then pass
-a second Googlesheet of Requirements with the following columns:</p>
+<p>While Stories can be mapped directly to tests, it is often useful to instead map them to associated Technical Requirements, which are then mapped to specific tests. If you want to do this, you will need to include the <code>RequirementIds</code> column (and <em>not</em> the <code>TestIds</code> column) in your Stories Googlesheet, and then pass a second Googlesheet of Requirements with the following columns:</p>
 <ul>
 <li>
-<code>RequirementId</code> – Unique identifier for the Requirement.
-These must match what is included in the <code>RequirementIds</code>
-column of the Stories Googlesheet.</li>
+<code>RequirementId</code> – Unique identifier for the Requirement. These must match what is included in the <code>RequirementIds</code> column of the Stories Googlesheet.</li>
 <li>
-<code>RequirementDescription</code> – Short description of the
-Requirement, to be printed in resulting docs.</li>
+<code>RequirementDescription</code> – Short description of the Requirement, to be printed in resulting docs.</li>
 <li>
-<code>TestIds</code> – Comma separated list of Test Id’s for mapping
-Requirement to any associated tests.</li>
+<code>TestIds</code> – Comma separated list of Test Id’s for mapping Requirement to any associated tests.</li>
 </ul>
-<p>These Requirements will be included, bullet-pointed, under the
-relevant Stories in the resulting
-<code>requirements-specification.docx</code> document.</p>
-<p><em>Note:</em> <strong>If you do not want to use
-Requirements</strong> in your validation, simply pass a Stories sheet
-containing a <code>TestIds</code> column and <em>not</em> a
-<code>RequirementIds</code> column.</p>
-<p>Calling <a href="https://metrumresearchgroup.github.io/mrgvalprep/reference/read_spec_gsheets.html"><code>read_spec_gsheets()</code></a>
-will pull the data in your sheet(s) into a tibble that can be passed
-directly to <a href="https://metrumresearchgroup.github.io/mrgvalidate/reference/create_validation_docs.html" class="external-link"><code>mrgvalidate::create_validation_docs()</code></a>.</p>
+<p>These Requirements will be included, bullet-pointed, under the relevant Stories in the resulting <code>requirements-specification.docx</code> document.</p>
+<p><em>Note:</em> <strong>If you do not want to use Requirements</strong> in your validation, simply pass a Stories sheet containing a <code>TestIds</code> column and <em>not</em> a <code>RequirementIds</code> column.</p>
+<p>Calling <a href="https://metrumresearchgroup.github.io/mrgvalprep/reference/read_spec_gsheets.html"><code>read_spec_gsheets()</code></a> will pull the data in your sheet(s) into a tibble that can be passed directly to <a href="https://metrumresearchgroup.github.io/mrgvalidate/reference/create_validation_docs.html" class="external-link"><code>mrgvalidate::create_validation_docs()</code></a>.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">stories_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_spec_gsheets.html">read_spec_gsheets</a></span><span class="op">(</span>
   ss_stories <span class="op">=</span> <span class="st">"1HgsxL4qfYK-wjB-nloMilQiuBSLV6FZq_h2ToB6QNlI"</span>, <span class="co"># the sheet with Stories</span>
@@ -334,14 +248,8 @@ directly to <a href="https://metrumresearchgroup.github.io/mrgvalidate/reference
 <div class="section level3">
 <h3 id="generating-the-docs">Generating the docs<a class="anchor" aria-label="anchor" href="#generating-the-docs"></a>
 </h3>
-<p>Now that you have test outputs and a tibble of Stories, you are ready
-to generate your validation documents. This is done with <a href="https://metrumresearchgroup.github.io/mrgvalidate/reference/create_validation_docs.html" class="external-link"><code>mrgvalidate::create_validation_docs()</code></a>.</p>
-<p>You will have <code>.csv</code> and <code>.json</code> files of
-automated test outputs, from your <a href="https://metrumresearchgroup.github.io/mrgvalprep/reference/validate_tests.html"><code>validate_tests()</code></a>
-call above, in the <code>auto_tests</code> directory, as well as
-<code>.md</code> capturing your manual tests in the
-<code>man_tests</code> directory. Simply pass these paths, along with
-your tibble of Stories, into <a href="https://metrumresearchgroup.github.io/mrgvalidate/reference/create_validation_docs.html" class="external-link"><code>mrgvalidate::create_validation_docs()</code></a>.</p>
+<p>Now that you have test outputs and a tibble of Stories, you are ready to generate your validation documents. This is done with <a href="https://metrumresearchgroup.github.io/mrgvalidate/reference/create_validation_docs.html" class="external-link"><code>mrgvalidate::create_validation_docs()</code></a>.</p>
+<p>You will have <code>.csv</code> and <code>.json</code> files of automated test outputs, from your <a href="https://metrumresearchgroup.github.io/mrgvalprep/reference/validate_tests.html"><code>validate_tests()</code></a> call above, in the <code>auto_tests</code> directory, as well as <code>.md</code> capturing your manual tests in the <code>man_tests</code> directory. Simply pass these paths, along with your tibble of Stories, into <a href="https://metrumresearchgroup.github.io/mrgvalidate/reference/create_validation_docs.html" class="external-link"><code>mrgvalidate::create_validation_docs()</code></a>.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">mrgvalidate</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/mrgvalidate/man/create_validation_docs.html" class="external-link">create_validation_docs</a></span><span class="op">(</span>
   <span class="st">"fake Googlesheets product"</span>,      <span class="co"># name of the product or package you are validating</span>
@@ -351,28 +259,18 @@ your tibble of Stories, into <a href="https://metrumresearchgroup.github.io/mrgv
   man_test_dir <span class="op">=</span> <span class="st">"man_tests"</span>,       <span class="co"># dir containing manual test outputs</span>
   output_dir <span class="op">=</span> <span class="st">"some_dir_for_docs"</span>  <span class="co"># dir to write validation docs into</span>
 <span class="op">)</span></code></pre></div>
-<p>This will write out three <code>.docx</code> files, as well as the
-<code>.md</code> files that are used to render each, into the directory
-passed to <code>output_dir</code>.</p>
+<p>This will write out three <code>.docx</code> files, as well as the <code>.md</code> files that are used to render each, into the directory passed to <code>output_dir</code>.</p>
 <ul>
 <li><code>validation-testing.docx</code></li>
 <li><code>requirements-specification.docx</code></li>
 <li><code>traceability-matrix.docx</code></li>
 </ul>
-<p>If these three documents look correct after human inspection, you’re
-done!</p>
-<p><em>Formatting note:</em> You may want to manually adjust the column
-widths of the tables in these documents for better readability,
-especially so that each “Test Id” column value is on its own line.
-Unfortunately, it is not possible to programmatically specify these
-column widths. However, it is possible to pass <code>.docx</code> “style
-reference templates” via the <a href="https://metrumresearchgroup.github.io/mrgvalidate/reference/create_validation_docs.html#arguments" class="external-link"><code>style_dir</code>
-argument</a> to <a href="https://metrumresearchgroup.github.io/mrgvalidate/reference/create_validation_docs.html" class="external-link"><code>mrgvalidate::create_validation_docs()</code></a>.</p>
+<p>If these three documents look correct after human inspection, you’re done!</p>
+<p><em>Formatting note:</em> You may want to manually adjust the column widths of the tables in these documents for better readability, especially so that each “Test Id” column value is on its own line. Unfortunately, it is not possible to programmatically specify these column widths. However, it is possible to pass <code>.docx</code> “style reference templates” via the <a href="https://metrumresearchgroup.github.io/mrgvalidate/reference/create_validation_docs.html#arguments" class="external-link"><code>style_dir</code> argument</a> to <a href="https://metrumresearchgroup.github.io/mrgvalidate/reference/create_validation_docs.html" class="external-link"><code>mrgvalidate::create_validation_docs()</code></a>.</p>
 </div>
 </div>
 <div class="section level2">
-<h2 id="example2">Example 2: An R package on Github, with Stories from Github
-Issues<a class="anchor" aria-label="anchor" href="#example2"></a>
+<h2 id="example2">Example 2: An R package on Github, with Stories from Github Issues<a class="anchor" aria-label="anchor" href="#example2"></a>
 </h2>
 <p>This example shows how to validate an R package that is:</p>
 <ul>
@@ -383,9 +281,7 @@ Issues<a class="anchor" aria-label="anchor" href="#example2"></a>
 <div class="section level4">
 <h4 id="full-code-for-reference">Full code for reference<a class="anchor" aria-label="anchor" href="#full-code-for-reference"></a>
 </h4>
-<p>The full code (replicated in each section below) is included here for
-ease of reference. See below for details about each of these functions
-and their inputs.</p>
+<p>The full code (replicated in each section below) is included here for ease of reference. See below for details about each of these functions and their inputs.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># run test suite to generate test outputs</span>
 <span class="fu"><a href="../reference/validate_tests.html">validate_tests</a></span><span class="op">(</span>
@@ -415,49 +311,28 @@ and their inputs.</p>
 <div class="section level4">
 <h4 id="initial-setup">Initial setup<a class="anchor" aria-label="anchor" href="#initial-setup"></a>
 </h4>
-<p>Before proceeding, you will need to have <code>ghpm</code> installed
-on your system in order to interact with Github. This is an internal
-Metrum package that handles calls to the Github API. You can try
-<code><a href="https://rdrr.io/r/base/library.html" class="external-link">library(ghpm)</a></code> if you’re not sure if you have it. If you do
-not, install it with:</p>
+<p>Before proceeding, you will need to have <code>ghpm</code> installed on your system in order to interact with Github. This is an internal Metrum package that handles calls to the Github API. You can try <code><a href="https://rdrr.io/r/base/library.html" class="external-link">library(ghpm)</a></code> if you’re not sure if you have it. If you do not, install it with:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"metrumresearchgroup/ghpm"</span><span class="op">)</span></code></pre></div>
-<p>Next, you will need to make sure you have a valid token assigned to
-the relevant environment variable so that <code>ghpm</code> can access
-the Github API. Depending on whether the package you are validating is
-on Github Enterprise or public Github, you will either need to set
-<code>GHE_PAT</code> or <code>GITHUB_PAT</code> respectively. <strong>If
-you do not have a token</strong> please read an article like <a href="https://happygitwithr.com/github-pat.html#github-pat" class="external-link">this</a> for
-instuctions on getting one set up. Then use the following code to set
-the variable (substituting <code>GHE_PAT</code> if appropriate).</p>
+<p>Next, you will need to make sure you have a valid token assigned to the relevant environment variable so that <code>ghpm</code> can access the Github API. Depending on whether the package you are validating is on Github Enterprise or public Github, you will either need to set <code>GHE_PAT</code> or <code>GITHUB_PAT</code> respectively. <strong>If you do not have a token</strong> please read an article like <a href="https://happygitwithr.com/github-pat.html#github-pat" class="external-link">this</a> for instuctions on getting one set up. Then use the following code to set the variable (substituting <code>GHE_PAT</code> if appropriate).</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>GITHUB_PAT<span class="op">=</span><span class="st">"your-token"</span><span class="op">)</span> <span class="co"># "your-token" will be the alphanumeric OAuth token you get from Github</span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="test-outputs-1">Test outputs<a class="anchor" aria-label="anchor" href="#test-outputs-1"></a>
 </h3>
-<p>While you can call <a href="https://metrumresearchgroup.github.io/mrgvalprep/reference/parse_testthat_list_reporter.html"><code>parse_testthat_list_reporter()</code></a>
-directly, as shown in <a href="#example1">Example 1</a>, if you are
-validating an R package on Github it is likely easier to use the <a href="https://metrumresearchgroup.github.io/mrgvalprep/reference/validate_tests.html"><code>validate_tests()</code></a>
-wrapper. This does several things:</p>
+<p>While you can call <a href="https://metrumresearchgroup.github.io/mrgvalprep/reference/parse_testthat_list_reporter.html"><code>parse_testthat_list_reporter()</code></a> directly, as shown in <a href="#example1">Example 1</a>, if you are validating an R package on Github it is likely easier to use the <a href="https://metrumresearchgroup.github.io/mrgvalprep/reference/validate_tests.html"><code>validate_tests()</code></a> wrapper. This does several things:</p>
 <ul>
-<li>Clones the repo of the package being validated from Github at a
-specified tag</li>
+<li>Clones the repo of the package being validated from Github at a specified tag</li>
 <li>Installs the package in a temp directory</li>
-<li>Runs the package’s test suite with
-<code>devtools::test(reporter = testthat::ListReporter)</code>
+<li>Runs the package’s test suite with <code>devtools::test(reporter = testthat::ListReporter)</code>
 </li>
-<li>Passes that output to <a href="https://metrumresearchgroup.github.io/mrgvalprep/reference/parse_testthat_list_reporter.html"><code>parse_testthat_list_reporter()</code></a>
-and writes the resulting tibble to a <code>.csv</code>
+<li>Passes that output to <a href="https://metrumresearchgroup.github.io/mrgvalprep/reference/parse_testthat_list_reporter.html"><code>parse_testthat_list_reporter()</code></a> and writes the resulting tibble to a <code>.csv</code>
 </li>
-<li>Calls <a href="https://metrumresearchgroup.github.io/mrgvalprep/reference/get_sys_info.html"><code>get_sys_info()</code></a>
-to capture relevant system and user information, writing that to a
-<code>.json</code>
+<li>Calls <a href="https://metrumresearchgroup.github.io/mrgvalprep/reference/get_sys_info.html"><code>get_sys_info()</code></a> to capture relevant system and user information, writing that to a <code>.json</code>
 </li>
 </ul>
-<p>You will then put the resulting <code>.csv</code> and
-<code>.json</code> files into a directory that will be passed to the
-<code>auto_test_dir</code> argument of <a href="https://metrumresearchgroup.github.io/mrgvalidate/reference/create_validation_docs.html" class="external-link"><code>mrgvalidate::create_validation_docs()</code></a>.</p>
+<p>You will then put the resulting <code>.csv</code> and <code>.json</code> files into a directory that will be passed to the <code>auto_test_dir</code> argument of <a href="https://metrumresearchgroup.github.io/mrgvalidate/reference/create_validation_docs.html" class="external-link"><code>mrgvalidate::create_validation_docs()</code></a>.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/validate_tests.html">validate_tests</a></span><span class="op">(</span>
   org <span class="op">=</span> <span class="st">"metrumresearchgroup"</span>,        <span class="co"># Github organization containing repo that will be validated</span>
@@ -466,80 +341,42 @@ to capture relevant system and user information, writing that to a
   out_file <span class="op">=</span> <span class="st">"test_outputs/test_res"</span>, <span class="co"># basename for output .csv and .json files</span>
   set_id_to_name <span class="op">=</span> <span class="cn">TRUE</span>               <span class="co"># pass this only if _not_ using Test Id's (described below)</span>
 <span class="op">)</span></code></pre></div>
-<p>This call will write the <code>testthat</code> output to
-<code>test_res.csv</code> and the system info (including the commit hash
-of the git tag you pass to <code>version</code>) to
-<code>test_res.json</code>, both in the <code>test_outputs</code>
-directory.</p>
+<p>This call will write the <code>testthat</code> output to <code>test_res.csv</code> and the system info (including the commit hash of the git tag you pass to <code>version</code>) to <code>test_res.json</code>, both in the <code>test_outputs</code> directory.</p>
 <div class="section level4">
 <h4 id="identifying-tests-in-code">Identifying tests in code<a class="anchor" aria-label="anchor" href="#identifying-tests-in-code"></a>
 </h4>
-<p>To map tests to Stories, each test must be uniquely identified. The
-preferred method is to include Test Id’s in the Test Name within your
-code, as described in <a href="#example1">Example 1</a> above. However,
-it is also possible to match on the full Test Name (the full string
-passed as the first argument to <code>test_that()</code>). For
-example:</p>
+<p>To map tests to Stories, each test must be uniquely identified. The preferred method is to include Test Id’s in the Test Name within your code, as described in <a href="#example1">Example 1</a> above. However, it is also possible to match on the full Test Name (the full string passed as the first argument to <code>test_that()</code>). For example:</p>
 <pre><code><span class="fu">test_that</span><span class="op">(</span><span class="st">"feature X works correctly"</span>, <span class="op">{</span>
   <span class="co"># test code</span>
 <span class="op">}</span><span class="op">)</span></code></pre>
-<p>In this case, <code>feature X works correctly</code> is the Test Name
-which will be passed through as a Test Id, if you pass
-<code>validate_tests(..., set_id_to_name = TRUE)</code> as shown above.
-Your Stories can then reference this full string, as discussed in the
-next section. Note that, for mapping tests to Stories, <strong>you must
-either use Test Id’s <em>or</em> the full Test Names. It is <em>not</em>
-possible to mix between them</strong> within a test suite.</p>
+<p>In this case, <code>feature X works correctly</code> is the Test Name which will be passed through as a Test Id, if you pass <code>validate_tests(..., set_id_to_name = TRUE)</code> as shown above. Your Stories can then reference this full string, as discussed in the next section. Note that, for mapping tests to Stories, <strong>you must either use Test Id’s <em>or</em> the full Test Names. It is <em>not</em> possible to mix between them</strong> within a test suite.</p>
 <p>A few notes of caution on using full Test Names:</p>
 <ul>
-<li>All tests must have a unique name specified as the first arguement
-to the <code>test_that()</code> function (as in, no two tests have the
-same name).</li>
-<li>If using the <code>describe()</code>/<code>it()</code> syntax in
-<code>testthat</code>, the Test Name will be the concatenation of the
-string passed to the outer <code>describe()</code> and the inner
-<code>it()</code>.</li>
-<li>If you are using Test Names in your issues then, if you change the
-names of your tests in future versions, you will have to go back and
-change the names in the issues as well (as described in the “Issue
-format” section below). This is obviously toilsome and is one of the
-primary motivations for using Test Id’s instead.</li>
+<li>All tests must have a unique name specified as the first arguement to the <code>test_that()</code> function (as in, no two tests have the same name).</li>
+<li>If using the <code>describe()</code>/<code>it()</code> syntax in <code>testthat</code>, the Test Name will be the concatenation of the string passed to the outer <code>describe()</code> and the inner <code>it()</code>.</li>
+<li>If you are using Test Names in your issues then, if you change the names of your tests in future versions, you will have to go back and change the names in the issues as well (as described in the “Issue format” section below). This is obviously toilsome and is one of the primary motivations for using Test Id’s instead.</li>
 </ul>
-<p>To reiterate, for these reasons and others, <strong>Test Id’s is the
-preferred method for mapping test outputs to Stories.</strong></p>
+<p>To reiterate, for these reasons and others, <strong>Test Id’s is the preferred method for mapping test outputs to Stories.</strong></p>
 </div>
 </div>
 <div class="section level3">
 <h3 id="stories-from-github-issues">Stories from Github issues<a class="anchor" aria-label="anchor" href="#stories-from-github-issues"></a>
 </h3>
-<p>You can define your Stories in Github issues, attached to a
-milestone, and <code>mrgvalprep</code> will pull them into a tibble that
-can be passed to <code>mrgvalidate</code>. However, doing this relies on
-the input data being structured in a predictable way:</p>
+<p>You can define your Stories in Github issues, attached to a milestone, and <code>mrgvalprep</code> will pull them into a tibble that can be passed to <code>mrgvalidate</code>. However, doing this relies on the input data being structured in a predictable way:</p>
 <div class="section level4">
 <h4 id="milestone">Milestone<a class="anchor" aria-label="anchor" href="#milestone"></a>
 </h4>
-<p>All issues relevant to the release you are validating <em>must</em>
-be associated with the same milestone. This may be named the same as the
-tag for the release commit, but it does not need to be.</p>
-<p>Note that this works well for validating a <em>change set</em>, but
-makes it difficult to validate the full functionality of the package
-(because <em>all</em> functionality would need to be represented in an
-issue on this milestone). If you need to validate the full functionality
-in single set of docs, consider using the Googlesheets method, shown in
-<a href="#example1">Example 1</a>.</p>
+<p>All issues relevant to the release you are validating <em>must</em> be associated with the same milestone. This may be named the same as the tag for the release commit, but it does not need to be.</p>
+<p>Note that this works well for validating a <em>change set</em>, but makes it difficult to validate the full functionality of the package (because <em>all</em> functionality would need to be represented in an issue on this milestone). If you need to validate the full functionality in single set of docs, consider using the Googlesheets method, shown in <a href="#example1">Example 1</a>.</p>
 </div>
 <div class="section level4">
 <h4 id="issue-format">Issue format<a class="anchor" aria-label="anchor" href="#issue-format"></a>
 </h4>
-<p>The issue parser for creating validation documents requires a very
-specific format for <em>all</em> issues that are being validated
-(i.e. associated with the milestone discussed above).</p>
+<p>The issue parser for creating validation documents requires a very specific format for <em>all</em> issues that are being validated (i.e. associated with the milestone discussed above).</p>
 <ul>
 <li>Summary section
 <ul>
-<li>There must be a top-level heading entitled
-<code># Summary</code>
+<li>There must be a top-level heading entitled <code># Summary</code>
 </li>
 <li>This should contain a “user story” describing the functionality</li>
 </ul>
@@ -548,50 +385,31 @@ specific format for <em>all</em> issues that are being validated
 <ul>
 <li>There must be a top-level heading entitled <code># Tests</code>
 </li>
-<li>This should contain a bulleted list of all the tests that are
-relevant to this functionality. This list can take two forms:
+<li>This should contain a bulleted list of all the tests that are relevant to this functionality. This list can take two forms:
 <ul>
 <li>
-<strong>Test Id’s</strong> – as described in <a href="#example1">Example 1</a>, you can list only the Test Id’s (like
-<code>XXX-XXX-123</code>) here, as long as those Test Id’s are contained
-in the <code>.csv</code> file created by <a href="https://metrumresearchgroup.github.io/mrgvalprep/reference/validate_tests.html"><code>validate_tests()</code></a>.
-See <a href="#example1">Example 1</a> above for how to included Test
-Id’s in your test suite code.</li>
+<strong>Test Id’s</strong> – as described in <a href="#example1">Example 1</a>, you can list only the Test Id’s (like <code>XXX-XXX-123</code>) here, as long as those Test Id’s are contained in the <code>.csv</code> file created by <a href="https://metrumresearchgroup.github.io/mrgvalprep/reference/validate_tests.html"><code>validate_tests()</code></a>. See <a href="#example1">Example 1</a> above for how to included Test Id’s in your test suite code.</li>
 <li>
-<strong>Test Names</strong> – alternatively, you can pass the full
-text of the Test Name (i.e. the string passed as the first arguement to
-the <code>test_that()</code> function in your test code). As mentioned
-above, this method is <em>not</em> recommended because it relies on
-exact full string matching and is therefore more brittle than using Test
-Id’s. If you use this method, <strong>you will need to pass
-<code>validate_tests(..., set_id_to_name = TRUE)</code></strong> as
-shown above.</li>
+<strong>Test Names</strong> – alternatively, you can pass the full text of the Test Name (i.e. the string passed as the first arguement to the <code>test_that()</code> function in your test code). As mentioned above, this method is <em>not</em> recommended because it relies on exact full string matching and is therefore more brittle than using Test Id’s. If you use this method, <strong>you will need to pass <code>validate_tests(..., set_id_to_name = TRUE)</code></strong> as shown above.</li>
 </ul>
 </li>
-<li>Note that <strong>if an issue has no tests</strong> associated with
-it, you <em>still</em> need a top-level heading entitled
-<code># Tests</code> but it should contain only some brief text about
-why tests are not necessary (with <em>no</em> leading bullets).</li>
+<li>Note that <strong>if an issue has no tests</strong> associated with it, you <em>still</em> need a top-level heading entitled <code># Tests</code> but it should contain only some brief text about why tests are not necessary (with <em>no</em> leading bullets).</li>
 </ul>
 </li>
 <li>Risk
 <ul>
-<li>All issues must have a label that conveys the level of product risk
-associated with this functionality.</li>
+<li>All issues must have a label that conveys the level of product risk associated with this functionality.</li>
 <li>Label must be formatted like <code>risk: ____</code>
 </li>
 </ul>
 </li>
 </ul>
-<p>There should be no other top-level headings. Examples of correctly
-formatted issues can be seen in the <a href="https://github.com/metrumresearchgroup/mrgvalidatetestreference/issues" class="external-link">test
-reference repo</a> used by the <code>mrgvalprep</code> test suite.</p>
+<p>There should be no other top-level headings. Examples of correctly formatted issues can be seen in the <a href="https://github.com/metrumresearchgroup/mrgvalidatetestreference/issues" class="external-link">test reference repo</a> used by the <code>mrgvalprep</code> test suite.</p>
 </div>
 <div class="section level4">
 <h4 id="pulling-the-issues">Pulling the issues<a class="anchor" aria-label="anchor" href="#pulling-the-issues"></a>
 </h4>
-<p>Once you have your issues formatted as described in the previous
-section, you can pull them into a tibble with <a href="https://metrumresearchgroup.github.io/mrgvalprep/reference/parse_github_issues.html"><code>parse_github_issues()</code></a>.</p>
+<p>Once you have your issues formatted as described in the previous section, you can pull them into a tibble with <a href="https://metrumresearchgroup.github.io/mrgvalprep/reference/parse_github_issues.html"><code>parse_github_issues()</code></a>.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">stories_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/parse_github_issues.html">parse_github_issues</a></span><span class="op">(</span>
   org <span class="op">=</span> <span class="st">"metrumresearchgroup"</span>,        <span class="co"># Github organization containing repo that will be validated</span>
@@ -603,12 +421,8 @@ section, you can pull them into a tibble with <a href="https://metrumresearchgro
 <div class="section level3">
 <h3 id="generating-the-docs-1">Generating the docs<a class="anchor" aria-label="anchor" href="#generating-the-docs-1"></a>
 </h3>
-<p>Now that you have test outputs and a tibble of Stories, you are ready
-to generate your validation documents. This is done with <a href="https://metrumresearchgroup.github.io/mrgvalidate/reference/create_validation_docs.html" class="external-link"><code>mrgvalidate::create_validation_docs()</code></a>.</p>
-<p>You will have <code>.csv</code> and <code>.json</code> files of test
-output, from your <a href="https://metrumresearchgroup.github.io/mrgvalprep/reference/validate_tests.html"><code>validate_tests()</code></a>
-call above, in the <code>test_outputs</code> directory. Simply pass the
-path to that directory, along with your tibble of Stories, into <a href="https://metrumresearchgroup.github.io/mrgvalidate/reference/create_validation_docs.html" class="external-link"><code>mrgvalidate::create_validation_docs()</code></a>.</p>
+<p>Now that you have test outputs and a tibble of Stories, you are ready to generate your validation documents. This is done with <a href="https://metrumresearchgroup.github.io/mrgvalidate/reference/create_validation_docs.html" class="external-link"><code>mrgvalidate::create_validation_docs()</code></a>.</p>
+<p>You will have <code>.csv</code> and <code>.json</code> files of test output, from your <a href="https://metrumresearchgroup.github.io/mrgvalprep/reference/validate_tests.html"><code>validate_tests()</code></a> call above, in the <code>test_outputs</code> directory. Simply pass the path to that directory, along with your tibble of Stories, into <a href="https://metrumresearchgroup.github.io/mrgvalidate/reference/create_validation_docs.html" class="external-link"><code>mrgvalidate::create_validation_docs()</code></a>.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">mrgvalidate</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/mrgvalidate/man/create_validation_docs.html" class="external-link">create_validation_docs</a></span><span class="op">(</span>
   <span class="st">"mrgvalidatetestreference"</span>,       <span class="co"># name of the product or package you are validating</span>
@@ -617,23 +431,14 @@ path to that directory, along with your tibble of Stories, into <a href="https:/
   auto_test_dir <span class="op">=</span> <span class="st">"test_outputs"</span>,   <span class="co"># dir containing test output .csv and .json files</span>
   output_dir <span class="op">=</span> <span class="st">"some_dir_for_docs"</span>  <span class="co"># dir to write validation docs into</span>
 <span class="op">)</span></code></pre></div>
-<p>This will write out three <code>.docx</code> files, as well as the
-<code>.md</code> files that are used to render each, into the directory
-passed to <code>output_dir</code>.</p>
+<p>This will write out three <code>.docx</code> files, as well as the <code>.md</code> files that are used to render each, into the directory passed to <code>output_dir</code>.</p>
 <ul>
 <li><code>validation-testing.docx</code></li>
 <li><code>requirements-specification.docx</code></li>
 <li><code>traceability-matrix.docx</code></li>
 </ul>
-<p>If these three documents look correct after human inspection, you’re
-done!</p>
-<p><em>Formatting note:</em> You may want to manually adjust the column
-widths of the tables in these documents for better readability,
-especially so that each “Test Id” column value is on its own line.
-Unfortunately, it is not possible to programmatically specify these
-column widths. However, it is possible to pass <code>.docx</code> “style
-reference templates” via the <a href="https://metrumresearchgroup.github.io/mrgvalidate/reference/create_validation_docs.html#arguments" class="external-link"><code>style_dir</code>
-argument</a> to <a href="https://metrumresearchgroup.github.io/mrgvalidate/reference/create_validation_docs.html" class="external-link"><code>mrgvalidate::create_validation_docs()</code></a>.</p>
+<p>If these three documents look correct after human inspection, you’re done!</p>
+<p><em>Formatting note:</em> You may want to manually adjust the column widths of the tables in these documents for better readability, especially so that each “Test Id” column value is on its own line. Unfortunately, it is not possible to programmatically specify these column widths. However, it is possible to pass <code>.docx</code> “style reference templates” via the <a href="https://metrumresearchgroup.github.io/mrgvalidate/reference/create_validation_docs.html#arguments" class="external-link"><code>style_dir</code> argument</a> to <a href="https://metrumresearchgroup.github.io/mrgvalidate/reference/create_validation_docs.html" class="external-link"><code>mrgvalidate::create_validation_docs()</code></a>.</p>
 </div>
 </div>
   </div>
@@ -650,14 +455,12 @@ argument</a> to <a href="https://metrumresearchgroup.github.io/mrgvalidate/refer
 
       <footer><div class="copyright">
   <p></p>
-<p>Developed by Devin Pastoor, Seth Green, Kyle Meyer, Kyle T Baron,
-Sean Wilson.</p>
+<p>Developed by Devin Pastoor, Seth Green, Kyle Meyer, Kyle T Baron, Sean Wilson.</p>
 </div>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer>

@@ -19,7 +19,7 @@ mrgvalidate::create_validation_docs()."><!-- mathjax --><script src="https://cdn
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">mrgvalprep</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.5</span>
       </span>
     </div>
 
@@ -28,7 +28,7 @@ mrgvalidate::create_validation_docs()."><!-- mathjax --><script src="https://cdn
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -88,27 +88,11 @@ and requirements from.</p></dd>
 
 
 <p>If you provide a value for both <code>stories</code> and <code>requirements</code>, the <code>stories</code>
-argument should be one or more YAML files with the following structure:</p><div class="sourceCode"><pre><code>STORY-ID-001:
-  name: Story name
-  description: &gt;
-    Longer story description
-  requirements:
-  - REQ-ID-001
-  - REQ-ID-002
-  ProductRisk: risk
-STORY-ID-002:
-[...]
-</code></pre></div>
-
+argument should be one or more YAML files with the following structure:</p>
+<p></p><div class="sourceCode"><pre><code></code></pre><p></p></div>
 <p>The <code>requirements</code> argument should be a set of YAML files that have entries
-that link those requirements to tests:</p><div class="sourceCode"><pre><code>REQ-ID-001:
-  description: &gt;
-    Description
-  tests:
-  - TEST-ID-001
-  - TEST-ID-001
-</code></pre></div>
-
+that link those requirements to tests:</p>
+<p></p><div class="sourceCode"><pre><code></code></pre><p></p></div>
 <p>The information above is used to construct a data frame with the following
 columns:</p><ul><li><p><code>StoryId</code> (character scalar)</p></li>
 <li><p><code>StoryName</code> (character scalar)</p></li>
@@ -124,18 +108,8 @@ columns:</p><ul><li><p><code>StoryId</code> (character scalar)</p></li>
 
 
 <p>If you provide only a <code>stories</code> argument, the YAML entries should specify a
-list of tests rather than a set of requirements:</p><div class="sourceCode"><pre><code>STORY-ID-001:
-  name: Story name
-  description: &gt;
-    Longer story description
-  tests:
-  - TEST-ID-001
-  - TEST-ID-002
-  ProductRisk: risk
-STORY-ID-002:
-[...]
-</code></pre></div>
-
+list of tests rather than a set of requirements:</p>
+<p></p><div class="sourceCode"><pre><code></code></pre><p></p></div>
 <p>Those entries are used to construct a data frame with the following columns:</p><ul><li><p><code>StoryId</code> (character scalar)</p></li>
 <li><p><code>StoryName</code> (character scalar)</p></li>
 <li><p><code>StoryDescription</code> (character scalar)</p></li>
@@ -153,13 +127,11 @@ STORY-ID-002:
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Devin Pastoor, Seth Green, Kyle Meyer, Kyle T Baron,
-Sean Wilson.</p>
+  <p></p><p>Developed by Devin Pastoor, Seth Green, Kyle Meyer, Kyle T Baron, Sean Wilson.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer></div>

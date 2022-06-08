@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">mrgvalprep</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.5</span>
       </span>
     </div>
 
@@ -43,7 +43,7 @@
   <a href="reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -80,8 +80,7 @@
 <div class="section level1">
 <div class="page-header"><h1 id="mrgvalprep">mrgvalprep<a class="anchor" aria-label="anchor" href="#mrgvalprep"></a>
 </h1></div>
-<p>R package containing helpers for formatting and preprocessing inputs
-to <a href="https://github.com/metrumresearchgroup/mrgvalidate" class="external-link">mrgvalidate</a>.</p>
+<p>R package containing helpers for formatting and preprocessing inputs to <a href="https://github.com/metrumresearchgroup/mrgvalidate" class="external-link">mrgvalidate</a>.</p>
 <div class="section level2">
 <h2 id="inputs">Inputs<a class="anchor" aria-label="anchor" href="#inputs"></a>
 </h2>
@@ -108,36 +107,25 @@ to <a href="https://github.com/metrumresearchgroup/mrgvalidate" class="external-
 <h2 id="more-to-come">More to come…<a class="anchor" aria-label="anchor" href="#more-to-come"></a>
 </h2>
 <ul>
-<li>Intending to expand to outputs from other test framework soon, as
-the need arises</li>
-<li>Probably some connectors to Jira and/or Confluence for pulling in
-Stories and Requirements</li>
+<li>Intending to expand to outputs from other test framework soon, as the need arises</li>
+<li>Probably some connectors to Jira and/or Confluence for pulling in Stories and Requirements</li>
 </ul>
 </div>
 <div class="section level2">
 <h2 id="development">Development<a class="anchor" aria-label="anchor" href="#development"></a>
 </h2>
-<p><code>mrgvalprep</code> uses <a href="https://github.com/metrumresearchgroup/pkgr" class="external-link">pkgr</a> to manage
-development dependencies and <a href="https://rstudio.github.io/renv/" class="external-link">renv</a> to provide isolation. To
-replicate this environment,</p>
+<p><code>mrgvalprep</code> uses <a href="https://github.com/metrumresearchgroup/pkgr" class="external-link">pkgr</a> to manage development dependencies and <a href="https://rstudio.github.io/renv/" class="external-link">renv</a> to provide isolation. To replicate this environment,</p>
 <ol style="list-style-type: decimal">
 <li><p>clone the repo</p></li>
 <li><p>install pkgr</p></li>
 <li>
-<p>open package in an R session and run
-<code>renv::init(bare = TRUE)</code></p>
-<ul>
-<li>install <code>renv</code> &gt; 0.8.3-4 into default
-<code><a href="https://rdrr.io/r/base/libPaths.html" class="external-link">.libPaths()</a></code> if not already installed</li>
-</ul>
+<p>open package in an R session and run <code>renv::init(bare = TRUE)</code></p>
+<ul><li>install <code>renv</code> &gt; 0.8.3-4 into default <code><a href="https://rdrr.io/r/base/libPaths.html" class="external-link">.libPaths()</a></code> if not already installed</li></ul>
 </li>
-<li><p>run <code>pkgr install</code> in terminal within package
-directory</p></li>
+<li><p>run <code>pkgr install</code> in terminal within package directory</p></li>
 <li><p>restart session</p></li>
 </ol>
-<p>Then, launch R with the repo as the working directory (open the
-project in RStudio). renv will activate and find the project
-library.</p>
+<p>Then, launch R with the repo as the working directory (open the project in RStudio). renv will activate and find the project library.</p>
 </div>
 </div>
   </div>
@@ -179,14 +167,12 @@ library.</p>
 
       <footer><div class="copyright">
   <p></p>
-<p>Developed by Devin Pastoor, Seth Green, Kyle Meyer, Kyle T Baron,
-Sean Wilson.</p>
+<p>Developed by Devin Pastoor, Seth Green, Kyle Meyer, Kyle T Baron, Sean Wilson.</p>
 </div>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer>

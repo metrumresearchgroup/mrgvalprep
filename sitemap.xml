@@ -22,6 +22,12 @@
     <loc>https://metrumresearchgroup.github.io/mrgvalprep/news/index.html</loc>
   </url>
   <url>
+    <loc>https://metrumresearchgroup.github.io/mrgvalprep/reference/assign_test_ids.html</loc>
+  </url>
+  <url>
+    <loc>https://metrumresearchgroup.github.io/mrgvalprep/reference/check_uniq_col_vals.html</loc>
+  </url>
+  <url>
     <loc>https://metrumresearchgroup.github.io/mrgvalprep/reference/extract_issue_summary.html</loc>
   </url>
   <url>
@@ -46,7 +52,13 @@
     <loc>https://metrumresearchgroup.github.io/mrgvalprep/reference/merge_requirements_and_stories.html</loc>
   </url>
   <url>
+    <loc>https://metrumresearchgroup.github.io/mrgvalprep/reference/milestone_to_test_id.html</loc>
+  </url>
+  <url>
     <loc>https://metrumresearchgroup.github.io/mrgvalprep/reference/mrgvalprep.html</loc>
+  </url>
+  <url>
+    <loc>https://metrumresearchgroup.github.io/mrgvalprep/reference/overwrite_tests.html</loc>
   </url>
   <url>
     <loc>https://metrumresearchgroup.github.io/mrgvalprep/reference/parse_github_issues.html</loc>
@@ -56,6 +68,9 @@
   </url>
   <url>
     <loc>https://metrumresearchgroup.github.io/mrgvalprep/reference/parse_test_id.html</loc>
+  </url>
+  <url>
+    <loc>https://metrumresearchgroup.github.io/mrgvalprep/reference/parse_tests.html</loc>
   </url>
   <url>
     <loc>https://metrumresearchgroup.github.io/mrgvalprep/reference/parse_testthat_list_reporter.html</loc>
@@ -85,6 +100,12 @@
     <loc>https://metrumresearchgroup.github.io/mrgvalprep/reference/read_test_df.html</loc>
   </url>
   <url>
+    <loc>https://metrumresearchgroup.github.io/mrgvalprep/reference/replace_test_str.html</loc>
+  </url>
+  <url>
+    <loc>https://metrumresearchgroup.github.io/mrgvalprep/reference/requirements_from_tests.html</loc>
+  </url>
+  <url>
     <loc>https://metrumresearchgroup.github.io/mrgvalprep/reference/rm_blank.html</loc>
   </url>
   <url>
@@ -103,21 +124,18 @@
     <loc>https://metrumresearchgroup.github.io/mrgvalprep/reference/setup_package_env.html</loc>
   </url>
   <url>
+    <loc>https://metrumresearchgroup.github.io/mrgvalprep/reference/sort_tests_by_nchar.html</loc>
+  </url>
+  <url>
     <loc>https://metrumresearchgroup.github.io/mrgvalprep/reference/sp_sections.html</loc>
+  </url>
+  <url>
+    <loc>https://metrumresearchgroup.github.io/mrgvalprep/reference/stories_to_yaml.html</loc>
   </url>
   <url>
     <loc>https://metrumresearchgroup.github.io/mrgvalprep/reference/strip_test_id.html</loc>
   </url>
   <url>
     <loc>https://metrumresearchgroup.github.io/mrgvalprep/reference/validate_tests.html</loc>
-  </url>
-  <url>
-    <loc>https://metrumresearchgroup.github.io/mrgvalprep/requirements-specification.html</loc>
-  </url>
-  <url>
-    <loc>https://metrumresearchgroup.github.io/mrgvalprep/traceability-matrix.html</loc>
-  </url>
-  <url>
-    <loc>https://metrumresearchgroup.github.io/mrgvalprep/validation-testing.html</loc>
   </url>
 </urlset>
