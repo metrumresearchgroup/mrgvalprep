@@ -10,7 +10,7 @@ Packages:
 Repos:
   - CRAN: https://cran.rstudio.com
   - ghpm: https://s3.amazonaws.com/mpn.metworx.dev/releases/ghpm/0.5.1
-  - mrgvalidate: https://mpn.metworx.com/snapshots/stable/2022-02-11
+  - mrgvalidate: https://mpn.metworx.com/snapshots/stable/2022-10-20
 
 Lockfile:
   Type: renv
