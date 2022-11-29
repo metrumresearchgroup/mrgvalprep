@@ -115,3 +115,59 @@ git_ls_tree <- function(tree, recurse = FALSE) {
   tibble::as_tibble(fields) %>%
     tidyr::separate("rest", c("mode", "type", "name"), sep = " ")
 }
+
+#' Add files to Git object store
+#'
+#' @param files Files to add to object store. The basenames of these objects
+#'   should be unique.
+#' @return A tibble in the same form returned by `git_ls_tree()`, with the
+#'   basename of each file in the `path` column.
+#' @noRd
+git_hash_files <- function(files) {
+  purrr::map_dfr(files, git_hash_object)
+}
+
+git_hash_object <- function(f) {
+  # Note that git_hash_files() could be rewritten to use --stdin-paths,
+  # triggering one subprocess overall rather than a process for each file. For
+  # this package, it's only going to be two files at a time, so go with the more
+  # readable process-per-file approach.
+  id <- git_string(c("hash-object", "-w", f))
+  assert_valid_git_id(id, f)
+  # Note: A blob can be mode 100644 or 100755, but hard coding it to the
+  # non-executable version works for the purpose of this package.
+  tibble::tibble_row(mode = "100644", type = "blob",
+                     name = id, path = basename(f))
+}
+
+#' Make a Git tree from ls-tree entries
+#'
+#' @param entries A data frame of ls-tree entries in the same format returned by
+#'   `git_ls_tree()`.
+#' @return The ID of the tree.
+#' @noRd
+git_mktree <- function(entries) {
+  lines <- paste(paste(entries$mode, entries$type, entries$name),
+                 entries$path,
+                 sep = "\t")
+  p <- processx::process$new(
+    "git", "mktree",
+    stdin = "|", stdout = "|", stderr = "|")
+  on.exit(p$kill(), add = TRUE)
+
+  write_ret <- NULL
+  while (!identical(write_ret, raw(0))) {
+    write_ret <- p$write_input(lines)
+  }
+  close(p$get_input_connection())
+
+  id <- stringr::str_trim(p$read_all_output())
+
+  status <- p$get_exit_status()
+  if (status != 0) {
+    rlang::abort(paste0("git mktree:\n", p$read_all_error()))
+  }
+
+  assert_valid_git_id(id, "tree")
+  return(id)
+}
