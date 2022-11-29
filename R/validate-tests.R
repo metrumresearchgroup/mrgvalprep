@@ -113,7 +113,6 @@ validate_tests <- function(
 }
 
 #' Clones the specified repo at the specified tag to disk
-#' @importFrom glue glue
 #' @importFrom processx run
 #' @param org Github organization that the repo is under
 #' @param repo The name of the repo for the package you are validating
