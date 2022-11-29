@@ -43,3 +43,22 @@ test_that("assert_valid_git_id() aborts on invalid IDs", {
   expect_error(assert_valid_git_id(case, "something"),
                "Invalid .* something")
 })
+
+test_that("assert_clean_repo() aborts on dirty repo", {
+  local_git_repo()
+
+  assert_clean_repo()
+  cat("", file = "foo")
+  expect_error(assert_clean_repo(), "dirty")
+
+  # Still detects untracked files despite user configuration.
+  processx::run("git", c("config", "status.showUntrackedFiles", "no"))
+  expect_error(assert_clean_repo(), "dirty")
+
+  processx::run("git", c("add", "foo"))
+  processx::run("git", c("commit", "-m", "foo"))
+  assert_clean_repo()
+
+  cat("change", file = "foo")
+  expect_error(assert_clean_repo(), "dirty")
+})

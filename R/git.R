@@ -38,3 +38,12 @@ assert_valid_git_ref <- function(ref) {
           call = rlang::caller_env())
   }
 }
+
+assert_clean_repo <- function() {
+  if (nzchar(git_string(c("status", "--porcelain", "-unormal")))) {
+    repo <- git_string(c("rev-parse", "--show-toplevel"))
+    abort(c(paste("Repository", repo, "is dirty"),
+            "i" = "Commit or discard changes first.") ,
+          call = rlang::caller_env())
+  }
+}
