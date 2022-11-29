@@ -15,6 +15,7 @@ reference:
   - parse_testthat_list_reporter
   - parse_golang_test_json
   - get_sys_info
+  - test_and_write_results
   - validate_tests
 - title: Format stories and requirements
   contents:
