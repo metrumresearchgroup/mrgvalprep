@@ -15,7 +15,8 @@
 #'   is taken from the `USER` environment variable.
 #' @param info A named list with additional information that should be included
 #'   in the JSON output file.
-#' @seealso [parse_testthat_list_reporter()], [get_sys_info()]
+#' @seealso [test_and_push_results()], [parse_testthat_list_reporter()],
+#'   [get_sys_info()]
 #' @export
 test_and_write_results <- function(tests_dir,
                                    results_dir,

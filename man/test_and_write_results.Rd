@@ -28,5 +28,6 @@ To use this function, the tests must be a part of a package and be underneath
 the current directory's Git repository.
 }
 \seealso{
-\code{\link[=parse_testthat_list_reporter]{parse_testthat_list_reporter()}}, \code{\link[=get_sys_info]{get_sys_info()}}
+\code{\link[=test_and_push_results]{test_and_push_results()}}, \code{\link[=parse_testthat_list_reporter]{parse_testthat_list_reporter()}},
+\code{\link[=get_sys_info]{get_sys_info()}}
 }
