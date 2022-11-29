@@ -47,3 +47,27 @@ assert_clean_repo <- function() {
           call = rlang::caller_env())
   }
 }
+
+git_remote_ref_exists <- function(remote, ref) {
+  p <- processx::run(
+    "git", c("ls-remote", "--exit-code", "-q", remote, ref),
+    error_on_status = FALSE)
+  if (p$status == 0) {
+    TRUE
+  } else if (p$status == 2) {
+    FALSE
+  } else {
+    abort(paste0("git error:\n", p$stderr))
+  }
+}
+
+git_fetch_ref <- function(remote, ref) {
+  processx::run("git", c("fetch", "-q", remote, paste0(ref, ":", ref)))
+}
+
+git_create_ref <- function(ref) {
+  empty_tree <- git_string("mktree")
+  commit <- git_string(c("commit-tree", "-m", "initial commit", empty_tree))
+  processx::run("git", c("update-ref", "-m", "initial", ref, commit, ""))
+  return(commit)
+}
