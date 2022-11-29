@@ -22,3 +22,19 @@ git_lines <- function(args, ...) {
   }
   return(lines)
 }
+
+assert_valid_git_id <- function(id, label = NULL) {
+  label <- label %||% deparse(substitute(id))
+  if (!checkmate::test_string(id, pattern = "^[a-f0-9]+$", min.chars = 40)) {
+    abort(glue("Invalid Git object ID ({id}) for {label}"),
+          call = rlang::caller_env())
+  }
+}
+
+assert_valid_git_ref <- function(ref) {
+  if (!checkmate::test_string(ref, pattern = "^refs/[^/]+(:?/[^/]+)+$")) {
+    abort(paste("Expected full Git reference ('refs/{namespace}/...'), got",
+                ref),
+          call = rlang::caller_env())
+  }
+}
