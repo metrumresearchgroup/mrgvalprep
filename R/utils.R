@@ -105,6 +105,6 @@ sp_sections <- function(x) {
 merge_requirements_and_stories <- function(stories, reqs) {
   stories_flat <- stories %>%
     unnest("RequirementIds") %>%
-    rename(RequirementId = .data$RequirementIds)
+    rename(RequirementId = "RequirementIds")
   return(full_join(stories_flat, reqs, by = "RequirementId"))
 }

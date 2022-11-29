@@ -38,7 +38,7 @@ parse_github_issues <- function(org, repo, mile, domain = VALID_DOMAINS, prefix)
       get_risk(org, repo, domain),
       by = "issue"
     ) %>%
-    select(.data$StoryId, .data$StoryName, .data$StoryDescription, .data$ProductRisk, .data$TestIds)
+    select("StoryId", "StoryName", "StoryDescription", "ProductRisk", "TestIds")
 
 }
 
@@ -82,10 +82,10 @@ get_risk <- function(org, repo, domain = VALID_DOMAINS) {
   }
   issue_lab <- ghpm::get_issue_labels(org, repo, ghpm::api_url(hostname = domain))
   issue_lab <- filter(issue_lab, grepl("risk", .data$label, fixed = TRUE))
-  risk <- select(issue_lab, .data$issue, risk = .data$label)
+  risk <- select(issue_lab, "issue", risk = "label")
   risk %>%
     mutate(ProductRisk = sub("risk: ", "", .data$risk, fixed = TRUE)) %>%
-    select(-.data$risk)
+    select(-"risk")
 }
 
 #' @keywords internal
