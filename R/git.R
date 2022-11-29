@@ -71,3 +71,47 @@ git_create_ref <- function(ref) {
   processx::run("git", c("update-ref", "-m", "initial", ref, commit, ""))
   return(commit)
 }
+
+git_resolve_id <- function(obj, type = c("commit", "tree")) {
+  type <- match.arg(type)
+  p <- processx::run(
+      "git",
+      c("rev-parse", "--verify", "-q", paste0(obj, "^{", type, "}")),
+      error_on_status = FALSE)
+
+  id <- NULL
+  if (p$status == 0) {
+    id <- stringr::str_trim(p$stdout)
+    assert_valid_git_id(id, paste0(obj, "'s ", type))
+  } else if (p$status != 1) {
+    abort(paste0("git error:\n", p$stderr))
+  }
+
+  return(id)
+}
+
+#' Return tibble of `git ls-tree` output
+#'
+#' @param tree A string naming a tree or something Git can dereference to one.
+#' @param recurse Recurse into sub-trees.
+#' @return A tibble with a row for each line of `git ls-tree` output.
+#' @noRd
+git_ls_tree <- function(tree, recurse = FALSE) {
+  args  <- c("-c", "core.quotepath=false", "ls-tree")
+  if (isTRUE(recurse)) {
+    args <- c(args, "-r")
+  }
+
+  lines <- git_lines(c(args, tree))
+  if (length(lines) == 0) {
+    return(tibble::tibble(mode = character(0),
+                          type = character(0),
+                          name = character(0),
+                          path = character(0)))
+  }
+
+  fields <- stringr::str_split_fixed(lines, "\t", 2)
+  colnames(fields) <- c("rest", "path")
+  tibble::as_tibble(fields) %>%
+    tidyr::separate("rest", c("mode", "type", "name"), sep = " ")
+}
