@@ -16,7 +16,7 @@ Tibble with columns as described by \code{mrgvalidate::input_formats}.
 \description{
 Convert a set of stories and optionally requirements from YAML files into a
 data frame that is ready to be passed as the \code{specs} argument to
-\code{mrgvalidate::create_validation_docs()}.
+\code{mrgvalidate::create_package_docs()}.
 }
 \details{
 \subsection{Option 1: Stories and requirements}{

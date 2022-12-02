@@ -24,5 +24,5 @@ A tibble formatted according to \code{mrgvalidate::input_formats}
 Parse testthat output
 }
 \seealso{
-\code{mrgvalidate::input_formats}, \code{mrgvalidate::create_validation_docs()}
+\code{mrgvalidate::input_formats}, \code{mrgvalidate::create_package_docs()}
 }

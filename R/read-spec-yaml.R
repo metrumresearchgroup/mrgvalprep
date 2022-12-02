@@ -33,7 +33,7 @@ read_stories_yaml <- function(content, stories_only) {
 #'
 #' Convert a set of stories and optionally requirements from YAML files into a
 #' data frame that is ready to be passed as the `specs` argument to
-#' `mrgvalidate::create_validation_docs()`.
+#' `mrgvalidate::create_package_docs()`.
 #'
 #' @details
 #'

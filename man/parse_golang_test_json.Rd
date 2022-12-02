@@ -38,5 +38,5 @@ in your Go test code.
 }
 }
 \seealso{
-\code{mrgvalidate::input_formats}, \code{mrgvalidate::create_validation_docs()}
+\code{mrgvalidate::input_formats}, \code{mrgvalidate::create_package_docs()}
 }
