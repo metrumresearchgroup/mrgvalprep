@@ -6,7 +6,6 @@
 #' Read in the csv will results from all the tests
 #' @importFrom readr read_csv cols
 #' @importFrom dplyr rename mutate_at
-#' @importFrom rlang .data
 #' @param test_path File path to file containing test results
 #' @keywords internal
 read_test_df <- function(test_path = ALL_TESTS) {
@@ -100,7 +99,6 @@ sp_sections <- function(x) {
 #'   requirement ID.
 #' @importFrom dplyr full_join
 #' @importFrom tidyr unnest
-#' @importFrom rlang .data
 #' @keywords internal
 merge_requirements_and_stories <- function(stories, reqs) {
   stories_flat <- stories %>%

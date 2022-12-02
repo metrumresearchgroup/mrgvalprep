@@ -57,7 +57,6 @@ read_spec_gsheets <- function
 #'   in input Google Sheet.
 #' @return Tibble with the above columns.
 #' @importFrom dplyr rename select mutate
-#' @importFrom rlang .data
 #' @keywords internal
 read_requirements_gsheet <- function
 (
@@ -82,7 +81,6 @@ read_requirements_gsheet <- function
 #'   Names of relevant columns in input Google Sheet.
 #' @return Tibble with the above columns.
 #' @importFrom dplyr rename select mutate
-#' @importFrom rlang .data
 #' @keywords internal
 read_stories_gsheet <- function
 (

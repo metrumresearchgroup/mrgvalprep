@@ -6,7 +6,6 @@
 #' See `mrgvalidate::input_formats` for details.
 #' @importFrom tidyr unnest nest
 #' @importFrom dplyr select mutate left_join
-#' @importFrom rlang .data
 #' @importFrom stringr str_pad
 #' @importFrom checkmate assert_string
 #' @param org Github organization that the repo is under.
@@ -49,7 +48,6 @@ parse_github_issues <- function(org, repo, mile, domain = VALID_DOMAINS, prefix)
 #' used to pull the raw content for issues associated with a given milestone.
 #' @importFrom dplyr filter
 #' @inheritParams parse_github_issues
-#' @importFrom rlang .data
 #' @seealso [parse_github_issues()]
 #' @export
 get_issues <- function(org, repo, mile, domain = VALID_DOMAINS) {
@@ -71,7 +69,6 @@ get_issues <- function(org, repo, mile, domain = VALID_DOMAINS) {
 #' @param repo The name of the repo for the package you are validating
 #' @param domain Domain where repo lives. Either "github.com" or "ghe.metrumrg.com", defaulting to "github.com"
 #' @importFrom dplyr filter select mutate
-#' @importFrom rlang .data
 #' @keywords internal
 get_risk <- function(org, repo, domain = VALID_DOMAINS) {
   check_for_ghpm("get_risk()")

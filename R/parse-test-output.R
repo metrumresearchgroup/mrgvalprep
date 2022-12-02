@@ -13,7 +13,6 @@
 #' @importFrom purrr map_chr map_lgl map_dfr
 #' @importFrom dplyr mutate
 #' @importFrom stringr str_replace fixed
-#' @importFrom rlang .data
 #' @export
 parse_testthat_list_reporter <- function(result, roll_up_ids = FALSE) {
   test_results <- map_dfr(result, function(.r) {
@@ -77,7 +76,6 @@ parse_testthat_list_reporter <- function(result, roll_up_ids = FALSE) {
 #' @importFrom jsonlite fromJSON
 #' @importFrom purrr map_dfr
 #' @importFrom readr read_lines
-#' @importFrom rlang .data
 #' @export
 parse_golang_test_json <- function(test_file, roll_up_ids = TRUE) {
   line_by_line <- read_lines(test_file)
