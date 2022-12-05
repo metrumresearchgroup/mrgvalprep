@@ -57,7 +57,6 @@ read_spec_gsheets <- function
 #'   in input Google Sheet.
 #' @return Tibble with the above columns.
 #' @importFrom dplyr rename select mutate
-#' @importFrom rlang .data
 #' @keywords internal
 read_requirements_gsheet <- function
 (
@@ -71,7 +70,7 @@ read_requirements_gsheet <- function
     rename(RequirementId = !!req_id_col,
            RequirementDescription = !!req_description_col,
            TestIds = !!test_ids_col) %>%
-    select(.data$RequirementId, .data$RequirementDescription, .data$TestIds) %>%
+    select("RequirementId", "RequirementDescription", "TestIds") %>%
     mutate(TestIds = stringr::str_split(.data$TestIds, "[\\s,;]+"))
 }
 
@@ -82,7 +81,6 @@ read_requirements_gsheet <- function
 #'   Names of relevant columns in input Google Sheet.
 #' @return Tibble with the above columns.
 #' @importFrom dplyr rename select mutate
-#' @importFrom rlang .data
 #' @keywords internal
 read_stories_gsheet <- function
 (
@@ -100,8 +98,8 @@ read_stories_gsheet <- function
            StoryDescription = !!story_description_col,
            ProductRisk = !!risk_col,
            RequirementIds = !!req_ids_col) %>%
-    select(.data$StoryId, .data$StoryName, .data$StoryDescription,
-           .data$ProductRisk, .data$RequirementIds) %>%
+    select("StoryId", "StoryName", "StoryDescription",
+           "ProductRisk", "RequirementIds") %>%
     mutate(RequirementIds = stringr::str_split(.data$RequirementIds, "[\\s,;]+"))
 }
 
@@ -123,8 +121,8 @@ read_stories_only_gsheet <- function
            StoryDescription = !!story_description_col,
            ProductRisk = !!risk_col,
            TestIds = !!test_ids_col) %>%
-    select(.data$StoryId, .data$StoryName, .data$StoryDescription,
-           .data$ProductRisk, .data$TestIds) %>%
+    select("StoryId", "StoryName", "StoryDescription",
+           "ProductRisk", "TestIds") %>%
     mutate(TestIds = stringr::str_split(.data$TestIds, "[\\s,;]+"))
 }
 

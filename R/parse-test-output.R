@@ -13,7 +13,6 @@
 #' @importFrom purrr map_chr map_lgl map_dfr
 #' @importFrom dplyr mutate
 #' @importFrom stringr str_replace fixed
-#' @importFrom rlang .data
 #' @export
 parse_testthat_list_reporter <- function(result, roll_up_ids = FALSE) {
   test_results <- map_dfr(result, function(.r) {
@@ -39,7 +38,7 @@ parse_testthat_list_reporter <- function(result, roll_up_ids = FALSE) {
     test_results <- roll_up_test_ids(test_results)
   }
 
-  return(select(test_results, .data$TestName, .data$passed, .data$failed, .data$TestId))
+  return(select(test_results, "TestName", "passed", "failed", "TestId"))
 }
 
 
@@ -77,7 +76,6 @@ parse_testthat_list_reporter <- function(result, roll_up_ids = FALSE) {
 #' @importFrom jsonlite fromJSON
 #' @importFrom purrr map_dfr
 #' @importFrom readr read_lines
-#' @importFrom rlang .data
 #' @export
 parse_golang_test_json <- function(test_file, roll_up_ids = TRUE) {
   line_by_line <- read_lines(test_file)
@@ -87,7 +85,7 @@ parse_golang_test_json <- function(test_file, roll_up_ids = TRUE) {
     filter(!is.na(.data$Test)) %>%
     filter(str_detect(.data$Test, "\\/")) %>% # TODO: I think this throws out only the full test function summaries, but should double check
     filter(.data$Action %in% c("pass", "fail", "skip")) %>%
-    rename(TestName = .data$Test) %>%
+    rename(TestName = "Test") %>%
     mutate(
       TestId = parse_test_id(.data$TestName),
       TestName = strip_test_id(.data$TestName, .data$TestId),
@@ -106,7 +104,7 @@ parse_golang_test_json <- function(test_file, roll_up_ids = TRUE) {
     test_results <- roll_up_test_ids(test_results)
   }
 
-  return(select(test_results, .data$TestName, .data$passed, .data$failed, .data$TestId))
+  return(select(test_results, "TestName", "passed", "failed", "TestId"))
 }
 
 
@@ -184,5 +182,5 @@ roll_up_test_ids <- function(test_df) {
 
   test_df %>%
     bind_rows(no_id_tests) %>%
-    select(.data$TestName, .data$passed, .data$failed, .data$TestId)
+    select("TestName", "passed", "failed", "TestId")
 }

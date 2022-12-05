@@ -43,9 +43,9 @@ stories_to_yaml <- function(
     mutate(TestIds = sapply(.data$TestIds, toString))
   dl <- dd %>%
     rename(
-      name = .data$StoryName,
-      description = .data$StoryDescription,
-      tests = .data$TestIds
+      name = "StoryName",
+      description = "StoryDescription",
+      tests = "TestIds"
     ) %>%
     split(seq(nrow(dd))) %>%
     setNames(dd$StoryId) %>%
