@@ -1,5 +1,5 @@
 ---
-title: "Basic Usage of mrgvalprep and mrgvalidate"
+title: "Legacy Input Formats"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{basic_usage}
