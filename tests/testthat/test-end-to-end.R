@@ -1,6 +1,6 @@
 # Intended as a mini end-to-end test
 
-skip_if_not_installed("mrgvalidate", minimum_version = "1.0.0")
+skip_if_not_installed("mrgvalidate", minimum_version = "2.0.0")
 
 test_that("Googlesheets end-to-end works", {
   skip_if_over_rate_limit_google()
@@ -17,16 +17,17 @@ test_that("Googlesheets end-to-end works", {
 
   # test with pre-generated test outputs
   fake_product <- "fake Googlesheets product"
-  mrgvalidate::create_validation_docs(
+  mrgvalidate::create_metworx_docs(
     fake_product,
     "vFake",
     spec,
+    release_notes_file = system.file("test-inputs", "release_notes_sample.md", package = "mrgvalidate"),
     auto_test_dir = system.file("test-inputs", "validation-results-sample", package = "mrgvalidate"),
     man_test_dir = system.file("test-inputs", "manual-tests-sample", package = "mrgvalidate"),
     output_dir = docs_output_dir
   )
 
-  check_docs(spec, docs_output_dir)
+  expect_equal(length(fs::dir_ls(docs_output_dir, glob = "*.docx")), 7)
 
 })
 
@@ -68,15 +69,17 @@ test_that("Github end-to-end works", {
 
   # build docs
   suppressWarnings( # suppressing warning about `set_id_to_name=T` being legacy functionality
-    mrgvalidate::create_validation_docs(
+    mrgvalidate::create_package_docs(
       "fake Github product",
       "vFake",
+      language = "R",
+      repo_url = REPO,
       spec,
+      release_notes_file = system.file("test-inputs", "release_notes_sample.md", package = "mrgvalidate"),
       auto_test_dir = test_output_dir,
       output_dir = docs_output_dir
     )
   )
 
-
-  check_docs(spec, docs_output_dir, set_id_to_name = TRUE)
+  expect_equal(length(fs::dir_ls(docs_output_dir, glob = "*.docx")), 7)
 })

@@ -113,7 +113,7 @@ withr::with_options(
       dd <- milestone_to_test_id(stories_df = stories_df, tests = test_ids, return_missing_ids = TRUE)
 
       expect_true(all(c("merged", "missing_milestones", "missing_ids") %in% names(dd)))
-      expect_true(nrow(dd$missing_ids) == 25)
+      expect_true(nrow(dd$missing_ids) == 23)
 
     })
 
