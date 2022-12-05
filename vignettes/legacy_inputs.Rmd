@@ -2,7 +2,7 @@
 title: "Legacy Input Formats"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{basic_usage}
+  %\VignetteIndexEntry{legacy_inputs}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
