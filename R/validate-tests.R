@@ -16,7 +16,6 @@
 #'
 #' @importFrom dplyr group_by summarize bind_rows
 #' @importFrom purrr map_df map map_dfr
-#' @importFrom rlang .data
 #' @importFrom fs dir_exists dir_create
 #'
 #' @return Invisibly returns tibble of formatted test output. Note that this

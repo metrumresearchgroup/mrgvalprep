@@ -52,7 +52,7 @@ req_df_from_tests <- function(test_df) {
       req_desc = .data$TestName,
       test_ids = .data$TestId
     ) %>%
-    select(.data$req_id, .data$req_desc, .data$test_ids)
+    select("req_id", "req_desc", "test_ids")
 }
 
 #' @describeIn requirements_from_tests Write requirements YAML file from

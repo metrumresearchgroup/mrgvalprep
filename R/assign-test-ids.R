@@ -88,7 +88,7 @@ milestone_to_test_id <- function(stories_df, tests, return_missing_ids=FALSE){
   # Ensure test ids are sorted (necessary for replacement)
   tests <- sort_tests_by_nchar(tests)
 
-  dd <- stories_df %>% rename(TestNames = .data$TestIds)
+  dd <- stories_df %>% rename(TestNames = "TestIds")
 
   merged <- unnest(dd, "TestNames") %>%
     mutate(TestNames = str_trim(.data$TestNames, "both")) %>%
@@ -99,9 +99,9 @@ milestone_to_test_id <- function(stories_df, tests, return_missing_ids=FALSE){
 
   ### Scan for missed cases ###
   missing_ids <- filter(merged, is.na(.data$TestIds)) %>%
-    select(.data$StoryId, .data$StoryName, .data$StoryDescription, .data$TestNames)
+    select("StoryId", "StoryName", "StoryDescription", "TestNames")
   missing_milestones <- filter(merged, is.na(.data$StoryId)) %>%
-    select(.data$TestNames, .data$TestIds, .data$TestFile, .data$new)
+    select("TestNames", "TestIds", "TestFile", "new")
 
   if(nrow(missing_milestones) > 0){
     msg_dat <- data.frame(missing_milestones) # tibble will be truncated
@@ -109,7 +109,7 @@ milestone_to_test_id <- function(stories_df, tests, return_missing_ids=FALSE){
             The corresponding Test Id's have still been added to the test files:\n", print_and_capture(msg_dat),"\n")
   }
   if(nrow(missing_ids) > 0){
-    msg_dat <- missing_ids %>% chop(c(.data$TestNames))
+    msg_dat <- missing_ids %>% chop("TestNames")
     message("\nWarning: The following github issues did not have a matching test.
             Consider modifying the milestone/issue to ensure they are recognized.\n", print_and_capture(as.list(msg_dat)),"\n")
   }
@@ -117,9 +117,9 @@ milestone_to_test_id <- function(stories_df, tests, return_missing_ids=FALSE){
 
   merged <- merged %>% filter(!is.na(.data$StoryId)) %>%
     mutate(TestIds = ifelse(is.na(.data$TestIds), .data$TestNames, .data$TestIds)) %>%
-    select(.data$StoryId, .data$StoryName, .data$StoryDescription, .data$ProductRisk, .data$TestIds) %>%
+    select("StoryId", "StoryName", "StoryDescription", "ProductRisk", "TestIds") %>%
     distinct() %>%
-    chop(c(.data$TestIds))
+    chop("TestIds")
 
   if(return_missing_ids){
     return(
@@ -161,7 +161,7 @@ parse_tests <- function(test_file) {
 sort_tests_by_nchar <- function(test_ids){
   test_ids <- test_ids %>% mutate(nchars=nchar(.data$TestNames))
   test_ids <- test_ids %>% arrange(desc(.data$nchars)) %>%
-    select(-.data$nchars)
+    select(-"nchars")
   return(test_ids)
 }
 
