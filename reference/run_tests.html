@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">mrgvalprep</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.6</span>
       </span>
     </div>
 
@@ -33,6 +33,9 @@
   </a>
   <ul class="dropdown-menu" role="menu"><li>
       <a href="../articles/basic_usage.html">Basic Usage of mrgvalprep and mrgvalidate</a>
+    </li>
+    <li>
+      <a href="../articles/legacy_inputs.html">Legacy Input Formats</a>
     </li>
   </ul></li>
 <li>
@@ -63,7 +66,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">run_tests</span><span class="op">(</span><span class="va">pkg</span>, test_path <span class="op">=</span> <span class="st">"tests/testthat"</span>, root_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">run_tests</span><span class="op">(</span><span class="va">pkg</span>, test_path <span class="op">=</span> <span class="st">"tests/testthat"</span>, root_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -71,13 +74,18 @@
     <dl><dt>pkg</dt>
 <dd><p>Name of the package to test; should be installed to a library in
 <code><a href="https://rdrr.io/r/base/libPaths.html" class="external-link">.libPaths()</a></code>.</p></dd>
+
+
 <dt>test_path</dt>
 <dd><p>Directory containing tests, where <code><a href="https://testthat.r-lib.org/reference/test_dir.html" class="external-link">testthat::test_dir()</a></code>
 will be run.</p></dd>
+
+
 <dt>root_dir</dt>
 <dd><p>The directory path to where the package is (i.e. where the
 repo has been cloned). <code>file.path(root_dir, pkg, test_path)</code> should lead to
 the directory that will be tested.</p></dd>
+
 </dl></div>
 
   </div>
@@ -92,7 +100,7 @@ the directory that will be tested.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

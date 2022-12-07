@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">mrgvalprep</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.6</span>
       </span>
     </div>
 
@@ -33,6 +33,9 @@
   </a>
   <ul class="dropdown-menu" role="menu"><li>
       <a href="../articles/basic_usage.html">Basic Usage of mrgvalprep and mrgvalidate</a>
+    </li>
+    <li>
+      <a href="../articles/legacy_inputs.html">Legacy Input Formats</a>
     </li>
   </ul></li>
 <li>
@@ -63,23 +66,30 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">parse_golang_test_json</span><span class="op">(</span><span class="va">test_file</span>, roll_up_ids <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">parse_golang_test_json</span><span class="op">(</span><span class="va">test_file</span>, roll_up_ids <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>test_file</dt>
 <dd><p>Path to a <code>.json</code> file containing the output from <code>go test --json</code></p></dd>
+
+
 <dt>roll_up_ids</dt>
 <dd><p>If <code>TRUE</code>, the default, will roll up any duplicated
 (non-NA) ID's so that they are unique and the passed/failed count reflects
 the total sums for a tests with a given ID. If <code>FALSE</code>, will leave
 duplicated Test ID's as is. Note: leaving this <code>FALSE</code> may cause strange
 outputs for subtests.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A tibble formatted according to <code><a href="https://rdrr.io/pkg/mrgvalidate/man/input_formats.html" class="external-link">mrgvalidate::input_formats</a></code></p>
+    
+
+<p>A tibble formatted according to <code><a href="https://rdrr.io/pkg/mrgvalidate/man/input_formats.html" class="external-link">mrgvalidate::input_formats</a></code></p>
+
+
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -99,7 +109,7 @@ in your Go test code.</p></li>
 </ul></div>
     <div id="see-also">
     <h2>See also</h2>
-    <div class="dont-index"><p><code><a href="https://rdrr.io/pkg/mrgvalidate/man/input_formats.html" class="external-link">mrgvalidate::input_formats</a></code>, <code><a href="https://rdrr.io/pkg/mrgvalidate/man/create_validation_docs.html" class="external-link">mrgvalidate::create_validation_docs()</a></code></p></div>
+    <div class="dont-index"><p><code><a href="https://rdrr.io/pkg/mrgvalidate/man/input_formats.html" class="external-link">mrgvalidate::input_formats</a></code>, <code><a href="https://rdrr.io/pkg/mrgvalidate/man/create_package_docs.html" class="external-link">mrgvalidate::create_package_docs()</a></code></p></div>
     </div>
 
   </div>
@@ -114,7 +124,7 @@ in your Go test code.</p></li>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

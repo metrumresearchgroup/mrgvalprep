@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">mrgvalprep</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.6</span>
       </span>
     </div>
 
@@ -33,6 +33,9 @@
   </a>
   <ul class="dropdown-menu" role="menu"><li>
       <a href="../articles/basic_usage.html">Basic Usage of mrgvalprep and mrgvalidate</a>
+    </li>
+    <li>
+      <a href="../articles/legacy_inputs.html">Legacy Input Formats</a>
     </li>
   </ul></li>
 <li>
@@ -63,13 +66,15 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">parse_testthat_list_reporter</span><span class="op">(</span><span class="va">result</span>, roll_up_ids <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">parse_testthat_list_reporter</span><span class="op">(</span><span class="va">result</span>, roll_up_ids <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>result</dt>
 <dd><p>List output as reported by <a href="https://testthat.r-lib.org/reference/ListReporter.html" class="external-link">testthat::ListReporter</a></p></dd>
+
+
 <dt>roll_up_ids</dt>
 <dd><p>If <code>FALSE</code>, the default, will leave duplicated Test ID's
 as is. If <code>TRUE</code>, will roll up any duplicated (non-NA) ID's so that they
@@ -78,14 +83,19 @@ with a given ID. The test names for a set of rolled up ID's must share a
 common prefix, which will be used as the new test name. Any trailing
 spaces, slashes, colons, or underscores will be removed from the extracted
 prefix.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A tibble formatted according to <code><a href="https://rdrr.io/pkg/mrgvalidate/man/input_formats.html" class="external-link">mrgvalidate::input_formats</a></code></p>
+    
+
+<p>A tibble formatted according to <code><a href="https://rdrr.io/pkg/mrgvalidate/man/input_formats.html" class="external-link">mrgvalidate::input_formats</a></code></p>
+
+
     </div>
     <div id="see-also">
     <h2>See also</h2>
-    <div class="dont-index"><p><code><a href="https://rdrr.io/pkg/mrgvalidate/man/input_formats.html" class="external-link">mrgvalidate::input_formats</a></code>, <code><a href="https://rdrr.io/pkg/mrgvalidate/man/create_validation_docs.html" class="external-link">mrgvalidate::create_validation_docs()</a></code></p></div>
+    <div class="dont-index"><p><code><a href="https://rdrr.io/pkg/mrgvalidate/man/input_formats.html" class="external-link">mrgvalidate::input_formats</a></code>, <code><a href="https://rdrr.io/pkg/mrgvalidate/man/create_package_docs.html" class="external-link">mrgvalidate::create_package_docs()</a></code></p></div>
     </div>
 
   </div>
@@ -100,7 +110,7 @@ prefix.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

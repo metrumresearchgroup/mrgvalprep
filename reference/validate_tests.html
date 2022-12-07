@@ -21,7 +21,7 @@ system info to a JSON file."><!-- mathjax --><script src="https://cdnjs.cloudfla
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">mrgvalprep</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.6</span>
       </span>
     </div>
 
@@ -37,6 +37,9 @@ system info to a JSON file."><!-- mathjax --><script src="https://cdnjs.cloudfla
   </a>
   <ul class="dropdown-menu" role="menu"><li>
       <a href="../articles/basic_usage.html">Basic Usage of mrgvalprep and mrgvalidate</a>
+    </li>
+    <li>
+      <a href="../articles/legacy_inputs.html">Legacy Input Formats</a>
     </li>
   </ul></li>
 <li>
@@ -71,43 +74,59 @@ system info to a JSON file.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">validate_tests</span><span class="op">(</span>
-  <span class="va">org</span>,
-  <span class="va">repo</span>,
-  <span class="va">version</span>,
-  domain <span class="op">=</span> <span class="va">VALID_DOMAINS</span>,
-  out_file <span class="op">=</span> <span class="cn">NULL</span>,
-  root_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,
-  output_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span>,
-  extra_test_dirs <span class="op">=</span> <span class="cn">NULL</span>,
-  set_id_to_name <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">validate_tests</span><span class="op">(</span></span>
+<span>  <span class="va">org</span>,</span>
+<span>  <span class="va">repo</span>,</span>
+<span>  <span class="va">version</span>,</span>
+<span>  domain <span class="op">=</span> <span class="va">VALID_DOMAINS</span>,</span>
+<span>  out_file <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  root_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  output_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  extra_test_dirs <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  set_id_to_name <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>org</dt>
 <dd><p>Github organization that the repo is under</p></dd>
+
+
 <dt>repo</dt>
 <dd><p>The name of the repo for the package you are validating</p></dd>
+
+
 <dt>version</dt>
 <dd><p>The version number of the package you are validating. This must correspond to a tag in the repo.</p></dd>
+
+
 <dt>domain</dt>
 <dd><p>Domain where repo lives. Either "github.com" or "ghe.metrumrg.com", defaulting to "github.com"</p></dd>
+
+
 <dt>out_file</dt>
 <dd><p>File path to write out the test results to. Any extension
 will be ignored and replaced with <code>.csv</code> for the test output df and
 <code>.json</code> for the <code><a href="get_sys_info.html">get_sys_info()</a></code> output.</p></dd>
+
+
 <dt>root_dir</dt>
 <dd><p>The directory path to where the package has been cloned.
 <code>file.path(root_dir, repo)</code> should lead to the cloned repo that will be
 tested.</p></dd>
+
+
 <dt>output_dir</dt>
 <dd><p>Directory to write the test outputs to. Defaults to
 working directory.</p></dd>
+
+
 <dt>extra_test_dirs</dt>
 <dd><p>Character vector of paths (relative to package root
 dir) to directories that contain additional tests to run</p></dd>
+
+
 <dt>set_id_to_name</dt>
 <dd><p>Whether to copy the <code>TestName</code> column over to the
 <code>TestId</code> column when writing the output CSV. This exists to support legacy
@@ -115,10 +134,13 @@ issues and tests that don't use IDs. Starting with v1.0, mrgvalidate relies
 on test IDs and, as a temporary compatibility kludge, will auto-generate
 them if the <code>TestId</code> and <code>TestName</code> columns match. New tests and issues
 should use test IDs.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Invisibly returns tibble of formatted test output. Note that this
+    
+
+<p>Invisibly returns tibble of formatted test output. Note that this
 function is primarily called for the side effect of writing out the
 output to disk.</p>
     </div>
@@ -142,7 +164,7 @@ dependencies from the package that are <em>not</em> found in your <code><a href=
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

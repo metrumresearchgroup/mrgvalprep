@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">mrgvalprep</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.6</span>
       </span>
     </div>
 
@@ -33,6 +33,9 @@
   </a>
   <ul class="dropdown-menu" role="menu"><li>
       <a href="../articles/basic_usage.html">Basic Usage of mrgvalprep and mrgvalidate</a>
+    </li>
+    <li>
+      <a href="../articles/legacy_inputs.html">Legacy Input Formats</a>
     </li>
   </ul></li>
 <li>
@@ -58,10 +61,21 @@
     </div>
 
     <div class="section level2">
+<h2 class="page-header" data-toc-text="0.0.6" id="mrgvalprep-006">mrgvalprep 0.0.6<a class="anchor" aria-label="anchor" href="#mrgvalprep-006"></a></h2>
+<p>This release has no user-facing changes, with the exception of updates to the documentation and vignettes.</p>
+<div class="section level3">
+<h3 id="updates-0-0-6">Updates<a class="anchor" aria-label="anchor" href="#updates-0-0-6"></a></h3>
+<ul><li>Updating vignettes and documentation to use <code><a href="https://rdrr.io/pkg/mrgvalidate/man/create_package_docs.html" class="external-link">mrgvalidate::create_package_docs()</a></code> instead of <code>mrgvalidate::create_validation_docs()</code> that was deprecated in <code>mrgvalidate 2.0.0</code>. (#54)</li>
+<li>Updating <a href="https://metrumresearchgroup.github.io/mrgvalprep/articles/basic_usage.html">“Basic Usage” vignette</a> to demonstrate preferred YAML inputs. Moved demonstration of other formats in <a href="https://metrumresearchgroup.github.io/mrgvalprep/articles/legacy_inputs.html">“Legacy Input Formats” vignette</a>. (#54)</li>
+<li>Update code to <em>not</em> use .data in tidy selection context based on <a href="https://www.tidyverse.org/blog/2022/10/tidyselect-1-2-0/#using-data-inside-selections" class="external-link">changes</a> in <code>tidyselect 1.2.0</code>. (#53)</li>
+</ul></div>
+</div>
+    <div class="section level2">
 <h2 class="page-header" data-toc-text="0.0.5" id="mrgvalprep-005">mrgvalprep 0.0.5<a class="anchor" aria-label="anchor" href="#mrgvalprep-005"></a></h2>
 <div class="section level3">
 <h3 id="new-features-and-changes-0-0-5">New features and changes<a class="anchor" aria-label="anchor" href="#new-features-and-changes-0-0-5"></a></h3>
-<ul><li>Added helpers for converting legacy formats of specifying stories and requirements into the preferred YAML format.<ul><li>
+<ul><li>Added helpers for converting legacy formats of specifying stories and requirements into the preferred YAML format.
+<ul><li>
 <code><a href="../reference/stories_to_yaml.html">stories_to_yaml()</a></code> helper for converting stories specified in either Googlesheets or Github milestones into YAML. (#31, #35)</li>
 <li>
 <code><a href="../reference/assign_test_ids.html">assign_test_ids()</a></code> and <code><a href="../reference/milestone_to_test_id.html">milestone_to_test_id()</a></code> for converting tests specified with full test names into test IDs. (#36, #39, #42)</li>
@@ -84,7 +98,8 @@
 </ul></div>
 <div class="section level3">
 <h3 id="docs-0-0-4">Docs<a class="anchor" aria-label="anchor" href="#docs-0-0-4"></a></h3>
-<ul><li>The documentation for <code><a href="../reference/parse_testthat_list_reporter.html">parse_testthat_list_reporter()</a></code> and <code><a href="../reference/parse_golang_test_json.html">parse_golang_test_json()</a></code> now describe the requirements for the test name when <code>roll_up_ids = TRUE</code>. (#19)</li></ul></div>
+<ul><li>The documentation for <code><a href="../reference/parse_testthat_list_reporter.html">parse_testthat_list_reporter()</a></code> and <code><a href="../reference/parse_golang_test_json.html">parse_golang_test_json()</a></code> now describe the requirements for the test name when <code>roll_up_ids = TRUE</code>. (#19)</li>
+</ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.0.3" id="mrgvalprep-003">mrgvalprep 0.0.3<a class="anchor" aria-label="anchor" href="#mrgvalprep-003"></a></h2>
@@ -98,7 +113,8 @@
 <h2 class="page-header" data-toc-text="0.0.2" id="mrgvalprep-002">mrgvalprep 0.0.2<a class="anchor" aria-label="anchor" href="#mrgvalprep-002"></a></h2>
 <div class="section level3">
 <h3 id="new-features-and-changes-0-0-2">New features and changes<a class="anchor" aria-label="anchor" href="#new-features-and-changes-0-0-2"></a></h3>
-<ul><li>Added <code><a href="../reference/parse_golang_test_json.html">parse_golang_test_json()</a></code> for Go test <code>go test --json</code> output (#10)</li></ul></div>
+<ul><li>Added <code><a href="../reference/parse_golang_test_json.html">parse_golang_test_json()</a></code> for Go test <code>go test --json</code> output (#10)</li>
+</ul></div>
 <div class="section level3">
 <h3 id="developer-facing-changes-0-0-2">Developer-facing changes<a class="anchor" aria-label="anchor" href="#developer-facing-changes-0-0-2"></a></h3>
 <ul><li>Enabled drone CI (#11)</li>
@@ -130,7 +146,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

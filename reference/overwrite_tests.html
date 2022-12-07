@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">mrgvalprep</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.6</span>
       </span>
     </div>
 
@@ -33,6 +33,9 @@
   </a>
   <ul class="dropdown-menu" role="menu"><li>
       <a href="../articles/basic_usage.html">Basic Usage of mrgvalprep and mrgvalidate</a>
+    </li>
+    <li>
+      <a href="../articles/legacy_inputs.html">Legacy Input Formats</a>
     </li>
   </ul></li>
 <li>
@@ -63,17 +66,22 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">overwrite_tests</span><span class="op">(</span><span class="va">test_scripts</span>, <span class="va">TestIds</span>, <span class="va">test_path</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">overwrite_tests</span><span class="op">(</span><span class="va">test_scripts</span>, <span class="va">TestIds</span>, <span class="va">test_path</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>test_scripts</dt>
 <dd><p>list of test files</p></dd>
+
+
 <dt>TestIds</dt>
 <dd><p>dataframe of test Ids, generated in <code><a href="assign_test_ids.html">assign_test_ids()</a></code></p></dd>
+
+
 <dt>test_path</dt>
 <dd><p>path of tests. Only relevant for testing (i.e. when <code>getOption("TEST_DIR_TESTING")</code> returns a value)</p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -94,7 +102,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">mrgvalprep</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.6</span>
       </span>
     </div>
 
@@ -33,6 +33,9 @@
   </a>
   <ul class="dropdown-menu" role="menu"><li>
       <a href="../articles/basic_usage.html">Basic Usage of mrgvalprep and mrgvalidate</a>
+    </li>
+    <li>
+      <a href="../articles/legacy_inputs.html">Legacy Input Formats</a>
     </li>
   </ul></li>
 <li>
@@ -63,27 +66,32 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">read_stories_gsheet</span><span class="op">(</span>
-  <span class="va">ss</span>,
-  sheet <span class="op">=</span> <span class="cn">NULL</span>,
-  story_id_col <span class="op">=</span> <span class="st">"StoryId"</span>,
-  story_name_col <span class="op">=</span> <span class="st">"StoryName"</span>,
-  story_description_col <span class="op">=</span> <span class="st">"StoryDescription"</span>,
-  risk_col <span class="op">=</span> <span class="st">"ProductRisk"</span>,
-  req_ids_col <span class="op">=</span> <span class="st">"RequirementIds"</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">read_stories_gsheet</span><span class="op">(</span></span>
+<span>  <span class="va">ss</span>,</span>
+<span>  sheet <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  story_id_col <span class="op">=</span> <span class="st">"StoryId"</span>,</span>
+<span>  story_name_col <span class="op">=</span> <span class="st">"StoryName"</span>,</span>
+<span>  story_description_col <span class="op">=</span> <span class="st">"StoryDescription"</span>,</span>
+<span>  risk_col <span class="op">=</span> <span class="st">"ProductRisk"</span>,</span>
+<span>  req_ids_col <span class="op">=</span> <span class="st">"RequirementIds"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>ss, sheet</dt>
 <dd><p>Sheet identifiers passed <code><a href="https://googlesheets4.tidyverse.org/reference/range_read.html" class="external-link">googlesheets4::read_sheet()</a></code>.</p></dd>
+
+
 <dt>story_id_col, story_name_col, story_description_col, risk_col, req_ids_col</dt>
 <dd><p>Names of relevant columns in input Google Sheet.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Tibble with the above columns.</p>
+    
+
+<p>Tibble with the above columns.</p>
     </div>
 
   </div>
@@ -98,7 +106,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

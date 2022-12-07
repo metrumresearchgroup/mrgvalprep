@@ -22,7 +22,7 @@ the newly created requirements."><!-- mathjax --><script src="https://cdnjs.clou
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">mrgvalprep</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.6</span>
       </span>
     </div>
 
@@ -38,6 +38,9 @@ the newly created requirements."><!-- mathjax --><script src="https://cdnjs.clou
   </a>
   <ul class="dropdown-menu" role="menu"><li>
       <a href="../articles/basic_usage.html">Basic Usage of mrgvalprep and mrgvalidate</a>
+    </li>
+    <li>
+      <a href="../articles/legacy_inputs.html">Legacy Input Formats</a>
     </li>
   </ul></li>
 <li>
@@ -73,11 +76,11 @@ the newly created requirements.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">req_df_from_tests</span><span class="op">(</span><span class="va">test_df</span><span class="op">)</span>
-
-<span class="fu">req_df_to_yaml</span><span class="op">(</span><span class="va">req_df</span>, <span class="va">out_file</span><span class="op">)</span>
-
-<span class="fu">stories_replace_tests_with_reqs</span><span class="op">(</span><span class="va">stories_file</span>, <span class="va">req_spec</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">req_df_from_tests</span><span class="op">(</span><span class="va">test_df</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">req_df_to_yaml</span><span class="op">(</span><span class="va">req_df</span>, <span class="va">out_file</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">stories_replace_tests_with_reqs</span><span class="op">(</span><span class="va">stories_file</span>, <span class="va">req_spec</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -85,15 +88,24 @@ the newly created requirements.</p>
     <dl><dt>test_df</dt>
 <dd><p>Tibble of tests results, as returned from
 <code><a href="parse_testthat_list_reporter.html">parse_testthat_list_reporter()</a></code> or <code><a href="parse_golang_test_json.html">parse_golang_test_json()</a></code></p></dd>
+
+
 <dt>req_df</dt>
 <dd><p>Tibble of requirements, as returned from <code>req_df_from_tests()</code>.</p></dd>
+
+
 <dt>out_file</dt>
 <dd><p>Path to write requirements YAML file to.</p></dd>
+
+
 <dt>stories_file</dt>
 <dd><p>Path to write stories YAML file that will be modified on
 disk.</p></dd>
+
+
 <dt>req_spec</dt>
 <dd><p>Tibble of requirements, as returned from <code>req_df_from_tests()</code>.</p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -106,31 +118,31 @@ test names</p>
     <div id="functions">
     <h2>Functions</h2>
     
-<ul><li><p><code>req_df_from_tests</code>: Create new requirements tibble from test
+<ul><li><p><code>req_df_from_tests()</code>: Create new requirements tibble from test
 results tibble.</p></li>
-<li><p><code>req_df_to_yaml</code>: Write requirements YAML file from
+<li><p><code>req_df_to_yaml()</code>: Write requirements YAML file from
 requirements tibble.</p></li>
-<li><p><code>stories_replace_tests_with_reqs</code>: Modify existing stories YAML to reference
+<li><p><code>stories_replace_tests_with_reqs()</code>: Modify existing stories YAML to reference
 new requirements instead of tests.</p></li>
 </ul></div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># run your test suite to get a tibble of test names and IDs</span></span>
-<span class="r-in"><span class="va">test_res</span> <span class="op">&lt;-</span> <span class="fu">mrgvalprep</span><span class="fu">::</span><span class="fu"><a href="parse_testthat_list_reporter.html">parse_testthat_list_reporter</a></span><span class="op">(</span></span>
-<span class="r-in">  <span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/test.html" class="external-link">test</a></span><span class="op">(</span>Reporter <span class="op">=</span> <span class="fu">testthat</span><span class="fu">::</span><span class="va"><a href="https://testthat.r-lib.org/reference/ListReporter.html" class="external-link">ListReporter</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># create requirements tibble and write to new YAML</span></span>
-<span class="r-in"><span class="va">req_df</span> <span class="op">&lt;-</span> <span class="fu">req_df_from_tests</span><span class="op">(</span><span class="va">test_res</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">req_df_to_yaml</span><span class="op">(</span><span class="va">req_df</span>, <span class="st">"inst/validation/requirements.yaml"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># edit existing stories YAML</span></span>
-<span class="r-in"><span class="fu">stories_replace_tests_with_reqs</span><span class="op">(</span><span class="st">"inst/validation/stories.yaml"</span>, <span class="va">req_df</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># run your test suite to get a tibble of test names and IDs</span></span></span>
+<span class="r-in"><span><span class="va">test_res</span> <span class="op">&lt;-</span> <span class="fu">mrgvalprep</span><span class="fu">::</span><span class="fu"><a href="parse_testthat_list_reporter.html">parse_testthat_list_reporter</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/test.html" class="external-link">test</a></span><span class="op">(</span>Reporter <span class="op">=</span> <span class="fu">testthat</span><span class="fu">::</span><span class="va"><a href="https://testthat.r-lib.org/reference/ListReporter.html" class="external-link">ListReporter</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># create requirements tibble and write to new YAML</span></span></span>
+<span class="r-in"><span><span class="va">req_df</span> <span class="op">&lt;-</span> <span class="fu">req_df_from_tests</span><span class="op">(</span><span class="va">test_res</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">req_df_to_yaml</span><span class="op">(</span><span class="va">req_df</span>, <span class="st">"inst/validation/requirements.yaml"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># edit existing stories YAML</span></span></span>
+<span class="r-in"><span><span class="fu">stories_replace_tests_with_reqs</span><span class="op">(</span><span class="st">"inst/validation/stories.yaml"</span>, <span class="va">req_df</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -145,7 +157,7 @@ new requirements instead of tests.</p></li>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

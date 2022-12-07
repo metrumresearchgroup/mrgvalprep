@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">mrgvalprep</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.6</span>
       </span>
     </div>
 
@@ -33,6 +33,9 @@
   </a>
   <ul class="dropdown-menu" role="menu"><li>
       <a href="../articles/basic_usage.html">Basic Usage of mrgvalprep and mrgvalidate</a>
+    </li>
+    <li>
+      <a href="../articles/legacy_inputs.html">Legacy Input Formats</a>
     </li>
   </ul></li>
 <li>
@@ -63,30 +66,41 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">pull_tagged_repo</span><span class="op">(</span>
-  <span class="va">org</span>,
-  <span class="va">repo</span>,
-  <span class="va">tag</span>,
-  domain <span class="op">=</span> <span class="va">VALID_DOMAINS</span>,
-  dest_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,
-  overwrite <span class="op">=</span> <span class="cn">TRUE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">pull_tagged_repo</span><span class="op">(</span></span>
+<span>  <span class="va">org</span>,</span>
+<span>  <span class="va">repo</span>,</span>
+<span>  <span class="va">tag</span>,</span>
+<span>  domain <span class="op">=</span> <span class="va">VALID_DOMAINS</span>,</span>
+<span>  dest_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  overwrite <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>org</dt>
 <dd><p>Github organization that the repo is under</p></dd>
+
+
 <dt>repo</dt>
 <dd><p>The name of the repo for the package you are validating</p></dd>
+
+
 <dt>tag</dt>
 <dd><p>The tag to pull from the repo. When this function is called internally, this is assumed to be the same as the version you are testing, though it can be any valid tag.</p></dd>
+
+
 <dt>domain</dt>
 <dd><p>Domain where repo lives. Either "github.com" or "ghe.metrumrg.com", defaulting to "github.com"</p></dd>
+
+
 <dt>dest_dir</dt>
 <dd><p>File path for directory to clone repo into. Defaults to <code><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir()</a></code></p></dd>
+
+
 <dt>overwrite</dt>
 <dd><p>Boolean indicating whether to overwrite <code>file.path(dest_dir, repo)</code> if something already exists there. TRUE by default.</p></dd>
+
 </dl></div>
 
   </div>
@@ -101,7 +115,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

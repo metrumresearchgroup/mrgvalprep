@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">mrgvalprep</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.6</span>
       </span>
     </div>
 
@@ -33,6 +33,9 @@
   </a>
   <ul class="dropdown-menu" role="menu"><li>
       <a href="../articles/basic_usage.html">Basic Usage of mrgvalprep and mrgvalidate</a>
+    </li>
+    <li>
+      <a href="../articles/legacy_inputs.html">Legacy Input Formats</a>
     </li>
   </ul></li>
 <li>
@@ -63,19 +66,24 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">milestone_to_test_id</span><span class="op">(</span><span class="va">stories_df</span>, <span class="va">tests</span>, return_missing_ids <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">milestone_to_test_id</span><span class="op">(</span><span class="va">stories_df</span>, <span class="va">tests</span>, return_missing_ids <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>stories_df</dt>
 <dd><p>a dataframe of stories returned by <code><a href="parse_github_issues.html">parse_github_issues()</a></code>.</p></dd>
+
+
 <dt>tests</dt>
 <dd><p>dataframe returned by <code><a href="assign_test_ids.html">assign_test_ids()</a></code>
 Must have the following column names: "TestNames", "TestIds"</p></dd>
+
+
 <dt>return_missing_ids</dt>
 <dd><p>logical (T/F). Whether or not to return the warning messages pertaining to missing ids.
 Note that this will affect piping to other functions, as a named list will be returned instead of a dataframe.</p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -94,7 +102,7 @@ Note that this will affect piping to other functions, as a named list will be re
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>
