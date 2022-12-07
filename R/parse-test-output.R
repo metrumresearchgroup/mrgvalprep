@@ -9,7 +9,7 @@
 #'   spaces, slashes, colons, or underscores will be removed from the extracted
 #'   prefix.
 #' @return A tibble formatted according to `mrgvalidate::input_formats`
-#' @seealso `mrgvalidate::input_formats`, `mrgvalidate::create_validation_docs()`
+#' @seealso `mrgvalidate::input_formats`, `mrgvalidate::create_package_docs()`
 #' @importFrom purrr map_chr map_lgl map_dfr
 #' @importFrom dplyr mutate
 #' @importFrom stringr str_replace fixed
@@ -70,7 +70,7 @@ parse_testthat_list_reporter <- function(result, roll_up_ids = FALSE) {
 #'   duplicated Test ID's as is. Note: leaving this `FALSE` may cause strange
 #'   outputs for subtests.
 #' @return A tibble formatted according to `mrgvalidate::input_formats`
-#' @seealso `mrgvalidate::input_formats`, `mrgvalidate::create_validation_docs()`
+#' @seealso `mrgvalidate::input_formats`, `mrgvalidate::create_package_docs()`
 #' @importFrom dplyr summarise group_by filter select rename mutate
 #' @importFrom stringr str_detect
 #' @importFrom jsonlite fromJSON

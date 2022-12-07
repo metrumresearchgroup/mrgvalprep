@@ -2,7 +2,7 @@
 #' Process issues from Github into a tibble of properly formatted stories
 #'
 #' Reads issues from a Github milestone and parses to a tibble in the format
-#' expected by the `specs` argument of `mrgvalidate::create_validation_docs()`.
+#' expected by the `specs` argument of `mrgvalidate::create_package_docs()`.
 #' See `mrgvalidate::input_formats` for details.
 #' @importFrom tidyr unnest nest
 #' @importFrom dplyr select mutate left_join

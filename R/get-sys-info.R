@@ -2,7 +2,7 @@
 #'
 #' Captures system and session info, returns invisibly, and optionally writes to
 #' JSON file for later use. This JSON file is in the format expected by
-#' `mrgvalidate::create_validation_docs()` and is intended to accompany a `.csv`
+#' `mrgvalidate::create_package_docs()` and is intended to accompany a `.csv`
 #' of test results. See `mrgvalidate::input_formats` for details.
 #'
 #' @details

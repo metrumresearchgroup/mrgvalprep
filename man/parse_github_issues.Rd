@@ -19,6 +19,6 @@ parse_github_issues(org, repo, mile, domain = VALID_DOMAINS, prefix)
 }
 \description{
 Reads issues from a Github milestone and parses to a tibble in the format
-expected by the \code{specs} argument of \code{mrgvalidate::create_validation_docs()}.
+expected by the \code{specs} argument of \code{mrgvalidate::create_package_docs()}.
 See \code{mrgvalidate::input_formats} for details.
 }

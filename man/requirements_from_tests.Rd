@@ -43,16 +43,16 @@ test names
 }
 \section{Functions}{
 \itemize{
-\item \code{req_df_from_tests}: Create new requirements tibble from test
+\item \code{req_df_from_tests()}: Create new requirements tibble from test
 results tibble.
 
-\item \code{req_df_to_yaml}: Write requirements YAML file from
+\item \code{req_df_to_yaml()}: Write requirements YAML file from
 requirements tibble.
 
-\item \code{stories_replace_tests_with_reqs}: Modify existing stories YAML to reference
+\item \code{stories_replace_tests_with_reqs()}: Modify existing stories YAML to reference
 new requirements instead of tests.
-}}
 
+}}
 \examples{
 \dontrun{
 
