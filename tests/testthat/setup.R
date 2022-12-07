@@ -52,10 +52,6 @@ STORIES_DF_ROWS_GHE <- 5 # this shouldn't ever change because the GHE repo is st
 SPECS_DF_ROWS_GS <- 6
 SPECS_DF_COLS_GS <- 7
 
-VAL_FILE <- "validation-testing.docx"
-REQ_FILE <- "requirements-specification.docx"
-MAT_FILE <- "traceability-matrix.docx"
-
 #######
 # helper functions
 

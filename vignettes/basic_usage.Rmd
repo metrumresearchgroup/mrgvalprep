@@ -122,7 +122,7 @@ test_that("feature X works correctly [MRGV-CFG-001]", {
 
 In this case, `MRGV-CFG-001` will automatically be parsed out by [`parse_testthat_list_reporter()`](https://metrumresearchgroup.github.io/mrgvalprep/reference/parse_testthat_list_reporter.html) and will be matched against any Stories or Requirements containing `MRGV-CFG-001` in the `TestIds` column described below.
 
-Note that more than one test _can_ share the same test ID, though you will need to pass `roll_up_ids = TRUE` to the parsing function. See the documentation for the relevant parsing function above for more details.
+Note that more than one test _can_ share the same test ID, though you will need to pass `roll_up_ids = TRUE` to `parse_testthat_list_reporter()` See the documentation for the relevant parsing function above for more details.
 
 ### System information
 
@@ -199,15 +199,7 @@ mrgvalidate::create_package_docs(
 )
 ```
 
-This will write out seven `.docx` files, into the directory passed to `output_dir`.
-
-* `release-notes.docx`
-* `validation-plan.docx`
-* `testing-plan.docx`
-* `requirements-specification.docx`
-* `traceability-matrix.docx`
-* `testing-results.docx`
-* `validation-summary.docx`
+This will write out the seven `.docx` files, mentioned above, into the directory passed to `output_dir`.
 
 If these documents look correct after human inspection, you're done!
 
