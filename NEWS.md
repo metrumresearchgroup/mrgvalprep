@@ -1,3 +1,13 @@
+# mrgvalprep 0.0.6
+
+This release has no user-facing changes, with the exception of updates to the documentation and vignettes.
+
+## Updates
+
+-   Updating vignettes and documentation to use `mrgvalidate::create_package_docs()` instead of `mrgvalidate::create_validation_docs()` that was deprecated in `mrgvalidate 2.0.0`. (#54)
+-   Updating ["Basic Usage" vignette](https://metrumresearchgroup.github.io/mrgvalprep/articles/basic_usage.html) to demonstrate preferred YAML inputs. Moved demonstration of other formats in ["Legacy Input Formats" vignette](https://metrumresearchgroup.github.io/mrgvalprep/articles/legacy_inputs.html). (#54)
+-   Update code to *not* use .data in tidy selection context based on [changes](https://www.tidyverse.org/blog/2022/10/tidyselect-1-2-0/#using-data-inside-selections) in `tidyselect 1.2.0`. (#53)
+
 # mrgvalprep 0.0.5
 
 ## New features and changes
