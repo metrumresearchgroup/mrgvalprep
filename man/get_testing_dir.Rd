@@ -12,4 +12,3 @@ get_testing_dir(pkg_dir)
 \description{
 Get tests/testthat directory from package directory
 }
-\keyword{internal}

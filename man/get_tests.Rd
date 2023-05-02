@@ -4,14 +4,27 @@
 \alias{get_tests}
 \title{Tabulate all tests in a package directory}
 \usage{
-get_tests(pkg_dir)
+get_tests(pkg_dir, test_dirs = get_testing_dir(pkg_dir))
 }
 \arguments{
 \item{pkg_dir}{a file path pointing to an unpacked/untarred package directory}
+
+\item{test_dirs}{one or more directories containing test scripts}
 }
 \value{
 a dataframe containing all test names and the test file they are associated with
 }
 \description{
 Tabulate all tests in a package directory
+}
+\details{
+Note that \code{get_testing_dir} will only return the directory \code{tests/testthat} (if it exists).
+You must specify other directories manually if you have multiple.
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{# Example
+test_dirs = c(
+  get_testing_dir(pkg_dir),
+  'inst/other-tests'
+)
+}\if{html}{\out{</div>}}
 }
