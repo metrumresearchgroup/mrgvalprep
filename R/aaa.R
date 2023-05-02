@@ -13,3 +13,4 @@ NO_TESTS_STRING <- "No tests"
 
 options(mrgvalprep.TEST_LOC = devtools::package_file(file.path("tests","testthat")))
 
+utils::globalVariables(c("."))
